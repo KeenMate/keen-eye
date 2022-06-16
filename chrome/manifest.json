@@ -2,9 +2,9 @@
   "manifest_version": 2,
   "author": "Jan Rada Keenmate",
 
-  "name": "MS headers displayer",
+  "name": "KEEN EYE",
   "version": "1.0.0",
-  "description": "Display ms headers",
+  "description": "extension for showing headers",
 
   "background": {
     "page": "headersBackground.html"
