@@ -13,8 +13,6 @@ var mydragg = (function () {
         return;
       }
       let containerEl = document.body;
-      console.log("moving start");
-      console.log(evt);
       evt = evt || window.event;
       var posX = evt.clientX,
         posY = evt.clientY,
@@ -46,7 +44,6 @@ var mydragg = (function () {
       evt.preventDefault();
     },
     stopMoving: function () {
-      console.log("stop moving");
       var a = document.createElement("script");
       document.body.style.cursor = "default";
       document.onmousemove = function () {};
