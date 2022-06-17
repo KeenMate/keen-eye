@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "keen-eye",
+  "description": "header explorer",
+  "version": "0.0.1",
+  "background": {
+    "scripts": ["/background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["/content.js"]
+    }
+  ],
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "http://*/*",
+    "https://*/*",
+    "tabs",
+    "storage"
+  ],
+  "options_page": "options.html"
+}
