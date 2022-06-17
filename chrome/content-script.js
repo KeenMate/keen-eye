@@ -112,7 +112,7 @@ function printResults() {
   }
 
   function printHeading(key) {
-    results.innerHTML += "<b>" + calcTime() + "s</b> <br />";
+    results.innerHTML += "<b> <h1> Response in " + calcTime() + "s</b> </h1> <br />";
   }
   function printHeader(obj) {
     let d = document.createElement("div");

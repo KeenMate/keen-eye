@@ -6,6 +6,7 @@ var filters = {
   types: ["main_frame"],
 };
 
+
 chrome.webRequest.onSendHeaders.addListener(
   function (details) {
     chrome.extension.getBackgroundPage().console.log(details);
