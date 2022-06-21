@@ -1,3 +1,6 @@
+import { sendReply } from "@/helpers/scriptsComunicationHelper";
+import { getOriginSettings } from "@/helpers/storageHelper";
+
 console.log("hello world background todo something~");
 ("use strict");
 var headers = {};
@@ -34,24 +37,21 @@ chrome.webRequest.onHeadersReceived.addListener(
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(sender);
   if (request.type == "get-headers") {
-    console.log("gotta send them some headers");
     console.log(headers[sender.tab.id]);
-    sendResponse(headers[sender.tab.id]);
+    sendReply(true, headers[sender.tab.id], sendResponse);
     return true;
   }
+  console.log(request);
   if (request.type == "inject") {
-    console.log("gonna check if should check");
     console.log(sender);
-    if (sender.url.includes("microsoft"))
-      //TODO check if should inject
-      sendResponse({
-        inject: true,
-        allowedHeaders: [
-          "x-ms-clitelem",
-          "x-ms-ests-server",
-          "x-ms-request-id",
-        ],
-      });
+    getOriginSettings().then((originSettings) => {
+      if (originSettings) {
+        //TODO check if should inject
+        sendReply(true, originSettings, sendResponse);
+      } else {
+        sendReply(false, {}, sendResponse);
+      }
+    });
     return true;
   }
 });

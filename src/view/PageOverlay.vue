@@ -8,6 +8,7 @@
 
 <script>
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
+import { getRequestInfo } from "@/helpers/scriptsComunicationHelper";
 
 export default {
   components: {
@@ -18,14 +19,14 @@ export default {
   },
   data() {
     return {
-      backgroundResponse: null,
+      requestInfo: null,
       hidden: false,
     };
   },
   computed: {
     responseHeaders() {
-      if (!this.backgroundResponse?.response?.responseHeaders) return [];
-      return this.backgroundResponse.response.responseHeaders.filter((h) => {
+      if (!this.requestInfo?.response?.responseHeaders) return [];
+      return this.requestInfo.response.responseHeaders.filter((h) => {
         console.log(h.name);
         return this.allowedHeaders.includes(h.name);
       });
@@ -37,11 +38,7 @@ export default {
     },
   },
   mounted() {
-    chrome.runtime.sendMessage({ type: "get-headers" }, (response) => {
-      console.debug(response);
-
-      this.backgroundResponse = response;
-    });
+    getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
   },
 };
 </script>
