@@ -1,5 +1,5 @@
-export async function getRequestInfo() {
-  return await sendMessagePromise({ type: "get-headers" });
+export async function getRequestInfo(tabId = null) {
+  return await sendMessagePromise({ type: "get-headers", tabId: tabId });
 }
 
 export async function shouldInject() {
@@ -20,6 +20,5 @@ export function sendMessagePromise(message) {
 }
 
 export function sendReply(succeded, data, sendResponse) {
-  console.log({ ok: succeded, data: data });
   sendResponse({ ok: succeded, data: data });
 }

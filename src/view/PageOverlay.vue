@@ -1,9 +1,6 @@
 <template>
   <h4>Header Explorer</h4>
-  <button @click="toggleVisibility">{{ shown ? "hide" : " show" }}</button>
-  <div v-show="hidden">
-    <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
-  </div>
+  <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
 </template>
 
 <script>
@@ -20,7 +17,6 @@ export default {
   data() {
     return {
       requestInfo: null,
-      hidden: false,
     };
   },
   computed: {
@@ -30,11 +26,6 @@ export default {
         console.log(h.name);
         return this.allowedHeaders.includes(h.name);
       });
-    },
-  },
-  methods: {
-    toggleVisibility() {
-      this.hidden = !this.hidden;
     },
   },
   mounted() {

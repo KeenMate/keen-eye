@@ -1,4 +1,3 @@
-console.log("hello world content todo something~");
 import { createApp } from "vue";
 import PageOverlay from "../view/PageOverlay.vue";
 import { shouldInject } from "@/helpers/scriptsComunicationHelper";

@@ -1,7 +1,6 @@
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
 import { getOriginSettings } from "@/helpers/storageHelper";
 
-console.log("hello world background todo something~");
 ("use strict");
 var headers = {};
 
@@ -37,13 +36,12 @@ chrome.webRequest.onHeadersReceived.addListener(
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(sender);
   if (request.type == "get-headers") {
-    console.log(headers[sender.tab.id]);
-    sendReply(true, headers[sender.tab.id], sendResponse);
+    console.log(headers[request.tabId ?? sender.tab.id]);
+    sendReply(true, headers[request.tabId ?? sender.tab.id], sendResponse);
     return true;
   }
   console.log(request);
   if (request.type == "inject") {
-    console.log(sender);
     getOriginSettings().then((originSettings) => {
       if (originSettings) {
         //TODO check if should inject

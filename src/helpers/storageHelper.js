@@ -14,14 +14,20 @@ export function getItem(key) {
   });
 }
 
-export function getCurrentOrigin() {
-  return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
-      console.log(response[0].url);
-      let origin = new URL(response[0].url).origin;
+export async function getCurrentOrigin() {
+  let tab = await getCurrentTab();
+  return new URL(tab.url).origin;
+}
 
-      resolve(origin);
-    });
+export function getCurrentTab() {
+  return new Promise((resolve, reject) => {
+    try {
+      chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
+        resolve(response[0]);
+      });
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
@@ -31,11 +37,14 @@ export async function getOriginSettings() {
   return urlInfo ?? { inject: false };
 }
 
-export async function setInjection(inject) {
-  console.log(inject);
+/**
+ * if some of them is null, it doesnt change it
+ */
+export async function setOriginSettings(inject, headers) {
   let tabOrigin = await getCurrentOrigin();
-  setItem(tabOrigin, {
-    inject: inject,
-    allowedHeaders: ["x-ms-clitelem", "x-ms-ests-server", "x-ms-request-id"],
-  });
+  let oldOriginInfo = await getOriginSettings();
+  if (typeof inject === "boolean") oldOriginInfo.inject = inject;
+  if (headers) oldOriginInfo.allowedHeaders = headers;
+
+  setItem(tabOrigin, oldOriginInfo);
 }
