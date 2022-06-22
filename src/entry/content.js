@@ -18,10 +18,10 @@ shouldInject().then((response) => {
     div.setAttribute("id", elementId);
     addDrag(div, elementId);
     document.body.appendChild(div);
-
+    div.attachShadow({ mode: "open" });
     createApp(PageOverlay, {
       allowedHeaders: allowedHeaders,
-    }).mount("#" + elementId);
+    }).mount(div.shadowRoot);
   } else {
     return;
   }
