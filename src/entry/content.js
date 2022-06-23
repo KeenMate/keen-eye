@@ -3,6 +3,7 @@ import PageOverlay from "../view/PageOverlay.vue";
 import { shouldInject } from "@/helpers/scriptsComunicationHelper";
 import addDrag from "@/helpers/dragHelper";
 
+import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 shouldInject().then((response) => {
   if (response?.inject) {
     var allowedHeaders = response.allowedHeaders;
@@ -18,9 +19,11 @@ shouldInject().then((response) => {
     addDrag(div, elementId);
     document.body.appendChild(div);
     div.attachShadow({ mode: "open" });
-    createApp(PageOverlay, {
+
+    const app = createApp(PageOverlay, {
       allowedHeaders: allowedHeaders,
-    }).mount(div.shadowRoot);
+    });
+    app.mount(div.shadowRoot);
   } else {
     return;
   }

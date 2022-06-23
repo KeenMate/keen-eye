@@ -1,5 +1,5 @@
 <template>
-  <h4>Header Explorer</h4>
+  <h4 class="title">Header Explorer</h4>
   <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
 </template>
 
@@ -24,12 +24,17 @@ export default {
       if (!this.requestInfo?.response?.responseHeaders) return [];
       return this.requestInfo.response.responseHeaders.filter((h) => {
         console.log(h.name);
-        return this.allowedHeaders.includes(h.name);
+        return this.allowedHeaders?.includes(h.name) ?? false;
       });
     },
   },
+  methods: {
+    loadRequestInfo() {
+      getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
+    },
+  },
   mounted() {
-    getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
+    this.loadRequestInfo();
   },
 };
 </script>

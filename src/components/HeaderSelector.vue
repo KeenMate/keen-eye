@@ -10,6 +10,8 @@
       placeholder="Search or add a header"
       taggable
       @tag="addTag"
+      :close-on-select="false"
+      :clear-on-select="false"
     ></multiselect>
     <button @click="saveHeaders">SAVE HEADERS</button>
   </div>

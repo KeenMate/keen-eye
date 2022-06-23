@@ -32,12 +32,12 @@ export default {
   },
   computed: {
     enabled() {
-      return this.originSettings?.inject ?? true;
+      return this.originSettings?.inject ?? false;
     },
   },
   methods: {
     async toggleInjection() {
-      await setOriginSettings(!this.originSettings?.inject ?? true, null);
+      await setOriginSettings(!this.enabled, null);
       this.loadSettings();
     },
     async loadSettings() {
@@ -50,7 +50,7 @@ export default {
     },
   },
   mounted() {
-    this.loadSettings();
+    setTimeout(() => this.loadSettings(), 25);
   },
 };
 </script>

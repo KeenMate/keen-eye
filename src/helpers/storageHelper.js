@@ -31,6 +31,10 @@ export function getCurrentTab() {
   });
 }
 
+export function clearStorage() {
+  chrome.storage.sync.clear();
+}
+
 export async function getOriginSettings() {
   let tabOrigin = await getCurrentOrigin();
   let urlInfo = await getItem(tabOrigin);

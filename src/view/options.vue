@@ -1,24 +1,31 @@
 <template>
   <div class="main_app">
-    <h1>Hello {{msg}}</h1>
+    <h1>Settings</h1>
+    <button @click="clear">CLEAR STORAGE</button>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'optionsView',
-  data () {
-    return {
-      msg: 'options'
-    }
-  }
-}
+import { clearStorage } from "@/helpers/storageHelper";
 
+export default {
+  name: "optionsView",
+  data() {
+    return {
+      msg: "options",
+    };
+  },
+  methods: {
+    clear() {
+      clearStorage();
+    },
+  },
+};
 </script>
 
 <style>
 .main_app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
