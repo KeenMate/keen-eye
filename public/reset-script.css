@@ -85,10 +85,3 @@ meter {
 :where([draggable="true"]) {
   -webkit-user-drag: element;
 }
-
-* {
-  all: unset;
-}
-.reset {
-  all: initial;
-}

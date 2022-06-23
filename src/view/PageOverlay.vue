@@ -1,6 +1,8 @@
 <template>
-  <h4 class="title">Header Explorer</h4>
-  <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
+  <div class="container">
+    <h4 class="title">Header Explorer</h4>
+    <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
+  </div>
 </template>
 
 <script>
