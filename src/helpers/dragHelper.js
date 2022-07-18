@@ -1,12 +1,19 @@
-//https://stackoverflow.com/questions/9334084/moveable-draggable-div
+import { saveDivPosition } from "./scriptsComunicationHelper";
+
 /**
  * makes element dragable
  */
-export default function (dragableElement, elementId) {
+//https://stackoverflow.com/questions/9334084/moveable-draggable-div
+export default function (dragableElement, elementId, initialPosition) {
+  if (initialPosition) {
+    move(dragableElement, initialPosition.x, initialPosition.y);
+  }
   dragableElement.addEventListener("mousedown", (e) =>
     startMoving(dragableElement, e, elementId)
   );
-  dragableElement.addEventListener("mouseup", () => stopMoving());
+  dragableElement.addEventListener("mouseup", () =>
+    stopMoving(dragableElement)
+  );
 }
 
 function move(divid, xpos, ypos) {
@@ -50,8 +57,14 @@ function startMoving(divid, evt, containerId) {
   evt.preventDefault();
 }
 
-function stopMoving() {
+function stopMoving(divid) {
   // var a = document.createElement("script");
   document.body.style.cursor = "default";
   document.onmousemove = function () {};
+
+  let left = parseInt(
+    divid.style.left.substring(0, divid.style.left.length - 2)
+  );
+  let top = parseInt(divid.style.top.substring(0, divid.style.top.length - 2));
+  saveDivPosition({ x: left, y: top });
 }

@@ -1,4 +1,6 @@
 export function setItem(key, value) {
+  console.log(key);
+  console.log(value);
   return new Promise((resolve) => {
     chrome.storage.sync.set({ [key]: value }, function () {
       resolve();
@@ -44,11 +46,13 @@ export async function getOriginSettings() {
 /**
  * if some of them is null, it doesnt change it
  */
-export async function setOriginSettings(inject, headers) {
+export async function setOriginSettings(inject, headers, position) {
   let tabOrigin = await getCurrentOrigin();
   let oldOriginInfo = await getOriginSettings();
   if (typeof inject === "boolean") oldOriginInfo.inject = inject;
   if (headers) oldOriginInfo.allowedHeaders = headers;
-
+  if (position) {
+    oldOriginInfo.position = position;
+  }
   setItem(tabOrigin, oldOriginInfo);
 }

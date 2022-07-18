@@ -1,5 +1,7 @@
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
 import { getOriginSettings } from "@/helpers/storageHelper";
+import { setOriginSettings } from "@/helpers/storageHelper";
+import { settings, requestInfo, savePosition } from "@/constants/messages";
 
 ("use strict");
 var headers = {};
@@ -34,24 +36,35 @@ chrome.webRequest.onHeadersReceived.addListener(
 );
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(sender);
-  if (request.type == "get-headers") {
-    console.log(headers[request.tabId ?? sender.tab.id]);
-    sendReply(true, headers[request.tabId ?? sender.tab.id], sendResponse);
-    return true;
-  }
   console.log(request);
-  if (request.type == "inject") {
-    getOriginSettings().then((originSettings) => {
-      if (originSettings) {
-        //TODO check if should inject
-        sendReply(true, originSettings, sendResponse);
-      } else {
-        sendReply(false, {}, sendResponse);
-      }
-    });
-    return true;
+  //handle messsage based on type
+  switch (request.type) {
+    case requestInfo:
+      console.log(headers[request.tabId ?? sender.tab.id]);
+      sendReply(true, headers[request.tabId ?? sender.tab.id], sendResponse);
+      break;
+
+    case settings:
+      getOriginSettings().then((originSettings) => {
+        if (originSettings) {
+          sendReply(true, originSettings, sendResponse);
+        } else {
+          sendReply(false, {}, sendResponse);
+        }
+      });
+      break;
+
+    case savePosition:
+      console.log("saving position...");
+      setOriginSettings(null, null, request.position).then(() =>
+        sendReply(true, request.position, sendResponse)
+      );
+      break;
+    default:
+      sendReply(false, {}, sendResponse);
+      break;
   }
+  return true;
 });
 
 chrome.tabs.onRemoved.addListener(function (tabId) {
