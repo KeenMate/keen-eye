@@ -14,7 +14,7 @@ getSettings().then((response) => {
   const div = document.createElement("div");
   div.setAttribute(
     "style",
-    `position:fixed; z-index:5055; display:block; top: 0;left: 0;border:solid black 2px; width:550px;background: white;`
+    `position:fixed; z-index:5055; display:block; top: 0;left: 0;border:solid red 2px; min-width:550px;background: white;`
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");
@@ -22,11 +22,9 @@ getSettings().then((response) => {
   addStyleContent(document.body, resetcss);
   document.body.appendChild(div);
 
-
   //* create shadow root
   div.attachShadow({ mode: "open" });
   const appRoot = document.createElement("div");
-  appRoot.classList.add("complete-reset");
   div.shadowRoot.appendChild(appRoot);
   addStyleContent(div.shadowRoot, resetcss);
   addStyle(
@@ -37,6 +35,8 @@ getSettings().then((response) => {
     div.shadowRoot,
     "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
   );
+  addStyleContent(div.shadowRoot, bootstrapBody);
+  appRoot.classList.add("bootstrap-body");
 
   //* create vue app
   const app = createApp(PageOverlay, {
@@ -75,5 +75,17 @@ const resetcss = `
 .complete-reset:visited,
 .complete-reset:link {
   all: initial;
+}
+`;
+const bootstrapBody = `
+.bootstrap-body{
+margin: 0;
+font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+font-size: 1rem;
+font-weight: 400;
+line-height: 1.5;
+color: #212529;
+text-align: left;
+background-color: #fff;
 }
 `;

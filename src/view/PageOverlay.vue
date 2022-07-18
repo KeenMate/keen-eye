@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h4 class="title">Header Explorer</h4>
+    <CopyHeadersButtonVue :headers="responseHeaders"></CopyHeadersButtonVue>
     <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
   </div>
 </template>
@@ -8,10 +9,12 @@
 <script>
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
 import { getRequestInfo } from "@/helpers/scriptsComunicationHelper";
+import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 
 export default {
   components: {
     HeaderRendererVue,
+    CopyHeadersButtonVue,
   },
   props: {
     allowedHeaders: Array,
