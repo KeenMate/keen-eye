@@ -40,6 +40,9 @@
         >
           {{ enabled ? "disable" : "enable" }}
         </button>
+        <button class="btn-danger btn form-control-sm btn-sm" @click="resetDiv">
+          Reset overlay position
+        </button>
       </div>
       <HeaderSelector
         v-model="allowedOrigins"
@@ -75,6 +78,15 @@ export default {
   methods: {
     async toggleInjection() {
       await setSettings(!this.enabled, null);
+      if (confirm("Refresh page") === true) {
+        console.log("refreshing page");
+        refreshCurrentPage();
+      }
+      this.loadSettings();
+    },
+
+    async resetDiv() {
+      await setSettings(null, null, { x: 0, y: 0 });
       if (confirm("Refresh page") === true) {
         console.log("refreshing page");
         refreshCurrentPage();
