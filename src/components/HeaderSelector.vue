@@ -1,19 +1,22 @@
 <template>
-  <div>
+  <div class="form-group">
     <multiselect
       v-if="headers"
       v-model="internalValue"
+      :clear-on-select="false"
       :options="headers"
       :show-labels="false"
       :multiple="true"
       tag-placeholder="add"
       placeholder="Search or add a header"
       taggable
-      @tag="addTag"
       :close-on-select="false"
-      :clear-on-select="false"
-    ></multiselect>
-    <button @click="saveHeaders">SAVE HEADERS</button>
+      @tag="addTag"
+    >
+    </multiselect>
+    <button :class="'btn btn-outline-success'" @click="saveHeaders">
+      SAVE HEADERS
+    </button>
   </div>
 </template>
 
@@ -21,6 +24,7 @@
 import Multiselect from "vue-multiselect";
 import { setOriginSettings, getOriginSettings } from "../helpers/storageHelper";
 import { toRaw } from "vue";
+import { refreshCurrentPage } from "@/helpers/helpers";
 export default {
   components: { Multiselect },
   props: {
@@ -35,8 +39,12 @@ export default {
     addTag(val) {
       this.internalValue.push(val);
     },
-    saveHeaders() {
-      setOriginSettings(null, toRaw(this.internalValue));
+    async saveHeaders() {
+      await setOriginSettings(null, toRaw(this.internalValue));
+      if (confirm("Refresh page") === true) {
+        console.log("refreshing page");
+        refreshCurrentPage();
+      }
     },
   },
   mounted() {
