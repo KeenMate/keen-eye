@@ -5,17 +5,17 @@
       <li class="nav-item" role="tab">
         <a
           class="nav-link"
-          :class="currentTab == 'origin' ? 'active' : ''"
-          @click="changeTab('subdomain')"
-          >Origin</a
+          :class="currentTab == 'domain' ? 'active' : ''"
+          @click="changeTab('domain')"
+          >domain</a
         >
       </li>
       <li class="nav-item" role="tab">
         <a
           class="nav-link"
-          :class="currentTab == 'subdomain' ? 'active' : ''"
-          @click="changeTab('subdomain')"
-          >Subdomain</a
+          :class="currentTab == 'origin' ? 'active' : ''"
+          @click="changeTab('origin')"
+          >Origin</a
         >
       </li>
       <li>
@@ -50,14 +50,11 @@
 </template>
 
 <script>
-import {
-  getOriginSettings,
-  setOriginSettings,
-  getCurrentTab,
-} from "../helpers/storageHelper";
+import { getSettings, setSettings } from "../helpers/storageHelper";
 import { getRequestInfo } from "../helpers/scriptsComunicationHelper";
 import HeaderSelector from "@/components/HeaderSelector.vue";
 import { refreshCurrentPage } from "@/helpers/helpers";
+import { getCurrentTab } from "../helpers/urlHelper";
 
 export default {
   components: { HeaderSelector },
@@ -77,7 +74,7 @@ export default {
   },
   methods: {
     async toggleInjection() {
-      await setOriginSettings(!this.enabled, null);
+      await setSettings(!this.enabled, null);
       if (confirm("Refresh page") === true) {
         console.log("refreshing page");
         refreshCurrentPage();
@@ -85,7 +82,7 @@ export default {
       this.loadSettings();
     },
     async loadSettings() {
-      getOriginSettings().then((r) => (this.originSettings = r));
+      getSettings().then((r) => (this.originSettings = r));
       let currentTab = await getCurrentTab();
       getRequestInfo(currentTab.id).then((r) => {
         this.pageHeaders =

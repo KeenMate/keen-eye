@@ -22,7 +22,7 @@
 
 <script>
 import Multiselect from "vue-multiselect";
-import { setOriginSettings, getOriginSettings } from "../helpers/storageHelper";
+import { setSettings, getSettings } from "../helpers/storageHelper";
 import { toRaw } from "vue";
 import { refreshCurrentPage } from "@/helpers/helpers";
 export default {
@@ -40,7 +40,7 @@ export default {
       this.internalValue.push(val);
     },
     async saveHeaders() {
-      await setOriginSettings(null, toRaw(this.internalValue));
+      await setSettings(null, toRaw(this.internalValue));
       if (confirm("Refresh page") === true) {
         console.log("refreshing page");
         refreshCurrentPage();
@@ -48,7 +48,7 @@ export default {
     },
   },
   mounted() {
-    getOriginSettings().then(
+    getSettings().then(
       (r) => (this.internalValue = r?.allowedHeaders ?? [])
     );
   },

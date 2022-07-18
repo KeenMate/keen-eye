@@ -1,3 +1,5 @@
+import { getCurrentOrigin } from "./urlHelper";
+
 export function setItem(key, value) {
   console.log(key);
   console.log(value);
@@ -16,28 +18,11 @@ export function getItem(key) {
   });
 }
 
-export async function getCurrentOrigin() {
-  let tab = await getCurrentTab();
-  return new URL(tab.url).origin;
-}
-
-export function getCurrentTab() {
-  return new Promise((resolve, reject) => {
-    try {
-      chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
-        resolve(response[0]);
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-
 export function clearStorage() {
   chrome.storage.sync.clear();
 }
 
-export async function getOriginSettings() {
+export async function getSettings() {
   let tabOrigin = await getCurrentOrigin();
   let urlInfo = await getItem(tabOrigin);
   return urlInfo ?? { inject: false };
@@ -46,9 +31,9 @@ export async function getOriginSettings() {
 /**
  * if some of them is null, it doesnt change it
  */
-export async function setOriginSettings(inject, headers, position) {
+export async function setSettings(inject, headers, position) {
   let tabOrigin = await getCurrentOrigin();
-  let oldOriginInfo = await getOriginSettings();
+  let oldOriginInfo = await getSettings();
   if (typeof inject === "boolean") oldOriginInfo.inject = inject;
   if (headers) oldOriginInfo.allowedHeaders = headers;
   if (position) {

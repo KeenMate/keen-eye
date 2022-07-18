@@ -1,6 +1,6 @@
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
-import { getOriginSettings } from "@/helpers/storageHelper";
-import { setOriginSettings } from "@/helpers/storageHelper";
+import { getSettings } from "@/helpers/storageHelper";
+import { setSettings } from "@/helpers/storageHelper";
 import { settings, requestInfo, savePosition } from "@/constants/messages";
 
 ("use strict");
@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       break;
 
     case settings:
-      getOriginSettings().then((originSettings) => {
+      getSettings().then((originSettings) => {
         if (originSettings) {
           sendReply(true, originSettings, sendResponse);
         } else {
@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     case savePosition:
       console.log("saving position...");
-      setOriginSettings(null, null, request.position).then(() =>
+      setSettings(null, null, request.position).then(() =>
         sendReply(true, request.position, sendResponse)
       );
       break;
