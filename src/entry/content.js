@@ -5,20 +5,21 @@ import addDrag from "@/helpers/dragHelper";
 
 // import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 getSettings().then((response) => {
-  if (!response?.inject) return;
+  if (!response?.settings?.inject) return;
+  console.log();
   console.log("injecting...");
-  var allowedHeaders = response.allowedHeaders;
+  var allowedHeaders = response.settings.allowedHeaders;
 
   //* create container
   const elementId = "keen-eye-page-overlay-div";
   const div = document.createElement("div");
   div.setAttribute(
     "style",
-    `position:fixed; z-index:5055; display:block; top: 0;left: 0;border:solid red 2px; min-width:550px;background: white;`
+    `position:fixed; z-index:99999; display:block; top: 0;left: 0;border:solid red 2px; min-width:550px;background: white;`
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");
-  addDrag(div, elementId, response.position);
+  addDrag(div, elementId, response.settings.position);
   addStyleContent(document.body, resetcss);
   document.body.appendChild(div);
 

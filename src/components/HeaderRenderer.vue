@@ -32,12 +32,6 @@ export default {
   props: {
     headers: Object,
   },
-  watch: {
-    headers(newheader, oldheader) {
-      console.log(newheader);
-      console.log(oldheader);
-    },
-  },
   methods: {
     copy(name, value) {
       copyTextToClipboard(`${name}: ${value}`);

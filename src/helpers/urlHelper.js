@@ -26,19 +26,22 @@ export function getCurrentTab() {
 }
 
 export async function getCurrentTabUrl() {
-  return await URL(getCurrentTab()?.url);
+  let currentTab = await getCurrentTab();
+  console.log(currentTab);
+
+  return new URL(currentTab?.url ?? "");
 }
 
 export async function getUrlPart(part, url = undefined) {
   if (url === undefined) url = await getCurrentTabUrl();
-
+  console.log(part);
   switch (part) {
+    case "global":
+      return "!global!";
     case "domain":
       return getDomain(url);
-
     case "origin":
-      return;
-
+      return url.origin;
     case "page":
       return getPath(url);
 

@@ -29,6 +29,7 @@ export default {
   components: { Multiselect },
   props: {
     headers: Array,
+    level: String,
   },
   data() {
     return {
@@ -40,17 +41,25 @@ export default {
       this.internalValue.push(val);
     },
     async saveHeaders() {
-      await setSettings(null, toRaw(this.internalValue));
+      await setSettings(this.level, null, toRaw(this.internalValue));
       if (confirm("Refresh page") === true) {
         console.log("refreshing page");
         refreshCurrentPage();
       }
     },
+    loadHeaders() {
+      getSettings(this.level).then(
+        (r) => (this.internalValue = r?.allowedHeaders ?? [])
+      );
+    },
   },
   mounted() {
-    getSettings().then(
-      (r) => (this.internalValue = r?.allowedHeaders ?? [])
-    );
+    this.loadHeaders();
+  },
+  watch: {
+    level() {
+      this.loadHeaders();
+    },
   },
 };
 </script>

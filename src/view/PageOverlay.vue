@@ -1,6 +1,10 @@
 <template>
   <div class="container">
     <h4 class="title">Header Explorer</h4>
+    response headers{{ JSON.stringify(this.responseHeaders) }}<br />
+    allowed headers
+    {{ JSON.stringify(this.allowedHeaders) }}
+    <br />
     <CopyHeadersButtonVue :headers="responseHeaders"></CopyHeadersButtonVue>
     <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
   </div>
@@ -10,6 +14,7 @@
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
 import { getRequestInfo } from "@/helpers/scriptsComunicationHelper";
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
+// import { toRaw } from "vue";
 
 export default {
   components: {
@@ -26,9 +31,9 @@ export default {
   },
   computed: {
     responseHeaders() {
+      // console.log(toRaw(this.requestInfo));
       if (!this.requestInfo?.response?.responseHeaders) return [];
       return this.requestInfo.response.responseHeaders.filter((h) => {
-        console.log(h.name);
         return this.allowedHeaders?.includes(h.name) ?? false;
       });
     },

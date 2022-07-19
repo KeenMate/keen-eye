@@ -10,12 +10,6 @@ export default {
   props: {
     headers: Object,
   },
-  watch: {
-    headers(newheader, oldheader) {
-      console.log(newheader);
-      console.log(oldheader);
-    },
-  },
   methods: {
     copy() {
       console.log(this.headers);
