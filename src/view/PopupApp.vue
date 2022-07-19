@@ -84,7 +84,6 @@ export default {
       }
       this.loadSettings();
     },
-
     async resetDiv() {
       await setSettings(null, null, { x: 0, y: 0 });
       if (confirm("Refresh page") === true) {

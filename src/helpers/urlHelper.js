@@ -1,17 +1,16 @@
 import { parse } from "tldts";
+/**
+ * gets domain from URL object based on tldts
+ * @param {URL} url needs to be url object
+ * @returns
+ */
 export function getDomain(url) {
-  return parse(url).domain;
+  return parse(url.href).domain;
 }
 
-export async function getPath(urlString) {
-  let location = new URL(urlString);
-
-  return `${location.protocol}//${location.host}${location.pathname}`;
-}
-
-export async function getCurrentPath() {
-  let tab = await getCurrentTab();
-  return getPath(tab.url);
+export async function getPath(url) {
+  //https://stackoverflow.com/questions/6257463/how-to-get-the-url-without-any-parameters-in-javascript
+  return `${url.protocol}//${url.host}${url.pathname}`;
 }
 
 export function getCurrentTab() {
@@ -25,7 +24,26 @@ export function getCurrentTab() {
     }
   });
 }
-export async function getCurrentOrigin() {
-  let tab = await getCurrentTab();
-  return new URL(tab.url).origin;
+
+export async function getCurrentTabUrl() {
+  return await URL(getCurrentTab()?.url);
+}
+
+export async function getUrlPart(part, url = undefined) {
+  if (url === undefined) url = await getCurrentTabUrl();
+
+  switch (part) {
+    case "domain":
+      return getDomain(url);
+
+    case "origin":
+      return;
+
+    case "page":
+      return getPath(url);
+
+    //TODO remove this is only for compatibility reasons
+    default:
+      return url.origin;
+  }
 }
