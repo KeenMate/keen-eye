@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <h4 class="title">Header Explorer</h4>
-    response headers{{ JSON.stringify(this.responseHeaders) }}<br />
-    allowed headers
-    {{ JSON.stringify(this.allowedHeaders) }}
+    Settings loaded from <b>{{ level }}</b>
+    <br />
+    settings: {{ settings }}
     <br />
     <CopyHeadersButtonVue :headers="responseHeaders"></CopyHeadersButtonVue>
     <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
@@ -22,7 +22,8 @@ export default {
     CopyHeadersButtonVue,
   },
   props: {
-    allowedHeaders: Array,
+    settings: Array,
+    level: String,
   },
   data() {
     return {
@@ -34,7 +35,7 @@ export default {
       // console.log(toRaw(this.requestInfo));
       if (!this.requestInfo?.response?.responseHeaders) return [];
       return this.requestInfo.response.responseHeaders.filter((h) => {
-        return this.allowedHeaders?.includes(h.name) ?? false;
+        return this.settings?.allowedHeaders?.includes(h.name) ?? false;
       });
     },
   },

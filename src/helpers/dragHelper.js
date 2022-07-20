@@ -4,7 +4,7 @@ import { saveDivPosition } from "./scriptsComunicationHelper";
  * makes element dragable
  */
 //https://stackoverflow.com/questions/9334084/moveable-draggable-div
-export default function (dragableElement, elementId, initialPosition) {
+export default function (dragableElement, elementId, initialPosition, level) {
   if (initialPosition) {
     move(dragableElement, initialPosition.x, initialPosition.y);
   }
@@ -12,7 +12,7 @@ export default function (dragableElement, elementId, initialPosition) {
     startMoving(dragableElement, e, elementId)
   );
   dragableElement.addEventListener("mouseup", () =>
-    stopMoving(dragableElement)
+    stopMoving(dragableElement, level)
   );
 }
 
@@ -57,7 +57,7 @@ function startMoving(divid, evt, containerId) {
   evt.preventDefault();
 }
 
-function stopMoving(divid) {
+function stopMoving(divid, level) {
   // var a = document.createElement("script");
   document.body.style.cursor = "default";
   document.onmousemove = function () {};
@@ -66,5 +66,5 @@ function stopMoving(divid) {
     divid.style.left.substring(0, divid.style.left.length - 2)
   );
   let top = parseInt(divid.style.top.substring(0, divid.style.top.length - 2));
-  saveDivPosition({ x: left, y: top });
+  saveDivPosition({ x: left, y: top }, level);
 }

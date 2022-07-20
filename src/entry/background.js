@@ -57,10 +57,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     case savePosition:
       console.log("saving position...");
-      //TODO save position to setting it was loaded from 
-      setSettings("origin",undefined, undefined, request.position).then(() =>
-        sendReply(true, request.position, sendResponse)
-      );
+      //TODO save position to setting it was loaded from
+      setSettings(
+        request.level ?? "page",
+        undefined,
+        undefined,
+        request.position
+      ).then(() => sendReply(true, request.position, sendResponse));
       break;
     default:
       sendReply(false, {}, sendResponse);

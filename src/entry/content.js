@@ -8,7 +8,6 @@ getSettings().then((response) => {
   if (!response?.settings?.inject) return;
   console.log();
   console.log("injecting...");
-  var allowedHeaders = response.settings.allowedHeaders;
 
   //* create container
   const elementId = "keen-eye-page-overlay-div";
@@ -19,7 +18,7 @@ getSettings().then((response) => {
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");
-  addDrag(div, elementId, response.settings.position);
+  addDrag(div, elementId, response.settings.position, response.level);
   addStyleContent(document.body, resetcss);
   document.body.appendChild(div);
 
@@ -41,7 +40,8 @@ getSettings().then((response) => {
 
   //* create vue app
   const app = createApp(PageOverlay, {
-    allowedHeaders: allowedHeaders,
+    settings: response.settings,
+    level: response.level,
   });
   app.mount(appRoot);
 });
@@ -82,9 +82,9 @@ const bootstrapBody = `
 .bootstrap-body{
 margin: 0;
 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-font-size: 1rem;
+font-size: 14px;
 font-weight: 400;
-line-height: 1.5;
+line-height: 1.3;
 color: #212529;
 text-align: left;
 background-color: #fff;

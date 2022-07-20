@@ -8,8 +8,12 @@ export async function getSettings() {
   return await sendMessagePromise({ type: settings });
 }
 
-export async function saveDivPosition(position) {
-  return await sendMessagePromise({ type: savePosition, position: position });
+export async function saveDivPosition(position, level) {
+  return await sendMessagePromise({
+    type: savePosition,
+    position: position,
+    level: level,
+  });
 }
 
 export function sendMessagePromise(message) {
