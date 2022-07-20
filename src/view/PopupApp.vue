@@ -53,28 +53,26 @@
       <div class="row">
         <div class="col-6"><h3>SETTINGS</h3></div>
         <div class="col-6">
-          <div class="form-group">
-            <div class="form-group">
-              <div class="btn-group">
-                <button
-                  class="btn-danger btn form-control-sm btn-sm"
-                  @click="deleteSetting"
-                >
-                  Delete settings
-                </button>
-                <button
-                  class="btn-info btn form-control-sm btn-sm"
-                  @click="loadSelectedSettings"
-                >
-                  Refresh
-                </button>
-              </div>
+          <div class="mb-2">
+            <div class="btn-group">
+              <button
+                class="btn-danger btn form-control-sm btn-sm"
+                @click="deleteSetting"
+              >
+                Delete settings
+              </button>
+              <button
+                class="btn-info btn form-control-sm btn-sm"
+                @click="loadSelectedSettings"
+              >
+                Refresh
+              </button>
             </div>
           </div>
         </div>
       </div>
       <hr class="my-3" />
-      <div class="form-group">
+      <div class="mb-2">
         <button
           @click="toggleInjection"
           class="btn-primary btn form-control-sm btn-sm"
@@ -83,7 +81,7 @@
           {{ enabled ? "disable" : "enable" }}
         </button>
       </div>
-      <div class="form-group">
+      <div class="mb-2">
         <button
           class="btn-warning btn form-control-sm btn-sm"
           @click="resetDiv"
@@ -92,29 +90,33 @@
         </button>
         {{ selectedSettings?.position }}
       </div>
-    </div>
-    <div class="form-group">
-      <multiselect
-        v-if="selectedSettings.headerRules"
-        v-model="selectedSettings.headerRules"
-        :clear-on-select="false"
-        :options="pageHeaders"
-        :show-labels="false"
-        :multiple="true"
-        tag-placeholder="add"
-        placeholder="Search or add a header"
-        taggable
-        :close-on-select="false"
-        @tag="addTag"
-        @input="() => (this.changed = true)"
-        @remove="() => (this.changed = true)"
-        @select="() => (this.changed = true)"
-      >
-      </multiselect>
-      <button :class="'btn btn-outline-success'" @click="save">SAVE</button>
-    </div>
-    <div class="alert-danger" v-if="changed === true">
-      carefull unsaved changes
+      <div class="mb-2">
+        <multiselect
+          v-model="selectedSettings.headerRules"
+          :clear-on-select="false"
+          :options="pageHeaders"
+          :show-labels="false"
+          :multiple="true"
+          tag-placeholder="add"
+          placeholder="Search or add a header"
+          taggable
+          :close-on-select="false"
+          @tag="addTag"
+          @input="() => (this.changed = true)"
+          @remove="() => (this.changed = true)"
+          @select="() => (this.changed = true)"
+        >
+        </multiselect>
+      </div>
+      <div class="mb-2">
+        <button :class="'btn btn-large btn-outline-success'" @click="save">
+          SAVE
+        </button>
+      </div>
+
+      <div class="alert-danger" v-if="changed === true">
+        carefull unsaved changes
+      </div>
     </div>
   </div>
 </template>

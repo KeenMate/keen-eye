@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import PageOverlay from "../view/PageOverlay.vue";
 import { getSettings } from "@/helpers/scriptsComunicationHelper";
 import addDrag from "@/helpers/dragHelper";
+import { getLevelColor } from "@/helpers/helpers";
 
 // import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 getSettings().then((response) => {
@@ -11,9 +12,11 @@ getSettings().then((response) => {
   //* create container
   const elementId = "keen-eye-page-overlay-div";
   const div = document.createElement("div");
+  let borderColor = getLevelColor(response.level);
+
   div.setAttribute(
     "style",
-    `position:fixed; z-index:99999; display:block; top: 0;left: 0;border:solid red 2px; min-width:550px;background: white;`
+    `position:fixed; z-index:99999; display:block; top: 0;left: 0;border:solid ${borderColor} 5px; min-width:550px;background: white;`
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");

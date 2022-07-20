@@ -1,6 +1,6 @@
 <template>
   <button class="btn btn-secondary btn-sm" @click="copy">
-    copy all headers
+    <slot> </slot>
   </button>
 </template>
 <script>

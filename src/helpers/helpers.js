@@ -4,3 +4,20 @@ export function refreshCurrentPage() {
     chrome.tabs.update(tabs[0].id, { url: tabs[0].url });
   });
 }
+
+export function getLevelColor(level) {
+  console.log(level);
+  switch (level) {
+    case "global":
+      return "blue";
+    case "domain":
+      return "purple";
+    case "origin":
+      return "orange";
+    case "page":
+      return "red";
+
+    default:
+      return "gray";
+  }
+}

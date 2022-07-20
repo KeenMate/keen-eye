@@ -3,7 +3,12 @@
     <div class="row">
       <div class="col-6"><h4 class="title">KEEN-EYE</h4></div>
       <div class="col-6">
-        <CopyHeadersButtonVue :headers="responseHeaders"></CopyHeadersButtonVue>
+        <CopyHeadersButtonVue :headers="responseHeaders"
+          >Copy selected headers</CopyHeadersButtonVue
+        >
+        <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
+          >Copy all headers</CopyHeadersButtonVue
+        >
       </div>
     </div>
 
