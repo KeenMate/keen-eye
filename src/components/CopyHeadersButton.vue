@@ -12,7 +12,6 @@ export default {
   },
   methods: {
     copy() {
-      console.log(this.headers);
       let text = this.headers
 
         .map((header) => header.name + ": " + header.value)

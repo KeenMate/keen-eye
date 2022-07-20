@@ -22,7 +22,6 @@ function move(divid, xpos, ypos) {
 }
 function startMoving(divid, evt, containerId) {
   if (divid.id != containerId) {
-    console.log(divid.id);
     return;
   }
   let containerEl = document.body;

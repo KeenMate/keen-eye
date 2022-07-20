@@ -40,15 +40,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //handle messsage based on type
   switch (request.type) {
     case requestInfo:
-      console.log(headers[request.tabId ?? sender.tab.id]);
       sendReply(true, headers[request.tabId ?? sender.tab.id], sendResponse);
       break;
 
     case settings:
-      getMostSpecificSettings().then((originSettings) => {
-        console.log(originSettings);
-        if (originSettings) {
-          sendReply(true, originSettings, sendResponse);
+      getMostSpecificSettings().then((settings) => {
+        console.log(settings);
+        if (settings) {
+          sendReply(true, settings, sendResponse);
         } else {
           sendReply(false, {}, sendResponse);
         }
@@ -57,7 +56,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     case savePosition:
       console.log("saving position...");
-      //TODO save position to setting it was loaded from
       setSettings(
         request.level ?? "page",
         undefined,

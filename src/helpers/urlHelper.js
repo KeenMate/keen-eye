@@ -28,13 +28,11 @@ export function getCurrentTab() {
 export async function getCurrentTabUrl() {
   let currentTab = await getCurrentTab();
   console.log(currentTab);
-
   return new URL(currentTab?.url ?? "");
 }
 
 export async function getUrlPart(part, url = undefined) {
   if (url === undefined) url = await getCurrentTabUrl();
-  console.log(part);
   switch (part) {
     case "global":
       return "!global!";

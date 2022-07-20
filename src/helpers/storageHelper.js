@@ -19,16 +19,22 @@ export function getItem(key) {
   });
 }
 
+export function getAll() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(null, function (result) {
+      console.log(result);
+      resolve(result);
+    });
+  });
+}
+
 export function clearStorage() {
   chrome.storage.sync.clear();
 }
 
 export async function getSettings(level) {
-  // console.log(level);
   let storageKey = await getUrlPart(level);
-  console.log(storageKey);
   let urlInfo = await getItem(storageKey);
-  console.log(urlInfo);
   return urlInfo;
 }
 
@@ -76,5 +82,4 @@ export async function deleteSettings(level) {
   let storageKey = await getUrlPart(level);
   console.log("removing from " + storageKey);
   await setItem(storageKey, null);
-  console.log(await getItem(storageKey));
 }

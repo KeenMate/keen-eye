@@ -6,7 +6,6 @@ import addDrag from "@/helpers/dragHelper";
 // import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 getSettings().then((response) => {
   if (!response?.settings?.inject) return;
-  console.log();
   console.log("injecting...");
 
   //* create container
