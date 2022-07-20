@@ -48,7 +48,10 @@
         >
           {{ enabled ? "disable" : "enable" }}
         </button>
-        <button class="btn-danger btn form-control-sm btn-sm" @click="resetDiv">
+        <button
+          class="btn-warning btn form-control-sm btn-sm"
+          @click="resetDiv"
+        >
           Reset overlay position
         </button>
         <button
@@ -58,11 +61,25 @@
           Delete settings
         </button>
       </div>
-      <HeaderSelector
-        v-model="allowedOrigins"
-        :headers="pageHeaders"
-        :level="selectedTab"
-      ></HeaderSelector>
+      <div class="form-group">
+        <multiselect
+          v-if="pageHeaders"
+          v-model="selectedHeaders"
+          :clear-on-select="false"
+          :options="pageHeaders"
+          :show-labels="false"
+          :multiple="true"
+          tag-placeholder="add"
+          placeholder="Search or add a header"
+          taggable
+          :close-on-select="false"
+          @tag="addTag"
+        >
+        </multiselect>
+        <button :class="'btn btn-outline-success'" @click="saveHeaders">
+          SAVE HEADERS
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -75,12 +92,13 @@ import {
   setSettings,
 } from "../helpers/storageHelper";
 import { getRequestInfo } from "../helpers/scriptsComunicationHelper";
-import HeaderSelector from "@/components/HeaderSelector.vue";
 import { refreshCurrentPage } from "@/helpers/helpers";
 import { getCurrentTab } from "../helpers/urlHelper";
+import Multiselect from "vue-multiselect";
+import { toRaw } from "vue";
 
 export default {
-  components: { HeaderSelector },
+  components: { Multiselect },
   name: "popupView",
   data() {
     return {
@@ -89,6 +107,7 @@ export default {
       selectedTab: "origin",
       activeSettings: {},
       requestInfo: {},
+      selectedHeaders: [],
     };
   },
   computed: {
@@ -107,13 +126,12 @@ export default {
   methods: {
     async toggleInjection() {
       await setSettings(this.selectedTab, !this.enabled);
-      this.confirmRefresh();
+      this.pageRefresh();
       this.loadSelectedSettings();
     },
     async resetDiv() {
-      await setSettings(this.selectedTab, null, null, { x: 0, y: 0 });
-      this.confirmRefresh();
-
+      await setSettings(this.selectedTab, undefined, undefined, { x: 0, y: 0 });
+      this.pageRefresh();
       this.loadSelectedSettings();
     },
     async loadSettings() {
@@ -130,14 +148,33 @@ export default {
     },
     async loadSelectedSettings() {
       this.selectedSettings = await getSettings(this.selectedTab);
+      console.log(toRaw(this.selectedSettings));
+      this.selectedHeaders = this.selectedSettings?.allowedHeaders ?? [];
+      console.log(toRaw(this.selectedHeaders));
     },
     async deleteSetting() {
       await deleteSettings(this.selectedTab);
-      this.loadSelectedSettings();
       console.log("Settings deleted");
+
+      this.loadSelectedSettings();
+      this.loadSettings();
     },
-    confirmRefresh() {
+    pageRefresh() {
       if (confirm("Refresh page")) {
+        console.log("refreshing page");
+        refreshCurrentPage();
+      }
+    },
+    addTag(val) {
+      this.selectedHeaders.push(val);
+    },
+    async saveHeaders() {
+      await setSettings(
+        this.selectedTab,
+        undefined,
+        toRaw(this.selectedHeaders)
+      );
+      if (confirm("Refresh page") === true) {
         console.log("refreshing page");
         refreshCurrentPage();
       }

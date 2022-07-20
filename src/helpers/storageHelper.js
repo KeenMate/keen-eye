@@ -26,9 +26,9 @@ export function clearStorage() {
 export async function getSettings(level) {
   // console.log(level);
   let storageKey = await getUrlPart(level);
-  // console.log(storageKey);
+  console.log(storageKey);
   let urlInfo = await getItem(storageKey);
-  // console.log(urlInfo);
+  console.log(urlInfo);
   return urlInfo;
 }
 
@@ -55,13 +55,18 @@ export async function getMostSpecificSettings() {
 /**
  * if some of them is null, it doesnt change it
  */
-export async function setSettings(level, inject, headers, position) {
+export async function setSettings(
+  level,
+  inject = undefined,
+  headers = undefined,
+  position = undefined
+) {
   console.warn(level);
   let storageKey = await getUrlPart(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
-  if (typeof inject === "boolean") oldOriginInfo.inject = inject;
-  if (headers) oldOriginInfo.allowedHeaders = headers;
-  if (position) {
+  if (inject !== undefined) oldOriginInfo.inject = inject;
+  if (headers !== undefined) oldOriginInfo.allowedHeaders = headers;
+  if (position !== undefined) {
     oldOriginInfo.position = position;
   }
   return setItem(storageKey, oldOriginInfo);
