@@ -65,7 +65,8 @@ export async function setSettings(
   level,
   inject = undefined,
   headers = undefined,
-  position = undefined
+  position = undefined,
+  requestsRules = undefined
 ) {
   console.warn(level);
   let storageKey = await getUrlPart(level);
@@ -74,6 +75,9 @@ export async function setSettings(
   if (headers !== undefined) oldOriginInfo.headerRules = headers;
   if (position !== undefined) {
     oldOriginInfo.position = position;
+  }
+  if (position !== undefined) {
+    oldOriginInfo.requestsRules = requestsRules;
   }
   return setItem(storageKey, oldOriginInfo);
 }

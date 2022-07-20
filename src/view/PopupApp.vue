@@ -101,7 +101,25 @@
           placeholder="Search or add a header"
           taggable
           :close-on-select="false"
-          @tag="addTag"
+          @tag="addHeaderRule"
+          @input="() => (this.changed = true)"
+          @remove="() => (this.changed = true)"
+          @select="() => (this.changed = true)"
+        >
+        </multiselect>
+      </div>
+      <div class="mb-2">
+        <multiselect
+          v-model="selectedSettings.requestsRules"
+          :options="[]"
+          :clear-on-select="false"
+          :show-labels="false"
+          :multiple="true"
+          tag-placeholder="add"
+          placeholder="Search or add a header"
+          taggable
+          :close-on-select="false"
+          @tag="addRequestRule"
           @input="() => (this.changed = true)"
           @remove="() => (this.changed = true)"
           @select="() => (this.changed = true)"
@@ -212,15 +230,22 @@ export default {
         refreshCurrentPage();
       }
     },
-    addTag(val) {
+    addHeaderRule(val) {
       this.selectedSettings?.headerRules.push(val);
     },
+    addRequestRule(val) {
+      if (!this.selectedSettings.requestsRules)
+        this.selectedSettings.requestsRules = [];
+      this.selectedSettings.requestsRules.push(val);
+    },
     async save() {
+      //TODO add requestRules to settings
       await setSettings(
         this.selectedTab,
         this.selectedSettings.inject,
         toRaw(this.selectedSettings.headerRules),
-        this.selectedSettings.position
+        this.selectedSettings.position,
+        toRaw(this.selectedSettings.requestsRules)
       );
       this.pageRefresh();
       this.loadSelectedSettings();
