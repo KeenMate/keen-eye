@@ -14,8 +14,7 @@
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
 import { getRequestInfo } from "@/helpers/scriptsComunicationHelper";
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
-// import { toRaw } from "vue";
-
+import { matchWithStairs } from "@/helpers/stringHelpers";
 export default {
   components: {
     HeaderRendererVue,
@@ -32,11 +31,22 @@ export default {
   },
   computed: {
     responseHeaders() {
-      // console.log(toRaw(this.requestInfo));
-      if (!this.requestInfo?.response?.responseHeaders) return [];
-      return this.requestInfo.response.responseHeaders.filter((h) => {
-        return this.settings?.allowedHeaders?.includes(h.name) ?? false;
-      });
+      if (
+        !this.requestInfo?.response?.responseHeaders ||
+        !Array.isArray(this.settings?.headerRules)
+      )
+        return [];
+
+      console.log(matchWithStairs("test", "test"));
+      console.log(matchWithStairs("test11", "test*"));
+      console.log(matchWithStairs("11test", "*test"));
+      return this.requestInfo.response.responseHeaders.filter(
+        ({ name: headerName }) => {
+          return this.settings?.headerRules?.some((allowed) => {
+            return matchWithStairs(headerName, allowed);
+          });
+        }
+      );
     },
   },
   methods: {

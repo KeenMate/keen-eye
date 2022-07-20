@@ -71,7 +71,7 @@ export async function setSettings(
   let storageKey = await getUrlPart(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
   if (inject !== undefined) oldOriginInfo.inject = inject;
-  if (headers !== undefined) oldOriginInfo.allowedHeaders = headers;
+  if (headers !== undefined) oldOriginInfo.headerRules = headers;
   if (position !== undefined) {
     oldOriginInfo.position = position;
   }

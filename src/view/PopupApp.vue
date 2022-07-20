@@ -95,8 +95,8 @@
     </div>
     <div class="form-group">
       <multiselect
-        v-if="selectedSettings.allowedHeaders"
-        v-model="selectedSettings.allowedHeaders"
+        v-if="selectedSettings.headerRules"
+        v-model="selectedSettings.headerRules"
         :clear-on-select="false"
         :options="pageHeaders"
         :show-labels="false"
@@ -131,24 +131,17 @@ import { refreshCurrentPage } from "@/helpers/helpers";
 import { getCurrentTab } from "../helpers/urlHelper";
 import Multiselect from "vue-multiselect";
 import { toRaw } from "vue";
+import { EMPTY_SETTINGS } from "@/constants/settings";
 
 export default {
   components: { Multiselect },
   name: "popupView",
   data() {
     return {
-      selectedSettings: {
-        inject: false,
-        allowedHeaders: [],
-        position: { x: 0, y: 0 },
-      },
+      selectedSettings: EMPTY_SETTINGS,
       allowedOrigins: [],
       selectedTab: "origin",
-      activeSettings: {
-        inject: false,
-        allowedHeaders: [],
-        position: { x: 0, y: 0 },
-      },
+      activeSettings: EMPTY_SETTINGS,
       requestInfo: {},
       changed: false,
       loadedTab: "origin",
@@ -166,10 +159,7 @@ export default {
   },
   methods: {
     toggleInjection() {
-      this.selectedSettings = {
-        ...this.selectedSettings,
-        inject: !this.enabled,
-      };
+      this.selectedSettings.inject = !this.enabled;
 
       console.log(this.selectedSettings);
       this.changed = true;
@@ -195,13 +185,9 @@ export default {
     },
     async loadSelectedSettings() {
       let loadedSettings = await getSettings(this.selectedTab);
-      console.log(loadedSettings);
+      //if settings arent set, use empty settings and allow saving it
       if (!loadedSettings) {
-        this.selectedSettings = {
-          inject: false,
-          allowedHeaders: [],
-          position: { x: 0, y: 0 },
-        };
+        this.selectedSettings = EMPTY_SETTINGS;
         this.changed = true;
       } else {
         this.selectedSettings = loadedSettings;
@@ -225,13 +211,13 @@ export default {
       }
     },
     addTag(val) {
-      this.selectedSettings?.allowedHeaders.push(val);
+      this.selectedSettings?.headerRules.push(val);
     },
     async save() {
       await setSettings(
         this.selectedTab,
         this.selectedSettings.inject,
-        toRaw(this.selectedSettings.allowedHeaders),
+        toRaw(this.selectedSettings.headerRules),
         this.selectedSettings.position
       );
       this.pageRefresh();
