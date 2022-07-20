@@ -6,32 +6,72 @@ import { settings, requestInfo, savePosition } from "@/constants/messages";
 ("use strict");
 var headers = {};
 
-var filters = {
+var mainFrameFilters = {
   urls: ["<all_urls>"],
   types: ["main_frame"],
+};
+var fetchFilters = {
+  urls: ["<all_urls>"],
+  types: ["xmlhttprequest"],
 };
 
 chrome.webRequest.onSendHeaders.addListener(
   function (details) {
-    chrome.extension.getBackgroundPage().console.log(details);
+    // chrome.extension.getBackgroundPage().console.log(details);
     headers[details.tabId] = headers[details.tabId] || {};
     headers[details.tabId].request = details;
   },
-  filters,
+  mainFrameFilters,
   ["requestHeaders"]
 );
-
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    chrome.extension.getBackgroundPage().console.log(details);
+    // chrome.extension.getBackgroundPage().console.log(details);
     headers[details.tabId] = headers[details.tabId] || {};
     headers[details.tabId].response = details;
     headers[details.tabId].responseHeaders = details.responseHeaders;
-    chrome.extension
-      .getBackgroundPage()
-      .console.log(headers[details.tabId].response);
+    // chrome.extension
+    //   .getBackgroundPage()
+    //   .console.log(headers[details.tabId].response);
   },
-  filters,
+  mainFrameFilters,
+  ["responseHeaders"]
+);
+
+chrome.webRequest.onSendHeaders.addListener(
+  function (details) {
+    console.debug("request");
+    // console.debug(details);
+    headers[details.tabId] = headers[details.tabId] ?? {};
+    headers[details.tabId].requests = headers[details.tabId].requests ?? {};
+    headers[details.tabId].requests[details.requestId] = {
+      ...details,
+      startTimestamp: details.timeStamp,
+    };
+    console.debug(headers[details.tabId].requests[details.requestId]);
+  },
+  fetchFilters,
+  ["requestHeaders"]
+);
+chrome.webRequest.onHeadersReceived.addListener(
+  function (details) {
+    console.debug("response");
+    // console.debug(details);
+    //checks if some of objects arent undefined
+    headers[details.tabId] = headers[details.tabId] ?? {};
+    headers[details.tabId].requests = headers[details.tabId].requests ?? {};
+
+    headers[details.tabId].requests[details.requestId] = {
+      ...headers[details.tabId].requests[details.requestId],
+      ...details,
+      endTimestamp: details.timeStamp,
+      took:
+        details.timeStamp -
+        headers[details.tabId].requests[details.requestId].startTimestamp,
+    };
+    console.debug(headers[details.tabId].requests[details.requestId]);
+  },
+  fetchFilters,
   ["responseHeaders"]
 );
 

@@ -114,7 +114,7 @@
         </button>
       </div>
 
-      <div class="alert-danger" v-if="changed === true">
+      <div class="alert alert-danger" v-if="changed === true">
         carefull unsaved changes
       </div>
     </div>

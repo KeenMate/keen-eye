@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-6"><h4 class="title">KEEN-EYE</h4></div>
+      <div class="col-6"><h3 class="title">KEEN-EYE</h3></div>
       <div class="col-6">
         <CopyHeadersButtonVue :headers="responseHeaders"
           >Copy selected headers</CopyHeadersButtonVue
@@ -12,20 +12,24 @@
       </div>
     </div>
 
-    Settings loaded from <b>{{ level }}</b>
-    <br />
-    <!--   settings: {{ settings }}
-    <br /> -->
-    <div class="row">
-      <div class="col-6">
-        Status code: <b>{{ requestInfo?.response?.statusCode ?? "loading" }}</b>
+    <div @mousedown.stop>
+      Settings loaded from <b>{{ level }}</b>
+      <br />
+      <!--   settings: {{ settings }}
+      <br /> -->
+      <div class="row">
+        <div class="col-6">
+          Status code:
+          <b>{{ requestInfo?.response?.statusCode ?? "loading" }}</b>
+        </div>
+        <div class="col-6">
+          Response took: <b>{{ time ? time + "ms" : "refresh" }}</b>
+        </div>
       </div>
-      <div class="col-6">
-        Response took: <b>{{ time ? time + "ms" : "loading" }}</b>
-      </div>
+      Try to refresh page if it is taking too long to load.Turn off in
+      popup,drag by grabbing sides
+      <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
     </div>
-    Try to refresh page if it is taking too long to load.Turn of in popup
-    <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
   </div>
 </template>
 
