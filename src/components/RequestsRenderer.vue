@@ -5,7 +5,7 @@
       <thead class="table-dark">
         <tr>
           <th>method</th>
-          <th>url</th>
+          <th>origin</th>
           <th>time</th>
           <th>code</th>
         </tr>

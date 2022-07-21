@@ -27,7 +27,7 @@
         </div>
       </div>
       Try to refresh page if it is taking too long to load.Turn off in
-      popup,drag by grabbing sides
+      popup,drag by grabbing sides. Copy by clicking on row
       <HeaderRendererVue
         v-if="settings?.headerRules"
         :headers="filteredHeaders"
