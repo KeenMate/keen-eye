@@ -100,7 +100,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         request.level ?? "page",
         undefined,
         undefined,
-        request.position
+        request.position,
+        undefined
       ).then(() => sendReply(true, request.position, sendResponse));
       break;
     default:

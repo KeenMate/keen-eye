@@ -69,6 +69,9 @@ export async function setSettings(
   requestsRules = undefined
 ) {
   console.warn(level);
+  console.clear();
+  console.log("SETTING SETTINGS");
+  console.log(requestsRules);
   let storageKey = await getUrlPart(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
   if (inject !== undefined) oldOriginInfo.inject = inject;
@@ -76,7 +79,9 @@ export async function setSettings(
   if (position !== undefined) {
     oldOriginInfo.position = position;
   }
-  if (position !== undefined) {
+  if (requestsRules !== undefined) {
+    console.log("chaning rules");
+    console.log(requestsRules);
     oldOriginInfo.requestsRules = requestsRules;
   }
   return setItem(storageKey, oldOriginInfo);

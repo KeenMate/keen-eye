@@ -20,3 +20,10 @@ export function getLevelColor(level) {
       return "gray";
   }
 }
+
+export function getStatusCodeColor(statusCode) {
+  if (!statusCode) return "muted";
+  if (statusCode >= 400) return "danger";
+  if (statusCode < 200) return "info";
+  if (statusCode < 300) return "success";
+}
