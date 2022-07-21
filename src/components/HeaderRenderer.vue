@@ -2,20 +2,24 @@
   <table class="table table-striped table-sm">
     <thead class="table-dark">
       <tr>
-        <th>name</th>
-        <th>value</th>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Copy</th>
       </tr>
     </thead>
-    <tbody class="table-group-divider" style="cursor: pointer;">
-      <tr
-        v-for="header in headers"
-        :key="header.name"
-        @click="copy(header.name, header.value)"
-      >
+    <tbody class="table-group-divider">
+      <tr v-for="header in headers" :key="header.name">
         <td>
           <b>{{ header.name }}</b>
         </td>
         <td>{{ header.value }}</td>
+
+        <td
+          style="cursor: pointer; user-select: none"
+          @click="copy(header.name, header.value)"
+        >
+          copy
+        </td>
       </tr>
     </tbody>
   </table>
