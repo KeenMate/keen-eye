@@ -25,5 +25,11 @@
     "storage"
   ],
   "options_page": "options.html",
-  "web_accessible_resources": ["/reset-script.css"]
+  "web_accessible_resources": ["/reset-script.css"],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": "Ctrl+Shift+K",
+      "description": "Toggle page overlay"
+    }
+  }
 }

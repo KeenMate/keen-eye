@@ -8,13 +8,13 @@ export function refreshCurrentPage() {
 export function getLevelColor(level) {
   switch (level) {
     case "global":
-      return "blue";
+      return "LightBlue";
     case "domain":
-      return "purple";
+      return "LightGreen";
     case "origin":
-      return "orange";
+      return "LightCoral";
     case "page":
-      return "red";
+      return "LightYellow";
 
     default:
       return "gray";

@@ -28,7 +28,11 @@ chrome.webRequest.onHeadersReceived.addListener(
     // chrome.extension.getBackgroundPage().console.log(details);
     headers[details.tabId] = headers[details.tabId] || {};
     headers[details.tabId].response = details;
-    headers[details.tabId].responseHeaders = details.responseHeaders;
+    headers[details.tabId].responseHeaders = details.responseHeaders.sort(
+      (a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0)
+    );
+
+    console.log();
     // chrome.extension
     //   .getBackgroundPage()
     //   .console.log(headers[details.tabId].response);

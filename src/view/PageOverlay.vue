@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-6"><h3 class="title">KEEN-EYE</h3></div>
       <div class="col-6">
-        <CopyHeadersButtonVue :headers="responseHeaders"
+        <CopyHeadersButtonVue :headers="filteredHeaders"
           >Copy selected headers</CopyHeadersButtonVue
         >
         <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
@@ -26,8 +26,6 @@
           Response took: <b>{{ time ? time + "ms" : "refresh" }}</b>
         </div>
       </div>
-      Try to refresh page if it is taking too long to load.Turn off in
-      popup,drag by grabbing sides. Copy by clicking on row
       <HeaderRendererVue
         v-if="settings?.headerRules"
         :headers="filteredHeaders"
@@ -36,19 +34,17 @@
       <div class="alert alert-warning" v-if="!settings?.headerRules">
         No header rules selected, you can select them in popup
       </div>
-      <div class="row">
+
+      <div class="row" v-if="requestsRulesSet">
         <div class="col-6"><h4>Requests</h4></div>
         <div class="col-6">
-          <button @click="loadRequestInfo">Refresh</button>
+          <button class="btn btn-sm" @click="loadRequestInfo">Refresh</button>
         </div>
       </div>
       <RequestsRendererVue
-        v-if="settings?.requestsRules && requestInfo?.requests"
+        v-if="requestsRulesSet && filteredRequests"
         :requests="filteredRequests"
       ></RequestsRendererVue>
-      <div class="alert alert-warning" v-if="!settings?.requestsRules">
-        No request rules selected, you can select them in popup
-      </div>
     </div>
   </div>
 </template>
@@ -76,6 +72,17 @@ export default {
     };
   },
   computed: {
+    requestsRulesSet() {
+      console.log(toRaw(this.settings?.requestsRules));
+
+      if (!this.settings || !this.settings?.requestsRules) {
+        return false;
+      }
+      if (this.settings.requestsRules.length == 0) {
+        return false;
+      }
+      return true;
+    },
     filteredHeaders() {
       if (
         !this.requestInfo?.response?.responseHeaders ||

@@ -11,6 +11,7 @@ export function setItem(key, value) {
 }
 
 export function getItem(key) {
+  if (!key) return Promise.reject("wrong key");
   // console.log(key);
   return new Promise((resolve) => {
     chrome.storage.sync.get([key], function (result) {

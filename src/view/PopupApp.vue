@@ -2,7 +2,7 @@
   <div style="min-width: 500px; min-height: 600px" class="card">
     <!-- Tabs navs -->
     <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
-      <li class="nav-item" role="tab">
+      <li class="nav-item" role="tab" :style="getColor('global')">
         <a
           class="nav-link"
           :class="
@@ -13,7 +13,7 @@
           >global</a
         >
       </li>
-      <li class="nav-item" role="tab">
+      <li class="nav-item" role="tab" :style="getColor('domain')">
         <a
           class="nav-link"
           :class="
@@ -24,7 +24,7 @@
           >domain</a
         >
       </li>
-      <li class="nav-item" role="tab">
+      <li class="nav-item" role="tab" :style="getColor('origin')">
         <a
           class="nav-link"
           :class="
@@ -35,7 +35,7 @@
           >Origin</a
         >
       </li>
-      <li>
+      <li class="nav-item" role="tab" :style="getColor('page')">
         <a
           class="nav-link"
           role="tab"
@@ -78,7 +78,7 @@
           class="btn-primary btn form-control-sm btn-sm"
           :class="enabled ? 'btn-danger' : 'btn-success'"
         >
-          {{ enabled ? "disable" : "enable" }}
+          {{ enabled ? "hide" : "show" }}
         </button>
       </div>
       <div class="mb-2">
@@ -152,6 +152,7 @@ import { getCurrentTab } from "../helpers/urlHelper";
 import Multiselect from "vue-multiselect";
 import { toRaw } from "vue";
 import { EMPTY_SETTINGS } from "@/constants/settings";
+import { getLevelColor } from "@/helpers/helpers";
 
 export default {
   components: { Multiselect },
@@ -178,9 +179,14 @@ export default {
     },
   },
   methods: {
-    toggleInjection() {
+    getColor(level) {
+      return `background-color: ${getLevelColor(level)}`;
+    },
+    async toggleInjection() {
       this.selectedSettings.inject = !this.enabled;
-
+      await setSettings(this.selectedTab, this.selectedSettings.inject);
+      this.pageRefresh();
+      this.loadSelectedSettings();
       console.log(this.selectedSettings);
       this.changed = true;
     },
