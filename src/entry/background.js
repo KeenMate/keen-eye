@@ -69,7 +69,7 @@ chrome.webRequest.onHeadersReceived.addListener(
       ...headers[details.tabId].requests[details.requestId],
       ...details,
       endTimestamp: details.timeStamp,
-      took:
+      ttfb:
         details.timeStamp -
         headers[details.tabId].requests[details.requestId].startTimestamp,
     };
@@ -78,7 +78,23 @@ chrome.webRequest.onHeadersReceived.addListener(
   fetchFilters,
   ["responseHeaders"]
 );
+chrome.webRequest.onCompleted.addListener(
+  function (details) {
+    console.debug("on complete");
+    // console.debug(details);
+    //checks if some of objects arent undefined
+    headers[details.tabId] = headers[details.tabId] ?? {};
+    headers[details.tabId].requests = headers[details.tabId].requests ?? {};
 
+    //add took to object
+    (headers[details.tabId].requests[details.requestId].took =
+      details.timeStamp -
+      headers[details.tabId].requests[details.requestId].startTimestamp),
+      console.debug(headers[details.tabId].requests[details.requestId]);
+  },
+  fetchFilters,
+  ["responseHeaders"]
+);
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request);
   //handle messsage based on type

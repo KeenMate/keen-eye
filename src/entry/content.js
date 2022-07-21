@@ -91,4 +91,7 @@ color: #212529;
 text-align: left;
 background-color: #fff;
 }
+td {
+  white-space: nowrap;
+}
 `;
