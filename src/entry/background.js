@@ -18,8 +18,7 @@ var fetchFilters = {
 chrome.webRequest.onSendHeaders.addListener(
   function (details) {
     // chrome.extension.getBackgroundPage().console.log(details);
-    headers[details.tabId] = headers[details.tabId] || {};
-    headers[details.tabId].request = details;
+    headers[details.tabId] = { request: details };
   },
   mainFrameFilters,
   ["requestHeaders"]
@@ -61,6 +60,7 @@ chrome.webRequest.onHeadersReceived.addListener(
     headers[details.tabId] = headers[details.tabId] ?? {};
     headers[details.tabId].requests = headers[details.tabId].requests ?? {};
 
+    //merge request details, responsedetails and some custom props
     headers[details.tabId].requests[details.requestId] = {
       ...headers[details.tabId].requests[details.requestId],
       ...details,

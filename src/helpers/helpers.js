@@ -6,7 +6,6 @@ export function refreshCurrentPage() {
 }
 
 export function getLevelColor(level) {
-  console.log(level);
   switch (level) {
     case "global":
       return "blue";

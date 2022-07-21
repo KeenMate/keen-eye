@@ -28,7 +28,22 @@
       </div>
       Try to refresh page if it is taking too long to load.Turn off in
       popup,drag by grabbing sides
-      <HeaderRendererVue :headers="responseHeaders"> </HeaderRendererVue>
+      <HeaderRendererVue
+        v-if="settings?.headerRules"
+        :headers="filteredHeaders"
+      >
+      </HeaderRendererVue>
+      <div class="alert alert-warning" v-if="!settings?.headerRules">
+        No header rules selected, you can select them in popup
+      </div>
+      <h4>Requests</h4>
+      <RequestsRendererVue
+        v-if="settings?.requestsRules && requestInfo?.requests"
+        :requests="filteredRequests"
+      ></RequestsRendererVue>
+      <div class="alert alert-warning" v-if="!settings?.requestsRules">
+        No request rules selected, you can select them in popup
+      </div>
     </div>
   </div>
 </template>
@@ -37,12 +52,14 @@
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
 import { getRequestInfo } from "@/helpers/scriptsComunicationHelper";
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
+import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
 export default {
   components: {
     HeaderRendererVue,
     CopyHeadersButtonVue,
+    RequestsRendererVue,
   },
   props: {
     settings: Array,
@@ -54,14 +71,14 @@ export default {
     };
   },
   computed: {
-    responseHeaders() {
+    filteredHeaders() {
       if (
         !this.requestInfo?.response?.responseHeaders ||
         !Array.isArray(this.settings?.headerRules)
       )
         return [];
 
-      console.log(toRaw(this.requestInfo));
+      // console.log(toRaw(this.requestInfo));
       return this.requestInfo.response.responseHeaders.filter(
         ({ name: headerName }) => {
           return this.settings?.headerRules?.some((allowed) => {
@@ -70,10 +87,25 @@ export default {
         }
       );
     },
+    filteredRequests() {
+      if (
+        !this.requestInfo?.requests ||
+        !Array.isArray(this.settings?.requestsRules)
+      )
+        return [];
+      let requestsArray = Object.values(toRaw(this.requestInfo.requests));
+
+      console.log(requestsArray);
+      return requestsArray.filter(({ url }) => {
+        return this.settings?.requestsRules?.some((allowed) => {
+          return matchWithStairs(url, allowed);
+        });
+      });
+    },
     time() {
-      console.log(this.requestInfo);
-      console.log(this.requestInfo?.response?.timeStamp);
-      console.log(this.requestInfo?.request?.timeStamp);
+      // console.log(this.requestInfo);
+      // console.log(this.requestInfo?.response?.timeStamp);
+      // console.log(this.requestInfo?.request?.timeStamp);
       if (
         !this.requestInfo ||
         !this.requestInfo?.response?.timeStamp ||
@@ -88,6 +120,8 @@ export default {
   methods: {
     loadRequestInfo() {
       getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
+      //TODO rework this
+      setTimeout(this.loadRequestInfo, 2000);
     },
   },
   mounted() {
