@@ -16,7 +16,7 @@ getSettings().then((response) => {
 
   div.setAttribute(
     "style",
-    `position:fixed; z-index:99999; display:block; top: 0;left: 0;border:solid ${borderColor} 5px; min-width:550px;background: white;`
+    `position:fixed; z-index:99999; display:block; top: 0;left: 0;border:solid ${borderColor} 5px; min-width:550px;background: white;resize: both;overflow: auto;`
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");
@@ -84,7 +84,7 @@ const bootstrapBody = `
 .bootstrap-body{
 margin: 0;
 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-font-size: 14px;
+font-size: 10 px;
 font-weight: 400;
 line-height: 1.3;
 color: #212529;

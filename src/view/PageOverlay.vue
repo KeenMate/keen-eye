@@ -13,7 +13,7 @@
     </div>
 
     <div @mousedown.stop>
-      Settings loaded from <b>{{ level }}</b>
+      <!-- Settings loaded from <b>{{ level }}</b> -->
       <br />
       <!--   settings: {{ settings }}
       <br /> -->
@@ -36,7 +36,12 @@
       <div class="alert alert-warning" v-if="!settings?.headerRules">
         No header rules selected, you can select them in popup
       </div>
-      <h4>Requests</h4>
+      <div class="row">
+        <div class="col-6"><h4>Requests</h4></div>
+        <div class="col-6">
+          <button @click="loadRequestInfo">Refresh</button>
+        </div>
+      </div>
       <RequestsRendererVue
         v-if="settings?.requestsRules && requestInfo?.requests"
         :requests="filteredRequests"
@@ -121,7 +126,7 @@ export default {
     loadRequestInfo() {
       getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
       //TODO rework this
-      setTimeout(this.loadRequestInfo, 2000);
+      // setTimeout(this.loadRequestInfo, 2000);
     },
   },
   mounted() {
