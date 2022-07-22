@@ -1,3 +1,4 @@
+import { refreshCurrentPage } from "./helpers";
 import { getUrlPart } from "./urlHelper";
 
 export function setItem(key, value) {
@@ -69,10 +70,7 @@ export async function setSettings(
   position = undefined,
   requestsRules = undefined
 ) {
-  console.warn(level);
-  console.clear();
   console.log("SETTING SETTINGS");
-  console.log(requestsRules);
   let storageKey = await getUrlPart(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
   if (inject !== undefined) oldOriginInfo.inject = inject;
@@ -81,11 +79,21 @@ export async function setSettings(
     oldOriginInfo.position = position;
   }
   if (requestsRules !== undefined) {
-    console.log("chaning rules");
-    console.log(requestsRules);
     oldOriginInfo.requestsRules = requestsRules;
   }
   return setItem(storageKey, oldOriginInfo);
+}
+
+export async function toggleVisibility() {
+  let {
+    level,
+    settings: { inject },
+  } = await getMostSpecificSettings();
+  console.log(level);
+  console.log(inject);
+  await setSettings(level, !inject);
+
+  refreshCurrentPage();
 }
 
 export async function deleteSettings(level) {

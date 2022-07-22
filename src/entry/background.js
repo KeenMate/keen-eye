@@ -1,5 +1,8 @@
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
-import { getMostSpecificSettings } from "@/helpers/storageHelper";
+import {
+  getMostSpecificSettings,
+  toggleVisibility,
+} from "@/helpers/storageHelper";
 import { setSettings } from "@/helpers/storageHelper";
 import { settings, requestInfo, savePosition } from "@/constants/messages";
 
@@ -71,7 +74,8 @@ chrome.webRequest.onHeadersReceived.addListener(
       endTimestamp: details.timeStamp,
       ttfb:
         details.timeStamp -
-        headers[details.tabId].requests[details.requestId].startTimestamp,
+          headers[details.tabId].requests[details.requestId]?.startTimestamp ??
+        0,
     };
     console.debug(headers[details.tabId].requests[details.requestId]);
   },
@@ -133,4 +137,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 chrome.tabs.onRemoved.addListener(function (tabId) {
   delete headers[tabId];
+});
+
+chrome.commands.onCommand.addListener((command) => {
+  if (command === "toggle-page-overlay") {
+    console.log("toggling...");
+    toggleVisibility();
+  }
 });
