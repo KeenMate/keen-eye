@@ -237,6 +237,8 @@ export default {
       }
     },
     addHeaderRule(val) {
+      if (!this.selectedSettings.headerRules)
+        this.selectedSettings.headerRules = [];
       this.selectedSettings?.headerRules.push(val);
     },
     addRequestRule(val) {

@@ -1,22 +1,19 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-6"><h3 class="title">KEEN-EYE</h3></div>
+      <div class="col-6"><h5 class="title">KEEN-EYE</h5></div>
       <div class="col-6">
+        Copy
         <CopyHeadersButtonVue :headers="filteredHeaders"
-          >Copy selected headers</CopyHeadersButtonVue
+          >selected</CopyHeadersButtonVue
         >
         <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
-          >Copy all headers</CopyHeadersButtonVue
+          >all</CopyHeadersButtonVue
         >
       </div>
     </div>
 
     <div @mousedown.stop>
-      <!-- Settings loaded from <b>{{ level }}</b> -->
-      <br />
-      <!--   settings: {{ settings }}
-      <br /> -->
       <div class="row">
         <div class="col-6">
           Status code:
@@ -75,8 +72,6 @@ export default {
   },
   computed: {
     requestsRulesSet() {
-      console.log(toRaw(this.settings?.requestsRules));
-
       if (!this.settings || !this.settings?.requestsRules) {
         return false;
       }
