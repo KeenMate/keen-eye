@@ -1,6 +1,8 @@
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
 import {
+  getAll,
   getMostSpecificSettings,
+  getSettingsFromCache,
   toggleVisibility,
 } from "@/helpers/storageHelper";
 import { setSettings } from "@/helpers/storageHelper";
@@ -35,7 +37,6 @@ chrome.webRequest.onHeadersReceived.addListener(
       (a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0)
     );
 
-    console.log();
     // chrome.extension
     //   .getBackgroundPage()
     //   .console.log(headers[details.tabId].response);
@@ -46,23 +47,19 @@ chrome.webRequest.onHeadersReceived.addListener(
 
 chrome.webRequest.onSendHeaders.addListener(
   function (details) {
-    console.debug("request");
-    // console.debug(details);
+    console.log(details.requestHeaders);
     headers[details.tabId] = headers[details.tabId] ?? {};
     headers[details.tabId].requests = headers[details.tabId].requests ?? {};
     headers[details.tabId].requests[details.requestId] = {
       ...details,
       startTimestamp: details.timeStamp,
     };
-    console.debug(headers[details.tabId].requests[details.requestId]);
   },
   fetchFilters,
   ["requestHeaders"]
 );
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    console.debug("response");
-    // console.debug(details);
     //checks if some of objects arent undefined
     headers[details.tabId] = headers[details.tabId] ?? {};
     headers[details.tabId].requests = headers[details.tabId].requests ?? {};
@@ -77,24 +74,20 @@ chrome.webRequest.onHeadersReceived.addListener(
           headers[details.tabId].requests[details.requestId]?.startTimestamp ??
         0,
     };
-    console.debug(headers[details.tabId].requests[details.requestId]);
   },
   fetchFilters,
   ["responseHeaders"]
 );
 chrome.webRequest.onCompleted.addListener(
   function (details) {
-    console.debug("on complete");
-    // console.debug(details);
     //checks if some of objects arent undefined
     headers[details.tabId] = headers[details.tabId] ?? {};
     headers[details.tabId].requests = headers[details.tabId].requests ?? {};
 
     //add took to object
-    (headers[details.tabId].requests[details.requestId].took =
+    headers[details.tabId].requests[details.requestId].took =
       details.timeStamp -
-      headers[details.tabId].requests[details.requestId].startTimestamp),
-      console.debug(headers[details.tabId].requests[details.requestId]);
+      headers[details.tabId].requests[details.requestId].startTimestamp;
   },
   fetchFilters,
   ["responseHeaders"]
@@ -109,7 +102,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     case settings:
       getMostSpecificSettings().then((settings) => {
-        console.log(settings);
         if (settings) {
           sendReply(true, settings, sendResponse);
         } else {
@@ -125,6 +117,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         undefined,
         undefined,
         request.position,
+        undefined,
         undefined
       ).then(() => sendReply(true, request.position, sendResponse));
       break;
@@ -144,4 +137,37 @@ chrome.commands.onCommand.addListener((command) => {
     console.log("toggling...");
     toggleVisibility();
   }
+});
+
+const localeListenerOptions = ["blocking", "requestHeaders", "extraHeaders"];
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  (details) => {
+    let res = getSettingsFromCache(cachedStorage, details.url);
+    if (!res) return;
+
+    const {
+      settings: { locale },
+    } = res;
+    if (!locale) return;
+    let headerThere = false;
+    for (const header of details.requestHeaders ?? []) {
+      if (header.name.toLowerCase() === "accept-language") {
+        header.value = locale.code ?? locale;
+        headerThere = true;
+        break;
+      }
+    }
+    if (!headerThere)
+      details.requestHeaders.push({ name: "accept-language", value: locale });
+
+    return { requestHeaders: details.requestHeaders ?? [] };
+  },
+  { urls: ["<all_urls>"] },
+  localeListenerOptions
+);
+
+var cachedStorage;
+getAll().then((r) => (cachedStorage = r));
+chrome.storage.onChanged.addListener(async function () {
+  cachedStorage = await getAll();
 });

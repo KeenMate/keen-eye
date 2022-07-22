@@ -31,8 +31,7 @@ export async function getCurrentTabUrl() {
   return new URL(currentTab?.url ?? "");
 }
 
-export async function getUrlPart(part, url = undefined) {
-  if (url === undefined) url = await getCurrentTabUrl();
+export function getUrlPart(part, url) {
   switch (part) {
     case "global":
       return "!global!";
@@ -47,4 +46,9 @@ export async function getUrlPart(part, url = undefined) {
     default:
       return url.origin;
   }
+}
+
+export async function getUrlPartCurrent(part) {
+  let url = await getCurrentTabUrl();
+  return getUrlPart(part, url);
 }

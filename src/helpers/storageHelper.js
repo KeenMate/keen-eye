@@ -1,5 +1,6 @@
+import { EMPTY_SETTINGS } from "@/constants/settings";
 import { refreshCurrentPage } from "./helpers";
-import { getUrlPart } from "./urlHelper";
+import { getUrlPartCurrent, getUrlPart } from "./urlHelper";
 
 export function setItem(key, value) {
   // console.log(key);
@@ -35,7 +36,7 @@ export function clearStorage() {
 }
 
 export async function getSettings(level) {
-  let storageKey = await getUrlPart(level);
+  let storageKey = await getUrlPartCurrent(level);
   let urlInfo = await getItem(storageKey);
   return urlInfo;
 }
@@ -43,7 +44,7 @@ export async function getSettings(level) {
 export async function getMostSpecificSettings() {
   let settings;
 
-  // let pageUrl = getUrlPart("page"),originUrl = getUrlPart("origin"),domainUrl = getUrlPart("domain")
+  // let pageUrl = getUrlPartCurrent("page"),originUrl = getUrlPartCurrent("origin"),domainUrl = getUrlPartCurrent("domain")
   //1. try page settings
   if ((settings = await getSettings("page")))
     return { settings, level: "page" };
@@ -68,10 +69,11 @@ export async function setSettings(
   inject = undefined,
   headers = undefined,
   position = undefined,
-  requestsRules = undefined
+  requestsRules = undefined,
+  locale = undefined
 ) {
   console.log("SETTING SETTINGS");
-  let storageKey = await getUrlPart(level);
+  let storageKey = await getUrlPartCurrent(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
   if (inject !== undefined) oldOriginInfo.inject = inject;
   if (headers !== undefined) oldOriginInfo.headerRules = headers;
@@ -80,6 +82,9 @@ export async function setSettings(
   }
   if (requestsRules !== undefined) {
     oldOriginInfo.requestsRules = requestsRules;
+  }
+  if (locale !== undefined) {
+    oldOriginInfo.locale = locale;
   }
   return setItem(storageKey, oldOriginInfo);
 }
@@ -97,7 +102,32 @@ export async function toggleVisibility() {
 }
 
 export async function deleteSettings(level) {
-  let storageKey = await getUrlPart(level);
+  let storageKey = await getUrlPartCurrent(level);
   console.log("removing from " + storageKey);
   await setItem(storageKey, null);
+}
+
+export function getLocaleForTab() {
+  return { value: "cs-CZ" };
+}
+
+export function getSettingsFromCache(cache, url) {
+  if (!cache || !url) return null;
+  url = new URL(url);
+  let settings;
+  //1. try page settings
+  if ((settings = cache[getUrlPart("page", url)]))
+    return { settings, level: "page" };
+  //2. try origin settings
+  if ((settings = cache[getUrlPart("origin", url)]))
+    return { settings, level: "origin" };
+  //3. try domain settings
+  if ((settings = cache[getUrlPart("domain", url)]))
+    return { settings, level: "domain" };
+
+  //4. get global settings
+  if ((settings = cache[getUrlPart("global", url)]))
+    return { settings, level: "global" };
+
+  return { settings: EMPTY_SETTINGS, level: "global" };
 }

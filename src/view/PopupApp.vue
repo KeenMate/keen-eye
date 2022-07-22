@@ -67,6 +67,12 @@
               >
                 Refresh
               </button>
+              <button
+                class="btn-muted btn form-control-sm btn-sm"
+                @click="copySettings"
+              >
+                DEBUG
+              </button>
             </div>
           </div>
         </div>
@@ -91,6 +97,8 @@
         {{ selectedSettings?.position }}
       </div>
       <div class="mb-2">
+        <label>Headers</label>
+
         <multiselect
           v-model="selectedSettings.headerRules"
           :clear-on-select="false"
@@ -98,7 +106,7 @@
           :show-labels="false"
           :multiple="true"
           tag-placeholder="add"
-          placeholder="Search or add a header"
+          placeholder="Search or add a header rule"
           taggable
           :close-on-select="false"
           @tag="addHeaderRule"
@@ -109,6 +117,7 @@
         </multiselect>
       </div>
       <div class="mb-2">
+        <label>Requests</label>
         <multiselect
           v-model="selectedSettings.requestsRules"
           :options="[]"
@@ -116,7 +125,7 @@
           :show-labels="false"
           :multiple="true"
           tag-placeholder="add"
-          placeholder="Search or add a header"
+          placeholder="Search or add a request rule"
           taggable
           :close-on-select="false"
           @tag="addRequestRule"
@@ -126,12 +135,26 @@
         >
         </multiselect>
       </div>
+
+      <div>
+        <label>language</label>
+        <multiselect
+          v-model="selectedSettings.locale"
+          :options="langs"
+          :multiple="false"
+          track-by="code"
+          label="name"
+          @input="() => (this.changed = true)"
+          @remove="() => (this.changed = true)"
+          @select="() => (this.changed = true)"
+        ></multiselect>
+      </div>
+
       <div class="mb-2">
         <button :class="'btn btn-large btn-outline-success'" @click="save">
           SAVE
         </button>
       </div>
-
       <div class="alert alert-danger" v-if="changed === true">
         carefull unsaved changes
       </div>
@@ -153,6 +176,8 @@ import Multiselect from "vue-multiselect";
 import { toRaw } from "vue";
 import { EMPTY_SETTINGS } from "@/constants/settings";
 import { getLevelColor } from "@/helpers/helpers";
+import languages from "@/constants/languages";
+import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 
 export default {
   components: { Multiselect },
@@ -176,6 +201,10 @@ export default {
       return (
         this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
       );
+    },
+    langs() {
+      console.log(languages);
+      return languages;
     },
   },
   methods: {
@@ -247,16 +276,20 @@ export default {
       this.selectedSettings.requestsRules.push(val);
     },
     async save() {
-      //TODO add requestRules to settings
+      console.log(toRaw(this.selectedSettings));
       await setSettings(
         this.selectedTab,
         this.selectedSettings.inject,
         toRaw(this.selectedSettings.headerRules),
         this.selectedSettings.position,
-        toRaw(this.selectedSettings.requestsRules)
+        toRaw(this.selectedSettings.requestsRules),
+        toRaw(this.selectedSettings.locale)
       );
       this.pageRefresh();
       this.loadSelectedSettings();
+    },
+    copySettings() {
+      copyTextToClipboard(JSON.stringify(toRaw(this.selectedSettings)));
     },
   },
   mounted() {

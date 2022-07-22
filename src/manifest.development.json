@@ -20,11 +20,13 @@
   "permissions": [
     "webRequest",
     "webRequestBlocking",
-    "http://*/*",
-    "https://*/*",
+    "*://*/*",
     "tabs",
     "activeTab",
-    "storage"
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
   ],
   "options_page": "options.html",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
