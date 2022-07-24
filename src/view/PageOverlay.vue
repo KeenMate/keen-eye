@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-6"><h5 class="title">KEEN-EYE</h5></div>
-      <div class="col-6">
+      <div class="col-4">
         Copy
         <CopyHeadersButtonVue :headers="filteredHeaders"
           >selected</CopyHeadersButtonVue
@@ -11,9 +11,12 @@
           >all</CopyHeadersButtonVue
         >
       </div>
+      <div class="col-2">
+        <div ref="dragg">GRABER</div>
+      </div>
     </div>
 
-    <div @mousedown.stop>
+    <div>
       <div class="row">
         <div class="col-6">
           Status code:
@@ -50,11 +53,16 @@
 
 <script>
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
-import { getRequestInfo } from "@/helpers/scriptsComunicationHelper";
+import {
+  getRequestInfo,
+  saveDivPosition,
+} from "@/helpers/scriptsComunicationHelper";
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
+
+import AddDrag from "@/helpers/dragHelper";
 export default {
   components: {
     HeaderRendererVue,
@@ -133,8 +141,15 @@ export default {
       // setTimeout(this.loadRequestInfo, 2000);
     },
   },
-  mounted() {
-    this.loadRequestInfo();
+  async mounted() {
+    await this.loadRequestInfo();
+    console.log(this.$refs.dragg);
+    AddDrag(
+      this.$refs.dragg,
+      "keen-eye-page-overlay-div",
+      this.settings.position,
+      (pos) => saveDivPosition(pos, this.level)
+    );
   },
 };
 </script>
