@@ -72,7 +72,6 @@ export async function setSettings(
   requestsRules = undefined,
   locale = undefined
 ) {
-  console.log("SETTING SETTINGS");
   let storageKey = await getUrlPartCurrent(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
   if (inject !== undefined) oldOriginInfo.inject = inject;

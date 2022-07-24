@@ -1,18 +1,35 @@
 import { createApp } from "vue";
 import PageOverlay from "../view/PageOverlay.vue";
 import { getSettings } from "@/helpers/scriptsComunicationHelper";
-import addDrag from "@/helpers/dragHelper";
 import { getLevelColor } from "@/helpers/helpers";
+import { settingsChanged } from "@/constants/messages";
 
-// import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
-getSettings().then((response) => {
-  if (!response?.settings?.inject) return;
-  console.log("injecting...");
+const elementId = "keen-eye-page-overlay-div";
 
+chrome.runtime.onMessage.addListener((message, sender) => {
+  sender;
+  if (message?.type == settingsChanged) {
+    loadAndRender();
+  }
+});
+
+function loadAndRender() {
+  remove();
+  getSettings().then((response) => {
+    if (!response.settings?.inject) return;
+    render(response.settings, response.level);
+  });
+}
+
+function remove() {
+  let el = document.getElementById(elementId);
+  if (el) el.remove();
+}
+
+function render(settings, level) {
   //* create container
-  const elementId = "keen-eye-page-overlay-div";
   const div = document.createElement("div");
-  let borderColor = getLevelColor(response.level);
+  let borderColor = getLevelColor(level);
 
   div.setAttribute(
     "style",
@@ -20,14 +37,26 @@ getSettings().then((response) => {
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");
-  addDrag(div, elementId, response.settings.position, response.level);
-  addStyleContent(document.body, resetcss);
   document.body.appendChild(div);
 
   //* create shadow root
   div.attachShadow({ mode: "open" });
   const appRoot = document.createElement("div");
   div.shadowRoot.appendChild(appRoot);
+  addScriptsAndStyles(div);
+
+  appRoot.classList.add("bootstrap-body");
+
+  //* create vue app
+  const app = createApp(PageOverlay, {
+    settings: settings,
+    level: level,
+  });
+  app.mount(appRoot);
+}
+
+function addScriptsAndStyles(div) {
+  addStyleContent(document.body, resetcss);
   addStyleContent(div.shadowRoot, resetcss);
   addStyle(
     div.shadowRoot,
@@ -38,15 +67,7 @@ getSettings().then((response) => {
     "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
   );
   addStyleContent(div.shadowRoot, bootstrapBody);
-  appRoot.classList.add("bootstrap-body");
-
-  //* create vue app
-  const app = createApp(PageOverlay, {
-    settings: response.settings,
-    level: response.level,
-  });
-  app.mount(appRoot);
-});
+}
 
 function addStyle(el, href) {
   const styleLink = document.createElement("link");
@@ -95,3 +116,5 @@ td {
   white-space: nowrap;
 }
 `;
+
+loadAndRender();

@@ -171,7 +171,10 @@ import {
   getSettings,
   setSettings,
 } from "../helpers/storageHelper";
-import { getRequestInfo } from "../helpers/scriptsComunicationHelper";
+import {
+  getRequestInfo,
+  sendSettingsChanged,
+} from "../helpers/scriptsComunicationHelper";
 import { refreshCurrentPage } from "@/helpers/helpers";
 import { getCurrentTab } from "../helpers/urlHelper";
 import Multiselect from "vue-multiselect";
@@ -216,10 +219,8 @@ export default {
     async toggleInjection() {
       this.selectedSettings.inject = !this.enabled;
       await setSettings(this.selectedTab, this.selectedSettings.inject);
-      this.pageRefresh();
-      this.loadSelectedSettings();
+      sendSettingsChanged();
       console.log(this.selectedSettings);
-      this.changed = true;
     },
     resetDiv() {
       this.selectedSettings.position = { x: 0, y: 0 };
@@ -287,7 +288,8 @@ export default {
         toRaw(this.selectedSettings.requestsRules),
         toRaw(this.selectedSettings.locale)
       );
-      this.pageRefresh();
+      sendSettingsChanged();
+      // this.pageRefresh();
       this.loadSelectedSettings();
     },
     copySettings() {

@@ -143,7 +143,6 @@ export default {
   },
   async mounted() {
     await this.loadRequestInfo();
-    console.log(this.$refs.dragg);
     AddDrag(
       this.$refs.dragg,
       "keen-eye-page-overlay-div",
