@@ -144,6 +144,8 @@
           :multiple="false"
           track-by="code"
           label="name"
+          group-values="languages"
+          group-label="type"
           @input="() => (this.changed = true)"
           @remove="() => (this.changed = true)"
           @select="() => (this.changed = true)"
