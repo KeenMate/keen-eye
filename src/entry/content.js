@@ -9,6 +9,7 @@ const elementId = "keen-eye-page-overlay-div";
 chrome.runtime.onMessage.addListener((message, sender) => {
   sender;
   if (message?.type == settingsChanged) {
+    console.log("SETTINGS CHANGED");
     loadAndRender();
   }
 });

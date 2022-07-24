@@ -1,5 +1,5 @@
 import { EMPTY_SETTINGS } from "@/constants/settings";
-import { refreshCurrentPage } from "./helpers";
+import { sendSettingsChanged } from "./scriptsComunicationHelper";
 import { getUrlPartCurrent, getUrlPart } from "./urlHelper";
 
 export function setItem(key, value) {
@@ -96,8 +96,7 @@ export async function toggleVisibility() {
   console.log(level);
   console.log(inject);
   await setSettings(level, !inject);
-
-  refreshCurrentPage();
+  sendSettingsChanged();
 }
 
 export async function deleteSettings(level) {
