@@ -100,9 +100,9 @@
         </button>
         {{ selectedSettings?.position }}
       </div>
-      <div class="mb-2" @keyup.esc.stop>
-        <label>Headers</label>
+      <label>Headers</label>
 
+      <div class="mb-2" @keyup.esc.stop>
         <multiselect
           v-model="selectedSettings.headerRules"
           :clear-on-select="false"
@@ -120,8 +120,9 @@
         >
         </multiselect>
       </div>
+      <label>Requests</label>
+
       <div class="mb-2" @keyup.esc.stop>
-        <label>Requests</label>
         <multiselect
           v-model="selectedSettings.requestsRules"
           :options="[]"
@@ -139,22 +140,32 @@
         >
         </multiselect>
       </div>
+      <label>language</label>
 
-      <div>
-        <label>language</label>
-        <multiselect
-          @keyup.esc.stop
-          v-model="selectedSettings.locale"
-          :options="langs"
-          :multiple="false"
-          track-by="code"
-          label="name"
-          group-values="languages"
-          group-label="type"
-          @input="() => (this.changed = true)"
-          @remove="() => (this.changed = true)"
-          @select="() => (this.changed = true)"
-        ></multiselect>
+      <div class="row mb-2">
+        <div class="col-9">
+          <multiselect
+            @keyup.esc.stop
+            v-model="selectedSettings.locale"
+            :options="langs"
+            :multiple="false"
+            track-by="code"
+            label="name"
+            group-values="languages"
+            group-label="type"
+            @input="() => (this.changed = true)"
+            @remove="() => (this.changed = true)"
+            @select="() => (this.changed = true)"
+          ></multiselect>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn-danger"
+            @click="selectedSettings.locale = null"
+          >
+            Remove
+          </button>
+        </div>
       </div>
 
       <div class="mb-2">

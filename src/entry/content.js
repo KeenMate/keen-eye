@@ -106,7 +106,7 @@ const bootstrapBody = `
 .bootstrap-body{
 margin: 0;
 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-font-size: 10 px;
+font-size: 10px;
 font-weight: 400;
 line-height: 1.3;
 color: #212529;
