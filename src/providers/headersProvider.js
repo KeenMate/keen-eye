@@ -49,8 +49,11 @@ export default function (headers) {
   chrome.webRequest.onHeadersReceived.addListener(
     function (details) {
       //checks if some of objects arent undefined
+      //I shouldnt have to do this, but chrome somtimes misbehave
       headers[details.tabId] = headers[details.tabId] ?? {};
       headers[details.tabId].requests = headers[details.tabId].requests ?? {};
+      headers[details.tabId].requests[details.requestId] =
+        headers[details.tabId].requests[details.requestId] ?? {};
 
       //merge request details, responsedetails and some custom props
       headers[details.tabId].requests[details.requestId] = {

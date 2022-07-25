@@ -1,4 +1,4 @@
-import { getSettingsFromCache } from "@/helpers/storageHelper";
+import { getSettingsFromCache} from "@/helpers/storageHelper";
 
 export default function (cache) {
   const localeListenerOptions = ["blocking", "requestHeaders", "extraHeaders"];

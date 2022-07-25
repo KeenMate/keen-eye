@@ -13,8 +13,7 @@ import languageChanger from "@/providers/languageChanger";
 //setup providers
 var headers = {};
 headersProvider(headers);
-var cache = {};
-useCache(cache);
+var cache = useCache();
 languageChanger(cache);
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {

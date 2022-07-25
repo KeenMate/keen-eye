@@ -130,9 +130,12 @@ export function getSettingsFromCache(cache, url) {
   return { settings: EMPTY_SETTINGS, level: "global" };
 }
 
-export function useCache(cache) {
+export function useCache() {
+  var cache = {};
   getAll().then((r) => (cache.storage = r));
   chrome.storage.onChanged.addListener(async function () {
     cache.storage = await getAll();
   });
+
+  return cache;
 }
