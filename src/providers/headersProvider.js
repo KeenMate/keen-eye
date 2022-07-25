@@ -22,7 +22,12 @@ export default function (headers) {
       headers[details.tabId] = headers[details.tabId] || {};
       headers[details.tabId].response = details;
       headers[details.tabId].responseHeaders = details.responseHeaders.sort(
-        (a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0)
+        (a, b) =>
+          a.name.toLowerCase() > b.name.toLowerCase()
+            ? 1
+            : b.name.toLowerCase() > a.name.toLowerCase()
+            ? -1
+            : 0
       );
 
       // chrome.extension
