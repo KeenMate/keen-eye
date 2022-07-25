@@ -2,7 +2,7 @@
   <div
     style="min-width: 500px; min-height: 600px"
     class="card"
-    @keydown.stop.prevent
+    @keydown.esc.stop.prevent
   >
     <!-- Tabs navs -->
     <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
