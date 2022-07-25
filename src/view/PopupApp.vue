@@ -125,7 +125,7 @@
       <div class="mb-2" @keyup.esc.stop>
         <multiselect
           v-model="selectedSettings.requestsRules"
-          :options="[]"
+          :options="requests"
           :clear-on-select="false"
           :show-labels="false"
           :multiple="true"
@@ -223,6 +223,13 @@ export default {
       return (
         this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
       );
+    },
+    requests() {
+      if (!this.requestInfo.requests) return [];
+      console.log(
+        Object.values(this.requestInfo.requests).map((req) => req.url)
+      );
+      return Object.values(this.requestInfo.requests).map((req) => req.url);
     },
     langs() {
       console.log(languages);
