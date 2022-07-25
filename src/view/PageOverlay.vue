@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-6"><h5 class="title">KEEN-EYE</h5></div>
-      <div class="col-4">
+      <div class="col-6 user-select-none" ref="dragg" style="cursor: pointer">
+        <h4 class="title">KEEN-EYE</h4>
+      </div>
+      <div class="col-6">
         Copy
         <CopyHeadersButtonVue :headers="filteredHeaders"
           >selected</CopyHeadersButtonVue
@@ -10,9 +12,6 @@
         <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
           >all</CopyHeadersButtonVue
         >
-      </div>
-      <div class="col-2">
-        <div ref="dragg">GRABER</div>
       </div>
     </div>
 
