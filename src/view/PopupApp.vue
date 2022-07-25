@@ -153,6 +153,7 @@
             label="name"
             group-values="languages"
             group-label="type"
+            :custom-label="customLabel"
             @input="() => (this.changed = true)"
             @remove="() => (this.changed = true)"
             @select="() => (this.changed = true)"
@@ -310,6 +311,9 @@ export default {
     },
     copySettings() {
       copyTextToClipboard(JSON.stringify(toRaw(this.selectedSettings)));
+    },
+    customLabel(object) {
+      return `[${object.code}] ${object.name}`;
     },
   },
   mounted() {
