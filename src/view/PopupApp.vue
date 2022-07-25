@@ -1,5 +1,9 @@
 <template>
-  <div style="min-width: 500px; min-height: 600px" class="card">
+  <div
+    style="min-width: 500px; min-height: 600px"
+    class="card"
+    @keydown.stop.prevent
+  >
     <!-- Tabs navs -->
     <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
       <li class="nav-item" role="tab" :style="getColor('global')">
@@ -96,7 +100,7 @@
         </button>
         {{ selectedSettings?.position }}
       </div>
-      <div class="mb-2">
+      <div class="mb-2" @keyup.esc.stop>
         <label>Headers</label>
 
         <multiselect
@@ -116,7 +120,7 @@
         >
         </multiselect>
       </div>
-      <div class="mb-2">
+      <div class="mb-2" @keyup.esc.stop>
         <label>Requests</label>
         <multiselect
           v-model="selectedSettings.requestsRules"
@@ -139,6 +143,7 @@
       <div>
         <label>language</label>
         <multiselect
+          @keyup.esc.stop
           v-model="selectedSettings.locale"
           :options="langs"
           :multiple="false"
