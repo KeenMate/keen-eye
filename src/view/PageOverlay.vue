@@ -1,10 +1,13 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-6 user-select-none" ref="dragg" style="cursor: pointer">
-        <h4 class="title">KEEN-EYE</h4>
+      <div class="col-8">
+        <h5 class="title user-select-none" ref="dragg" style="cursor: pointer">
+          {{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
+        </h5>
+        <h6>{{ time ? time + "ms" : "refresh" }}</h6>
       </div>
-      <div class="col-6">
+      <div class="col-4">
         Copy
         <CopyHeadersButtonVue :headers="filteredHeaders"
           >selected</CopyHeadersButtonVue
@@ -16,15 +19,6 @@
     </div>
 
     <div>
-      <div class="row">
-        <div class="col-6">
-          Status code:
-          <b>{{ requestInfo?.response?.statusCode ?? "loading" }}</b>
-        </div>
-        <div class="col-6">
-          Response took: <b>{{ time ? time + "ms" : "refresh" }}</b>
-        </div>
-      </div>
       <HeaderRendererVue
         v-if="settings?.headerRules"
         :headers="filteredHeaders"
@@ -69,7 +63,7 @@ export default {
     RequestsRendererVue,
   },
   props: {
-    settings: Array,
+    settings: Object,
     level: String,
   },
   data() {
@@ -131,6 +125,13 @@ export default {
       return (
         this.requestInfo.response.timeStamp - this.requestInfo.request.timeStamp
       ).toFixed(2);
+    },
+
+    pageName() {
+      if (!this.requestInfo || !this.requestInfo?.response?.url)
+        return undefined;
+
+      return new URL(this.requestInfo?.response?.url).host;
     },
   },
   methods: {

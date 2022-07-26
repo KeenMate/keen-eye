@@ -68,6 +68,8 @@ function addScriptsAndStyles(div) {
     "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
   );
   addStyleContent(div.shadowRoot, bootstrapBody);
+  console.log(chrome.extension.getURL("css/content.css"));
+  addStyle(div.shadowRoot, chrome.extension.getURL("css/content.css"));
 }
 
 function addStyle(el, href) {
@@ -106,7 +108,7 @@ const bootstrapBody = `
 .bootstrap-body{
 margin: 0;
 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-font-size: 10px;
+font-size: 12px;
 font-weight: 400;
 line-height: 1.3;
 color: #212529;

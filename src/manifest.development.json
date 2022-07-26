@@ -30,7 +30,14 @@
   ],
   "options_page": "options.html",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "web_accessible_resources": ["reset-script.css"],
+  "web_accessible_resources": [
+    "reset-script.css",
+    "css/options.css",
+    "css/content.css",
+    "/css/content.css",
+    "css/*.css",
+    "/css/*.css"
+  ],
   "commands": {
     "toggle-page-overlay": {
       "suggested_key": { "default": "Ctrl+Shift+K" },

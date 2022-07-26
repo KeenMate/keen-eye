@@ -8,11 +8,11 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      <tr v-for="header in headers" :key="header.name">
-        <td>
+      <tr v-for="header in headers" :key="header.name" class="autowidth-table">
+        <td class="autowidth">
           <b>{{ header.name }}</b>
         </td>
-        <td>{{ header.value }}</td>
+        <td class="limited-width">{{ header.value }}</td>
 
         <td
           style="cursor: pointer; user-select: none"
@@ -38,3 +38,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.autowidth {
+  width: 1px;
+}
+
+.limited-width {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
