@@ -5936,6 +5936,11 @@
     "lodash" "^4.17.21"
     "semver" "^7.3.5"
 
+"vue-final-modal@^3.4.4":
+  "integrity" "sha512-4nOLU+cMcUqAT0kg+64+Hi96kkQPOph2LOJa7Fl58BXlTyhfRxaMuz3M91wi2ooMIL4poWA8428P5GIAXSpuZg=="
+  "resolved" "https://registry.npmjs.org/vue-final-modal/-/vue-final-modal-3.4.4.tgz"
+  "version" "3.4.4"
+
 "vue-functional-data-merge@^3.1.0":
   "integrity" "sha512-leT4kdJVQyeZNY1kmnS1xiUlQ9z1B/kdBFCILIjYYQDqZgLqCLa0UhjSSeRX6c3mUe6U5qYeM8LrEqkHJ1B4LA=="
   "resolved" "https://registry.npmjs.org/vue-functional-data-merge/-/vue-functional-data-merge-3.1.0.tgz"

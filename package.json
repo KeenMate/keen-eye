@@ -13,6 +13,7 @@
     "core-js": "^3.8.3",
     "tldts": "^5.7.84",
     "vue": "^3.2.37",
+    "vue-final-modal": "^3.4.4",
     "vue-multiselect": "^3.0.0-alpha.2"
   },
   "devDependencies": {

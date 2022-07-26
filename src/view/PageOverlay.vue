@@ -38,7 +38,10 @@
           </button>
         </div>
       </div>
-      <RequestsRendererVue v-if="requestsRulesSet && filteredRequests" :requests="filteredRequests">
+      <RequestsRendererVue
+        v-if="requestsRulesSet && filteredRequests"
+        :requests="filteredRequests"
+      >
       </RequestsRendererVue>
     </div>
   </div>
@@ -54,7 +57,7 @@ import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
-import { logEverything } from "@/helpers/urlHelper"
+import { logEverything } from "@/helpers/urlHelper";
 
 import AddDrag from "@/helpers/dragHelper";
 export default {
@@ -138,9 +141,9 @@ export default {
   methods: {
     loadRequestInfo() {
       getRequestInfo().then((requestInfo) => {
-        this.requestInfo = requestInfo
-        console.log("request", requestInfo)
-        logEverything(requestInfo.response.url)
+        this.requestInfo = requestInfo;
+        console.log("request", requestInfo);
+        logEverything(requestInfo?.response?.url);
       });
       //TODO rework this
       // setTimeout(this.loadRequestInfo, 2000);

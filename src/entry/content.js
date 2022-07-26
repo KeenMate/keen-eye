@@ -47,12 +47,14 @@ function render(settings, level) {
   addScriptsAndStyles(div);
 
   appRoot.classList.add("bootstrap-body");
-
-  //* create vue app
-  const app = createApp(PageOverlay, {
+  createVueApp(appRoot, {
     settings: settings,
     level: level,
   });
+}
+function createVueApp(appRoot, props) {
+  //* create vue app
+  const app = createApp(PageOverlay, props);
   app.mount(appRoot);
 }
 
