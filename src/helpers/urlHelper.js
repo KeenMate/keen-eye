@@ -8,6 +8,10 @@ export function getDomain(url) {
   return parse(url.href).domain;
 }
 
+export function logEverything(url) {
+  console.log("Url info", parse(url));
+}
+
 export async function getPath(url) {
   //https://stackoverflow.com/questions/6257463/how-to-get-the-url-without-any-parameters-in-javascript
   return `${url.protocol}//${url.host}${url.pathname}`;

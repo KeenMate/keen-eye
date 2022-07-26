@@ -29,17 +29,17 @@
       </div>
 
       <div class="row" v-if="requestsRulesSet">
-        <div class="col-6"><h4>Requests</h4></div>
+        <div class="col-6">
+          <h4>Requests</h4>
+        </div>
         <div class="col-6">
           <button class="btn btn btn-secondary btn-sm" @click="loadRequestInfo">
             Refresh
           </button>
         </div>
       </div>
-      <RequestsRendererVue
-        v-if="requestsRulesSet && filteredRequests"
-        :requests="filteredRequests"
-      ></RequestsRendererVue>
+      <RequestsRendererVue v-if="requestsRulesSet && filteredRequests" :requests="filteredRequests">
+      </RequestsRendererVue>
     </div>
   </div>
 </template>
@@ -54,6 +54,7 @@ import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
+import { logEverything } from "@/helpers/urlHelper"
 
 import AddDrag from "@/helpers/dragHelper";
 export default {
@@ -136,7 +137,11 @@ export default {
   },
   methods: {
     loadRequestInfo() {
-      getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
+      getRequestInfo().then((requestInfo) => {
+        this.requestInfo = requestInfo
+        console.log("request", requestInfo)
+        logEverything(requestInfo.response.url)
+      });
       //TODO rework this
       // setTimeout(this.loadRequestInfo, 2000);
     },
