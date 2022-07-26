@@ -1,4 +1,5 @@
 <template>
+  <h6>Headers</h6>
   <table class="table table-striped table-sm">
     <thead class="table-dark">
       <tr>

@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import PageOverlay from "../view/PageOverlay.vue";
 import { getSettings } from "@/helpers/scriptsComunicationHelper";
-import { getLevelColor } from "@/helpers/helpers";
+// import { getLevelColor } from "@/helpers/helpers";
 import { settingsChanged } from "@/constants/messages";
 
 const elementId = "keen-eye-page-overlay-div";
@@ -30,11 +30,11 @@ function remove() {
 function render(settings, level) {
   //* create container
   const div = document.createElement("div");
-  let borderColor = getLevelColor(level);
+  // let borderColor = getLevelColor(level);
 
   div.setAttribute(
     "style",
-    `position:fixed; z-index:99999; display:block; top: 0;left: 0;border:solid ${borderColor} 5px; min-width:550px;background: white;resize: both;overflow: auto;`
+    `position:fixed; z-index:99999; display:block; top: 0;left: 0;box-shadow: rgb(128 128 128 / 69%) 3px 3px 5px; min-width:550px;background: white;resize: both;overflow: auto;`
   );
   div.setAttribute("id", elementId);
   div.setAttribute("class", "complete-reset");

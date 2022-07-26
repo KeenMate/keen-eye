@@ -2,50 +2,39 @@
   <div class="container">
     <div class="row">
       <div class="col-6 user-select-none" ref="dragg" style="cursor: pointer">
-        <h4 class="title">KEEN-EYE</h4>
+        <h4 class="title">KeenEye ({{ requestInfo?.response?.statusCode ?? "loading" }})</h4>
       </div>
       <div class="col-6">
         Copy
-        <CopyHeadersButtonVue :headers="filteredHeaders"
-          >selected</CopyHeadersButtonVue
-        >
-        <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
-          >all</CopyHeadersButtonVue
-        >
+        <CopyHeadersButtonVue :headers="filteredHeaders">selected</CopyHeadersButtonVue>
+        <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders">all</CopyHeadersButtonVue>
       </div>
     </div>
 
     <div>
       <div class="row">
         <div class="col-6">
-          Status code:
-          <b>{{ requestInfo?.response?.statusCode ?? "loading" }}</b>
-        </div>
-        <div class="col-6">
           Response took: <b>{{ time ? time + "ms" : "refresh" }}</b>
         </div>
       </div>
-      <HeaderRendererVue
-        v-if="settings?.headerRules"
-        :headers="filteredHeaders"
-      >
+      <HeaderRendererVue v-if="settings?.headerRules" :headers="filteredHeaders">
       </HeaderRendererVue>
       <div class="alert alert-warning" v-if="!settings?.headerRules">
         No header rules selected, you can select them in popup
       </div>
 
       <div class="row" v-if="requestsRulesSet">
-        <div class="col-6"><h4>Requests</h4></div>
+        <div class="col-6">
+          <h4>Requests</h4>
+        </div>
         <div class="col-6">
           <button class="btn btn btn-secondary btn-sm" @click="loadRequestInfo">
             Refresh
           </button>
         </div>
       </div>
-      <RequestsRendererVue
-        v-if="requestsRulesSet && filteredRequests"
-        :requests="filteredRequests"
-      ></RequestsRendererVue>
+      <RequestsRendererVue v-if="requestsRulesSet && filteredRequests" :requests="filteredRequests">
+      </RequestsRendererVue>
     </div>
   </div>
 </template>
@@ -60,8 +49,10 @@ import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
+import { logEverything } from "@/helpers/urlHelper"
 
 import AddDrag from "@/helpers/dragHelper";
+// import { response } from "express";
 export default {
   components: {
     HeaderRendererVue,
@@ -135,7 +126,11 @@ export default {
   },
   methods: {
     loadRequestInfo() {
-      getRequestInfo().then((requestInfo) => (this.requestInfo = requestInfo));
+      getRequestInfo().then((requestInfo) => {
+        this.requestInfo = requestInfo
+        console.log("request", requestInfo)
+        logEverything(requestInfo.response.url)
+      });
       //TODO rework this
       // setTimeout(this.loadRequestInfo, 2000);
     },
