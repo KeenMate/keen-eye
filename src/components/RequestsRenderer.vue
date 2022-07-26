@@ -4,7 +4,7 @@
     <table class="table table-striped table-sm">
       <thead class="table-dark">
         <tr>
-          <th>i</th>
+          <th>more</th>
           <th>code</th>
           <th>method</th>
           <th>path</th>
@@ -18,7 +18,9 @@
         style="max-height: 500px; overflow-y: scroll"
       >
         <tr v-for="request in requests" :key="request.requestId">
-          <td @click="openModal(request)">i</td>
+          <td style="cursor: pointer" @click="openRequestModal(request)">
+            more
+          </td>
           <td :class="`text-${getColor(request.statusCode)}`">
             {{ request.statusCode ?? "running..." }}
           </td>
@@ -46,6 +48,8 @@
 <script>
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import { getStatusCodeColor } from "@/helpers/helpers";
+import { openModal } from "jenesius-vue-modal";
+import RequestInfoModalVue from "./RequestInfoModal.vue";
 export default {
   data() {
     return {
@@ -72,6 +76,9 @@ export default {
     },
     getColor(status) {
       return getStatusCodeColor(status);
+    },
+    openRequestModal(request) {
+      if (request.took) openModal(RequestInfoModalVue, { request });
     },
   },
 };

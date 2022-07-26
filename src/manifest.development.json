@@ -35,8 +35,8 @@
     "css/options.css",
     "css/content.css",
     "/css/content.css",
-    "css/*.css",
-    "/css/*.css"
+    "*.css",
+    "css/*.css"
   ],
   "commands": {
     "toggle-page-overlay": {

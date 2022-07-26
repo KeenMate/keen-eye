@@ -1,31 +1,24 @@
 <template>
-  <div>
-    <ModalTemplate v-model="show" @confirm="confirm" @cancel="cancel">
-      <template v-slot:title>Hello, vue-final-modal</template>
-      {{ Request }}
-    </ModalTemplate>
+  <div class="card p-1 shadow-lg">
+    <div class="card-body">
+      {{ request.statusLine }} <br />
+      <span class="overflox-auto">{{ request.url }} <br /></span>
+      Took: {{ request.took.toFixed(2) }}ms <br />
+      Ttfb: {{ request.ttfb.toFixed(2) }}ms <br />
+      <header-renderer :headers="request.responseHeaders"> </header-renderer>
+    </div>
   </div>
 </template>
 <script>
-import ModalTemplate from "./ModalTemplate.vue";
-
+import HeaderRenderer from "./HeaderRenderer.vue";
 export default {
-  components: { ModalTemplate },
+  components: { HeaderRenderer },
   props: {
-    showModal: Boolean,
-    Request: Object,
+    request: Object,
   },
-  data: () => ({
-    show: false,
-  }),
-  methods: {
-    confirm() {
-      // some code...
-      this.show = false;
-    },
-    cancel(close) {
-      // some code...
-      close();
+  computed: {
+    title() {
+      return new URL(this.request.url).host;
     },
   },
 };

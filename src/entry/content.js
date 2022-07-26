@@ -70,8 +70,8 @@ function addScriptsAndStyles(div) {
     "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
   );
   addStyleContent(div.shadowRoot, bootstrapBody);
-  console.log(chrome.extension.getURL("css/content.css"));
   addStyle(div.shadowRoot, chrome.extension.getURL("css/content.css"));
+  addStyle(div.shadowRoot, chrome.extension.getURL("modal.css"));
 }
 
 function addStyle(el, href) {

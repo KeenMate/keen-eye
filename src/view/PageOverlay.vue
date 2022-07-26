@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container position-relative">
     <div class="row">
       <div class="col-8">
         <h5 class="title user-select-none" ref="dragg" style="cursor: pointer">
@@ -45,6 +45,7 @@
       </RequestsRendererVue>
     </div>
   </div>
+  <widget-container-modal />
 </template>
 
 <script>
@@ -58,13 +59,14 @@ import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
 import { logEverything } from "@/helpers/urlHelper";
-
+import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
 export default {
   components: {
     HeaderRendererVue,
     CopyHeadersButtonVue,
     RequestsRendererVue,
+    WidgetContainerModal: container,
   },
   props: {
     settings: Object,
@@ -117,9 +119,6 @@ export default {
       });
     },
     time() {
-      // console.log(this.requestInfo);
-      // console.log(this.requestInfo?.response?.timeStamp);
-      // console.log(this.requestInfo?.request?.timeStamp);
       if (
         !this.requestInfo ||
         !this.requestInfo?.response?.timeStamp ||
