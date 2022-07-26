@@ -28,7 +28,9 @@
             {{ request.method }}
           </td>
           <td class="limited-width">
-            <b>{{ getPath(request.url) }}</b>
+            <Popper :content="request.url">
+              <b>{{ getPath(request.url) }}</b>
+            </Popper>
           </td>
           <td>
             {{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "running..." }}

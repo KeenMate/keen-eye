@@ -3,7 +3,7 @@ import PageOverlay from "../view/PageOverlay.vue";
 import { getSettings } from "@/helpers/scriptsComunicationHelper";
 // import { getLevelColor } from "@/helpers/helpers";
 import { settingsChanged } from "@/constants/messages";
-
+import Popper from "vue3-popper";
 const elementId = "keen-eye-page-overlay-div";
 
 chrome.runtime.onMessage.addListener((message, sender) => {
@@ -55,6 +55,8 @@ function render(settings, level) {
 function createVueApp(appRoot, props) {
   //* create vue app
   const app = createApp(PageOverlay, props);
+  // eslint-disable-next-line vue/multi-word-component-names
+  app.component("Popper", Popper);
   app.mount(appRoot);
 }
 
@@ -72,6 +74,7 @@ function addScriptsAndStyles(div) {
   addStyleContent(div.shadowRoot, bootstrapBody);
   addStyle(div.shadowRoot, chrome.extension.getURL("css/content.css"));
   addStyle(div.shadowRoot, chrome.extension.getURL("modal.css"));
+  addStyle(div.shadowRoot, chrome.extension.getURL("popper.css"));
 }
 
 function addStyle(el, href) {
@@ -116,6 +119,7 @@ line-height: 1.3;
 color: #212529;
 text-align: left;
 background-color: #fff;
+user-select: text;
 }
 td {
   white-space: nowrap;

@@ -13,7 +13,11 @@
         <td class="autowidth">
           <b>{{ header.name }}</b>
         </td>
-        <td class="limited-width">{{ header.value }}</td>
+        <td class="limited-width">
+          <Popper :content="header.value">
+            {{ header.value }}
+          </Popper>
+        </td>
 
         <td
           style="cursor: pointer; user-select: none"
