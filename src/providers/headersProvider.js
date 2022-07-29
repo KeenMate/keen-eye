@@ -1,3 +1,5 @@
+import { sendNewRequests } from "@/helpers/scriptsComunicationHelper";
+
 export default function (headers) {
   var mainFrameFilters = {
     urls: ["<all_urls>"],
@@ -47,6 +49,7 @@ export default function (headers) {
         ...details,
         startTimestamp: details.timeStamp,
       };
+      sendNewRequests(headers[details.tabId].requests);
     },
     fetchFilters,
     ["requestHeaders"]
@@ -70,6 +73,8 @@ export default function (headers) {
             headers[details.tabId].requests[details.requestId]
               ?.startTimestamp ?? 0,
       };
+
+      sendNewRequests(headers[details.tabId].requests);
     },
     fetchFilters,
     ["responseHeaders"]
@@ -84,6 +89,8 @@ export default function (headers) {
       headers[details.tabId].requests[details.requestId].took =
         details.timeStamp -
         headers[details.tabId].requests[details.requestId].startTimestamp;
+
+      sendNewRequests(headers[details.tabId].requests);
     },
     fetchFilters,
     ["responseHeaders"]

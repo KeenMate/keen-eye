@@ -3,6 +3,7 @@ import {
   requestInfo,
   settingsChanged,
   saveSettings,
+  newRequests,
 } from "@/constants/messages";
 
 export async function getRequestInfo(tabId = null) {
@@ -57,4 +58,8 @@ export function sendToCS(type, data) {
 
 export function sendSettingsChanged() {
   sendToCS(settingsChanged);
+}
+
+export function sendNewRequests(requests) {
+  sendToCS(newRequests, requests);
 }

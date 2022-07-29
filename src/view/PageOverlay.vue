@@ -99,6 +99,7 @@ import { logEverything } from "@/helpers/urlHelper";
 import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
 import FilterRules from "@/helpers/filterRules";
+import { newRequests } from "@/constants/messages";
 
 export default {
   components: {
@@ -214,6 +215,13 @@ export default {
       this.settings.position,
       (pos) => saveDivPosition(this.level, pos)
     );
+
+    chrome.runtime.onMessage.addListener((message, sender) => {
+      sender;
+      if (message?.type == newRequests) {
+        this.requestInfo.requests = message.data;
+      }
+    });
   },
 };
 </script>
