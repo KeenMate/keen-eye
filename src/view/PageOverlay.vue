@@ -1,5 +1,5 @@
 <template>
-  <div class="container position-relative">
+  <div class="container position-relative pt-1">
     <div class="row">
       <div class="col-8">
         <h5 class="title user-select-none" ref="dragg" style="cursor: pointer">
@@ -84,11 +84,12 @@ import {
 } from "@/helpers/scriptsComunicationHelper";
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
-import { matchWithStairs } from "@/helpers/stringHelpers";
 import { toRaw } from "@vue/reactivity";
 import { logEverything } from "@/helpers/urlHelper";
 import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
+import FilterRules from "@/helpers/filterRules";
+
 export default {
   components: {
     HeaderRendererVue,
@@ -104,6 +105,8 @@ export default {
     return {
       requestInfo: null,
       useFilters: true,
+      headersFilterRules: null,
+      requestsFilterRules: null,
     };
   },
   computed: {
@@ -117,38 +120,21 @@ export default {
       return true;
     },
     filteredHeaders() {
-      if (
-        !this.requestInfo?.response?.responseHeaders ||
-        !Array.isArray(this.settings?.headerRules)
-      )
-        return [];
-      if (!this.useFilters) return this.requestInfo.response.responseHeaders;
+      if (this.headersFilterRules === null) return [];
 
-      // console.log(toRaw(this.requestInfo));
-      return this.requestInfo.response.responseHeaders.filter(
-        ({ name: headerName }) => {
-          return this.settings?.headerRules?.some((allowed) => {
-            return matchWithStairs(headerName, allowed);
-          });
-        }
+      if (!this.useFilters) return this.requestInfo?.response?.responseHeaders;
+
+      return this.headersFilterRules.filter(
+        this.requestInfo?.response?.responseHeaders,
+        "name"
       );
     },
     filteredRequests() {
-      if (
-        !this.requestInfo?.requests ||
-        !Array.isArray(this.settings?.requestsRules)
-      )
+      if (this.requestsFilterRules === null || !this.requestInfo?.requests)
         return [];
-
-      let requestsArray = Object.values(toRaw(this.requestInfo.requests));
+      let requestsArray = Object.values(toRaw(this.requestInfo?.requests));
       if (!this.useFilters) return requestsArray;
-
-      console.log(requestsArray);
-      return requestsArray.filter(({ url }) => {
-        return this.settings?.requestsRules?.some((allowed) => {
-          return matchWithStairs(url, allowed);
-        });
-      });
+      return this.requestsFilterRules.filter(requestsArray, "url");
     },
     time() {
       if (
@@ -188,8 +174,17 @@ export default {
       });
     },
   },
+  watch: {
+    settings(newVal) {
+      this.headersFilterRules = new FilterRules(newVal.headerRules);
+      this.requestsFilterRules = new FilterRules(newVal.requestsRules);
+    },
+  },
+
   async mounted() {
     await this.loadRequestInfo();
+    this.headersFilterRules = new FilterRules(this.settings.headerRules);
+    this.requestsFilterRules = new FilterRules(this.settings.requestsRules);
     AddDrag(
       this.$refs.dragg,
       "keen-eye-page-overlay-div",
