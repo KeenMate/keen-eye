@@ -13,7 +13,9 @@ export default function (headers) {
   chrome.webRequest.onSendHeaders.addListener(
     function (details) {
       // chrome.extension.getBackgroundPage().console.log(details);
-      headers[details.tabId] = { request: details};
+      headers[details.tabId] = { request: details, requests: undefined };
+      console.warn("MAINFRAME");
+      console.warn(headers[details.tabId]);
     },
     mainFrameFilters,
     ["requestHeaders"]
@@ -42,14 +44,13 @@ export default function (headers) {
 
   chrome.webRequest.onSendHeaders.addListener(
     function (details) {
-      console.log(details.requestHeaders);
       headers[details.tabId] = headers[details.tabId] ?? {};
       headers[details.tabId].requests = headers[details.tabId].requests ?? {};
       headers[details.tabId].requests[details.requestId] = {
         ...details,
         startTimestamp: details.timeStamp,
       };
-      sendNewRequests(headers[details.tabId].requests);
+      sendNewRequests(headers[details.tabId].requests, details.tabId);
     },
     fetchFilters,
     ["requestHeaders"]
@@ -74,7 +75,7 @@ export default function (headers) {
               ?.startTimestamp ?? 0,
       };
 
-      sendNewRequests(headers[details.tabId].requests);
+      sendNewRequests(headers[details.tabId].requests, details.tabId);
     },
     fetchFilters,
     ["responseHeaders"]
@@ -90,7 +91,7 @@ export default function (headers) {
         details.timeStamp -
         headers[details.tabId].requests[details.requestId].startTimestamp;
 
-      sendNewRequests(headers[details.tabId].requests);
+      sendNewRequests(headers[details.tabId].requests, details.tabId);
     },
     fetchFilters,
     ["responseHeaders"]

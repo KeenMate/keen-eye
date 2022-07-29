@@ -50,9 +50,13 @@ export function sendReply(succeded, data, sendResponse) {
   sendResponse({ ok: succeded, data: data });
 }
 
+export function sendToSpecificCs(tabId, type, data) {
+  chrome.tabs.sendMessage(tabId, { type, data });
+}
+
 export function sendToCS(type, data) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { type, data });
+    if (tabs[0]) sendToSpecificCs(tabs[0].id, type, data);
   });
 }
 
@@ -60,6 +64,6 @@ export function sendSettingsChanged() {
   sendToCS(settingsChanged);
 }
 
-export function sendNewRequests(requests) {
-  sendToCS(newRequests, requests);
+export function sendNewRequests(requests, tabId) {
+  sendToSpecificCs(tabId, newRequests, requests);
 }
