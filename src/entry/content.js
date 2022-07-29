@@ -193,8 +193,7 @@ user-select: text;
 --bs-link-color: #0d6efd;
 --bs-link-hover-color: #0a58ca;
 --bs-code-color: #d63384;
---bs-highlight-bg: #fff3cd;
-}
+--bs-highlight-bg: #fff3cd;}
 td {
   white-space: nowrap;
 }

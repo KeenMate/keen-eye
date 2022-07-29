@@ -1,5 +1,5 @@
 <template>
-  <div class="card p-1 shadow-lg">
+  <div class="card p-1 shadow-lg" style="z-index: 999999">
     <div class="card-body">
       <div class="row">
         <div class="col-10">
