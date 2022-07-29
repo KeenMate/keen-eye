@@ -1,5 +1,5 @@
 <template>
-  <div class="container position-relative pt-1">
+  <div class="container position-relative pt-2 pb-2">
     <div class="row">
       <div class="col-8">
         <h5 class="title user-select-none" ref="dragg" style="cursor: pointer">
@@ -38,13 +38,25 @@
           <label class="form-check-label" for="useFilters">use filters</label>
         </div>
       </div>
-      <div class="col-3"></div>
+      <div class="col-3">
+        <button
+          class="btn btn-sm"
+          :class="{
+            'btn-secondary': !changesToSave,
+            'btn-success': changesToSave,
+          }"
+          @click="saveSettings"
+        >
+          save settings
+        </button>
+      </div>
       <div class="col-3"></div>
     </div>
     <div>
       <div style="max-height: 45vh; overflow-y: auto">
         <HeaderRendererVue
           v-if="headersFilterRules"
+          :filtering="true"
           :headers="filteredHeaders"
           :headersFilterRules="headersFilterRules"
         >
@@ -78,6 +90,7 @@ import {
   changeInject,
   getRequestInfo,
   saveDivPosition,
+  setSettings,
 } from "@/helpers/scriptsComunicationHelper";
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
@@ -104,6 +117,7 @@ export default {
       useFilters: true,
       headersFilterRules: null,
       requestsFilterRules: null,
+      changesToSave: false,
     };
   },
   computed: {
@@ -170,20 +184,28 @@ export default {
         }
       });
     },
+    saveSettings() {
+      setSettings(this.level, { headerRules: this.headersFilterRules.rules });
+    },
+    createFilterObjects(settings) {
+      this.changesToSave = false;
+      this.headersFilterRules = new FilterRules(
+        settings.headerRules,
+        () => (this.changesToSave = true)
+      );
+      this.requestsFilterRules = new FilterRules(settings.requestsRules);
+    },
   },
   watch: {
     settings(newVal) {
-      this.headersFilterRules = new FilterRules(newVal.headerRules);
-      this.requestsFilterRules = new FilterRules(newVal.requestsRules);
+      this.createFilterObjects(newVal);
     },
   },
 
   async mounted() {
     await this.loadRequestInfo();
-    this.headersFilterRules = new FilterRules(toRaw(this.settings.headerRules));
-    this.requestsFilterRules = new FilterRules(
-      toRaw(this.settings.requestsRules)
-    );
+    this.createFilterObjects(this.settings);
+
     AddDrag(
       this.$refs.dragg,
       "keen-eye-page-overlay-div",

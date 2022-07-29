@@ -27,7 +27,7 @@ languageChanger(cache);
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request);
   //handle messsage based on type
-  switch (request.type) {
+  switch (request?.type) {
     case requestInfo:
       console.log(headers);
       sendReply(true, headers[request.tabId ?? sender.tab.id], sendResponse);
@@ -65,8 +65,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case saveSettings:
       {
         console.log("saving settings");
-        const { inject, level } = request;
-        setSettings(level ?? "global", inject)
+        const { settings, level } = request;
+        setSettings(
+          level ?? "global",
+          settings.inject,
+          settings.headerRules,
+          settings.position,
+          settings.requestsRules,
+          settings.locale
+        )
           .then(() => sendSettingsChanged())
           .catch((e) =>
             sendReply(

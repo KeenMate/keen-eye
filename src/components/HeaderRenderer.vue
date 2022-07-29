@@ -3,7 +3,7 @@
   <table class="table table-striped table-sm">
     <thead class="table-dark">
       <tr>
-        <th>
+        <th v-if="filtering">
           <span :class="{ 'text-warning': starSelected }" @click="toggleAll"
             >EYE</span
           >
@@ -15,7 +15,7 @@
     </thead>
     <tbody class="table-group-divider">
       <tr v-for="header in headers" :key="header.name" class="autowidth-table">
-        <td>
+        <td v-if="filtering">
           <span
             :class="{ 'text-warning': headersFilterRules.exists(header.name) }"
             @click="toggleRule(header.name)"
@@ -40,7 +40,6 @@
       </tr>
     </tbody>
   </table>
-  {{ this.headersFilterRules.rules }}
 </template>
 <script>
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
@@ -49,11 +48,15 @@ import filterRules from "@/helpers/filterRules";
 export default {
   props: {
     headers: Object,
+    filtering: {
+      type: Boolean,
+      default: false,
+    },
     headersFilterRules: filterRules,
   },
   computed: {
     starSelected() {
-      return this.headersFilterRules.exists("*") != undefined;
+      return this.headersFilterRules?.exists("*") != undefined;
     },
   },
   methods: {
@@ -66,7 +69,7 @@ export default {
     toggleRule(rule) {
       this.headersFilterRules.removeWildCard();
       this.headersFilterRules.toggle(rule);
-      },
+    },
   },
 };
 </script>

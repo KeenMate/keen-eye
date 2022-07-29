@@ -22,7 +22,16 @@ export async function saveDivPosition(position, level) {
   });
 }
 export async function changeInject(level, inject) {
-  return await sendMessagePromise({ type: saveSettings, level, inject });
+  return await sendMessagePromise({
+    type: saveSettings,
+    level,
+    settings: { inject },
+  });
+}
+
+export async function setSettings(level, settings) {
+  console.log("save settings", settings);
+  return await sendMessagePromise({ type: saveSettings, level, settings });
 }
 
 export function sendMessagePromise(message) {

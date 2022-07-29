@@ -1,10 +1,16 @@
 import { matchWithStairs } from "@/helpers/stringHelpers";
 
 export default class filterRules {
-  constructor(filterRulesArray) {
+  constructor(filterRulesArray, saveFunction) {
     this.rules = filterRulesArray ?? [];
+    this.saveFunc = saveFunction;
   }
   rules;
+  saveFunc;
+  save() {
+    if (this.saveFunc && typeof this.saveFunc === "function")
+      this.saveFunc(this.rules);
+  }
 
   toggleAll() {
     //"*" is only rule remove it else set it to be only rules
@@ -13,6 +19,7 @@ export default class filterRules {
     } else {
       this.rules = ["*"];
     }
+    this.save();
   }
   all() {
     return this.exists("*");
@@ -22,6 +29,7 @@ export default class filterRules {
     this.rules = this.rules.filter(
       (rule) => !rule.includes("*") || rule === "*"
     );
+    this.save();
   }
   exists(rule) {
     return this.rules.find((r) => r == rule);
@@ -31,11 +39,13 @@ export default class filterRules {
     //enforce star
     if (this.all()) this.toggleAll();
     if (!this.exists(rule)) this.rules.push(rule);
+    this.save();
   }
   remove(rule) {
     this.rules = this.rules.filter((r) => {
       return r != rule;
     });
+    this.save();
   }
   toggle(rule) {
     if (this.exists(rule)) {
