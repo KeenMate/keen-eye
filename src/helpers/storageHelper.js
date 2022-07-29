@@ -79,6 +79,9 @@ export async function setSettings(level, settings) {
   if (settings.locale !== undefined) {
     oldOriginInfo.locale = settings.locale;
   }
+  if (settings.transformations !== undefined) {
+    oldOriginInfo.transformations = settings.transformations;
+  }
   return setItem(storageKey, oldOriginInfo);
 }
 

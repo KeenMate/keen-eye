@@ -81,14 +81,40 @@
           </div>
         </div>
       </div>
-      <hr class="my-3" />
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="tab">
+          <a
+            class="nav-link"
+            :class="settingsTab == 'basic' ? ' active ' : ''"
+            @click="settingsTab = 'basic'"
+            >basic</a
+          >
+        </li>
+        <li class="nav-item" role="tab">
+          <a
+            class="nav-link"
+            :class="settingsTab == 'advanced' ? ' active ' : ''"
+            @click="settingsTab = 'advanced'"
+            >advanced</a
+          >
+        </li>
+      </ul>
       <basic-settings
+        v-if="settingsTab == 'basic'"
         :selectedSettings="selectedSettings"
         :requestInfo="requestInfo"
         @input="(newVal) => (this.selectedSettings = newVal)"
         @change="changed = true"
         @toggle-injection="toggleInjection"
       ></basic-settings>
+      <advanced-settings
+        v-if="settingsTab == 'advanced'"
+        :selectedSettings="selectedSettings"
+        :requestInfo="requestInfo"
+        @input="(newVal) => (this.selectedSettings = newVal)"
+        @change="changed = true"
+      >
+      </advanced-settings>
       <div class="mb-2">
         <button :class="'btn btn-large btn-outline-success'" @click="save">
           SAVE
@@ -119,9 +145,11 @@ import { EMPTY_SETTINGS } from "@/constants/settings";
 import { getLevelColor } from "@/helpers/helpers";
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import BasicSettings from "@/components/BasicSettings.vue";
+import AdvancedSettings from "@/components/AdvancedSettings.vue";
+
 export default {
   name: "popupView",
-  components: { BasicSettings },
+  components: { BasicSettings, AdvancedSettings },
   data() {
     return {
       selectedSettings: EMPTY_SETTINGS,
@@ -131,6 +159,7 @@ export default {
       requestInfo: {},
       changed: false,
       loadedTab: "origin",
+      settingsTab: "basic",
     };
   },
   methods: {
@@ -194,6 +223,7 @@ export default {
         position: this.selectedSettings.position,
         requestsRules: toRaw(this.selectedSettings.requestsRules),
         locale: toRaw(this.selectedSettings.locale),
+        transformations: toRaw(this.selectedSettings.transformations),
       });
       sendSettingsChanged();
       // this.pageRefresh();
