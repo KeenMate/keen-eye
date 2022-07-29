@@ -25,17 +25,34 @@
         ></button>
       </div>
     </div>
-
-    <div>
-      <HeaderRendererVue
-        v-if="settings?.headerRules"
-        :headers="filteredHeaders"
-      >
-      </HeaderRendererVue>
-      <div class="alert alert-warning" v-if="!settings?.headerRules">
-        No header rules selected, you can select them in popup
+    <div class="row">
+      <div class="col-3">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="useFilters"
+            v-model="useFilters"
+          />
+          <label class="form-check-label" for="useFilters">use filters</label>
+        </div>
       </div>
+      <div class="col-3"></div>
+      <div class="col-3"></div>
+    </div>
+    <div>
+      <div style="max-height: 45vh; overflow-y: auto">
+        <HeaderRendererVue
+          v-if="settings?.headerRules"
+          :headers="filteredHeaders"
+        >
+        </HeaderRendererVue>
 
+        <div class="alert alert-warning" v-if="!settings?.headerRules">
+          No header rules selected, you can select them in popup
+        </div>
+      </div>
       <div class="row" v-if="requestsRulesSet">
         <div class="col-6">
           <h4>Requests</h4>
@@ -46,11 +63,13 @@
           </button>
         </div>
       </div>
-      <RequestsRendererVue
-        v-if="requestsRulesSet && filteredRequests"
-        :requests="filteredRequests"
-      >
-      </RequestsRendererVue>
+      <div style="max-height: 45vh; overflow-y: auto">
+        <RequestsRendererVue
+          v-if="requestsRulesSet && filteredRequests"
+          :requests="filteredRequests"
+        >
+        </RequestsRendererVue>
+      </div>
     </div>
   </div>
   <widget-container-modal />
@@ -84,6 +103,7 @@ export default {
   data() {
     return {
       requestInfo: null,
+      useFilters: true,
     };
   },
   computed: {
@@ -102,6 +122,7 @@ export default {
         !Array.isArray(this.settings?.headerRules)
       )
         return [];
+      if (!this.useFilters) return this.requestInfo.response.responseHeaders;
 
       // console.log(toRaw(this.requestInfo));
       return this.requestInfo.response.responseHeaders.filter(
@@ -118,7 +139,9 @@ export default {
         !Array.isArray(this.settings?.requestsRules)
       )
         return [];
+
       let requestsArray = Object.values(toRaw(this.requestInfo.requests));
+      if (!this.useFilters) return requestsArray;
 
       console.log(requestsArray);
       return requestsArray.filter(({ url }) => {
