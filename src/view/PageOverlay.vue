@@ -185,7 +185,9 @@ export default {
       });
     },
     saveSettings() {
-      setSettings(this.level, { headerRules: this.headersFilterRules.rules });
+      setSettings(this.level, {
+        headerRules: toRaw(this.headersFilterRules.rules),
+      });
     },
     createFilterObjects(settings) {
       this.changesToSave = false;
@@ -210,7 +212,7 @@ export default {
       this.$refs.dragg,
       "keen-eye-page-overlay-div",
       this.settings.position,
-      (pos) => saveDivPosition(pos, this.level)
+      (pos) => saveDivPosition(this.level, pos)
     );
   },
 };

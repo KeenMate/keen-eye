@@ -8,12 +8,7 @@ import {
   useCache,
 } from "@/helpers/storageHelper";
 import { setSettings } from "@/helpers/storageHelper";
-import {
-  settings,
-  requestInfo,
-  savePosition,
-  saveSettings,
-} from "@/constants/messages";
+import { settings, requestInfo, saveSettings } from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
 
@@ -29,8 +24,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //handle messsage based on type
   switch (request?.type) {
     case requestInfo:
-      console.log(headers);
-      sendReply(true, headers[request.tabId ?? sender.tab.id], sendResponse);
+      {
+        const { tabId } = request.data;
+        sendReply(true, headers[tabId ?? sender.tab.id], sendResponse);
+      }
       break;
 
     case settings:
@@ -42,18 +39,26 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
       });
       break;
-
-    case savePosition:
-      console.log("saving position...");
+    case saveSettings: {
+      console.log("saving settings");
+      const { settings, level } = request.data;
       setSettings(
-        request.level ?? "page",
-        undefined,
-        undefined,
-        request.position,
-        undefined,
-        undefined
+        level ?? "global",
+        settings.inject,
+        settings.headerRules,
+        settings.position,
+        settings.requestsRules,
+        settings.locale
       )
-        .then(() => sendReply(true, request.position, sendResponse))
+        .then(() => {
+          if (
+            settings.headerRules !== undefined ||
+            settings.requestsRules !== undefined ||
+            settings.inject !== undefined
+          )
+            sendSettingsChanged();
+          sendReply(true, undefined, sendResponse);
+        })
         .catch((e) =>
           sendReply(
             false,
@@ -61,29 +66,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             sendResponse
           )
         );
-      break;
-    case saveSettings:
-      {
-        console.log("saving settings");
-        const { settings, level } = request;
-        setSettings(
-          level ?? "global",
-          settings.inject,
-          settings.headerRules,
-          settings.position,
-          settings.requestsRules,
-          settings.locale
-        )
-          .then(() => sendSettingsChanged())
-          .catch((e) =>
-            sendReply(
-              false,
-              { reason: "error setting data", error: e },
-              sendResponse
-            )
-          );
-      }
-      break;
+      return true;
+    }
     default:
       sendReply(false, {}, sendResponse);
       break;

@@ -226,13 +226,9 @@ export default {
     },
     requests() {
       if (!this.requestInfo.requests) return [];
-      console.log(
-        Object.values(this.requestInfo.requests).map((req) => req.url)
-      );
       return Object.values(this.requestInfo.requests).map((req) => req.url);
     },
     langs() {
-      console.log(languages);
       return languages;
     },
   },
@@ -276,19 +272,15 @@ export default {
         this.changed = false;
       }
       console.debug(toRaw(this.selectedSettings));
-
-      // console.log(await getAll());
     },
     async deleteSetting() {
       if (!confirm("Do you really want to delete this settings?")) return;
       await deleteSettings(this.selectedTab);
-      console.log("Settings deleted");
 
       this.loadSettings();
     },
     pageRefresh() {
       if (confirm("Refresh page")) {
-        console.log("refreshing page");
         refreshCurrentPage();
       }
     },

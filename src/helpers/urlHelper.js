@@ -31,7 +31,6 @@ export function getCurrentTab() {
 
 export async function getCurrentTabUrl() {
   let currentTab = await getCurrentTab();
-  console.log(currentTab);
   return new URL(currentTab?.url ?? "");
 }
 

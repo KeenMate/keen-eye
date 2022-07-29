@@ -14,7 +14,11 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      <tr v-for="header in headers" :key="header.name" class="autowidth-table">
+      <tr
+        v-for="(header, index) in headers"
+        :key="index"
+        class="autowidth-table"
+      >
         <td v-if="filtering">
           <span
             :class="{ 'text-warning': headersFilterRules.exists(header.name) }"

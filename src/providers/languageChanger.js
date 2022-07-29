@@ -1,12 +1,10 @@
-import { getSettingsFromCache} from "@/helpers/storageHelper";
+import { getSettingsFromCache } from "@/helpers/storageHelper";
 
 export default function (cache) {
   const localeListenerOptions = ["blocking", "requestHeaders", "extraHeaders"];
   chrome.webRequest.onBeforeSendHeaders.addListener(
     (details) => {
       let res = getSettingsFromCache(cache.storage, details.url);
-      console.log(res);
-      console.log(cache.storage);
       if (!res) return;
 
       const {

@@ -62,7 +62,7 @@ export default class filterRules {
   }
   filter(data, propName) {
     if (this.all()) return data;
-
+    console.log(data);
     if (!data) return [];
     return data.filter(({ [propName]: key }) => {
       return this.filterOne(key);

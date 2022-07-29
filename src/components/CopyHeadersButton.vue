@@ -16,7 +16,6 @@ export default {
 
         .map((header) => header.name + ": " + header.value)
         .join("\n");
-      console.log(text);
       copyTextToClipboard(text);
     },
   },

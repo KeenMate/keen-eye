@@ -93,8 +93,6 @@ export async function toggleVisibility() {
     level,
     settings: { inject },
   } = await getMostSpecificSettings();
-  console.log(level);
-  console.log(inject);
   await setSettings(level, !inject);
   sendSettingsChanged();
 }

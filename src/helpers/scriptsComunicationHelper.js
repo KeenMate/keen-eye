@@ -1,44 +1,42 @@
 import {
   settings,
   requestInfo,
-  savePosition,
   settingsChanged,
   saveSettings,
 } from "@/constants/messages";
 
 export async function getRequestInfo(tabId = null) {
-  return await sendMessagePromise({ type: requestInfo, tabId: tabId });
+  return await sendMessagePromise({
+    type: requestInfo,
+    data: { tabId: tabId },
+  });
 }
 
 export async function getSettings() {
   return await sendMessagePromise({ type: settings });
 }
 
-export async function saveDivPosition(position, level) {
-  return await sendMessagePromise({
-    type: savePosition,
-    position: position,
-    level: level,
-  });
+export async function saveDivPosition(level, position) {
+  return setSettings(level, { position });
 }
 export async function changeInject(level, inject) {
-  return await sendMessagePromise({
-    type: saveSettings,
-    level,
-    settings: { inject },
-  });
+  return setSettings(level, { inject });
 }
 
 export async function setSettings(level, settings) {
   console.log("save settings", settings);
-  return await sendMessagePromise({ type: saveSettings, level, settings });
+  return await sendMessagePromise({
+    type: saveSettings,
+    data: { level, settings },
+  });
 }
 
 export function sendMessagePromise(message) {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(message, (response) => {
       console.log(response);
-      if (response.ok) {
+      if (response === undefined) resolve();
+      if (response?.ok) {
         resolve(response.data);
       } else {
         reject("Something wrong");
