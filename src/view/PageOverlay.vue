@@ -44,14 +44,11 @@
     <div>
       <div style="max-height: 45vh; overflow-y: auto">
         <HeaderRendererVue
-          v-if="settings?.headerRules"
+          v-if="headersFilterRules"
           :headers="filteredHeaders"
+          :headersFilterRules="headersFilterRules"
         >
         </HeaderRendererVue>
-
-        <div class="alert alert-warning" v-if="!settings?.headerRules">
-          No header rules selected, you can select them in popup
-        </div>
       </div>
       <div class="row" v-if="requestsRulesSet">
         <div class="col-6">
@@ -183,8 +180,10 @@ export default {
 
   async mounted() {
     await this.loadRequestInfo();
-    this.headersFilterRules = new FilterRules(this.settings.headerRules);
-    this.requestsFilterRules = new FilterRules(this.settings.requestsRules);
+    this.headersFilterRules = new FilterRules(toRaw(this.settings.headerRules));
+    this.requestsFilterRules = new FilterRules(
+      toRaw(this.settings.requestsRules)
+    );
     AddDrag(
       this.$refs.dragg,
       "keen-eye-page-overlay-div",
