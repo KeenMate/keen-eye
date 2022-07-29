@@ -22,7 +22,7 @@
             more
           </td>
           <td :class="`text-${getColor(request.statusCode)}`">
-            {{ request.statusCode ?? "running..." }}
+            {{ request.statusCode ?? "..." }}
           </td>
           <td>
             {{ request.method }}
@@ -33,10 +33,10 @@
             </Popper>
           </td>
           <td>
-            {{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "running..." }}
+            {{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "..." }}
           </td>
           <td>
-            {{ request.took ? request.took.toFixed(2) + "ms" : "running..." }}
+            {{ request.took ? request.took.toFixed(2) + "ms" : "..." }}
           </td>
 
           <td>

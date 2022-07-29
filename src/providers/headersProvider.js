@@ -13,7 +13,7 @@ export default function (headers) {
   chrome.webRequest.onSendHeaders.addListener(
     function (details) {
       // chrome.extension.getBackgroundPage().console.log(details);
-      headers[details.tabId] = { request: details };
+      headers[details.tabId] = { request: details};
     },
     mainFrameFilters,
     ["requestHeaders"]

@@ -82,93 +82,13 @@
         </div>
       </div>
       <hr class="my-3" />
-      <div class="mb-2">
-        <button
-          @click="toggleInjection"
-          class="btn-primary btn form-control-sm btn-sm"
-          :class="enabled ? 'btn-danger' : 'btn-success'"
-        >
-          {{ enabled ? "hide" : "show" }}
-        </button>
-      </div>
-      <div class="mb-2">
-        <button
-          class="btn-warning btn form-control-sm btn-sm"
-          @click="resetDiv"
-        >
-          Reset overlay position
-        </button>
-        {{ selectedSettings?.position }}
-      </div>
-      <label>Headers</label>
-
-      <div class="mb-2" @keyup.esc.stop>
-        <multiselect
-          v-model="selectedSettings.headerRules"
-          :clear-on-select="false"
-          :options="pageHeaders"
-          :show-labels="false"
-          :multiple="true"
-          tag-placeholder="add"
-          placeholder="Search or add a header rule"
-          taggable
-          :close-on-select="false"
-          @tag="addHeaderRule"
-          @input="() => (this.changed = true)"
-          @remove="() => (this.changed = true)"
-          @select="() => (this.changed = true)"
-        >
-        </multiselect>
-      </div>
-      <label>Requests</label>
-
-      <div class="mb-2" @keyup.esc.stop>
-        <multiselect
-          v-model="selectedSettings.requestsRules"
-          :options="requests"
-          :clear-on-select="false"
-          :show-labels="false"
-          :multiple="true"
-          tag-placeholder="add"
-          placeholder="Search or add a request rule"
-          taggable
-          :close-on-select="false"
-          @tag="addRequestRule"
-          @input="() => (this.changed = true)"
-          @remove="() => (this.changed = true)"
-          @select="() => (this.changed = true)"
-        >
-        </multiselect>
-      </div>
-      <label>language</label>
-
-      <div class="row mb-2">
-        <div class="col-9">
-          <multiselect
-            @keyup.esc.stop
-            v-model="selectedSettings.locale"
-            :options="langs"
-            :multiple="false"
-            track-by="code"
-            label="name"
-            group-values="languages"
-            group-label="type"
-            :custom-label="customLabel"
-            @input="() => (this.changed = true)"
-            @remove="() => (this.changed = true)"
-            @select="() => (this.changed = true)"
-          ></multiselect>
-        </div>
-        <div class="col-3">
-          <button
-            class="btn btn-danger"
-            @click="selectedSettings.locale = null"
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-
+      <basic-settings
+        :selectedSettings="selectedSettings"
+        :requestInfo="requestInfo"
+        @input="(newVal) => (this.selectedSettings = newVal)"
+        @change="changed = true"
+        @toggle-injection="toggleInjection"
+      ></basic-settings>
       <div class="mb-2">
         <button :class="'btn btn-large btn-outline-success'" @click="save">
           SAVE
@@ -194,16 +114,14 @@ import {
 } from "../helpers/scriptsComunicationHelper";
 import { refreshCurrentPage } from "@/helpers/helpers";
 import { getCurrentTab } from "../helpers/urlHelper";
-import Multiselect from "vue-multiselect";
 import { toRaw } from "vue";
 import { EMPTY_SETTINGS } from "@/constants/settings";
 import { getLevelColor } from "@/helpers/helpers";
-import languages from "@/constants/languages";
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
-
+import BasicSettings from "@/components/BasicSettings.vue";
 export default {
-  components: { Multiselect },
   name: "popupView",
+  components: { BasicSettings },
   data() {
     return {
       selectedSettings: EMPTY_SETTINGS,
@@ -215,36 +133,15 @@ export default {
       loadedTab: "origin",
     };
   },
-  computed: {
-    enabled() {
-      return this.selectedSettings?.inject ?? false;
-    },
-    pageHeaders() {
-      return (
-        this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
-      );
-    },
-    requests() {
-      if (!this.requestInfo.requests) return [];
-      return Object.values(this.requestInfo.requests).map((req) => req.url);
-    },
-    langs() {
-      return languages;
-    },
-  },
   methods: {
     getColor(level) {
       return `background-color: ${getLevelColor(level)}`;
     },
     async toggleInjection() {
-      this.selectedSettings.inject = !this.enabled;
+      console.log("TOOOGGGLLLIIING");
+      this.selectedSettings.inject = !this.selectedSettings.inject;
       await setSettings(this.selectedTab, this.selectedSettings.inject);
       sendSettingsChanged();
-      console.log(this.selectedSettings);
-    },
-    resetDiv() {
-      this.selectedSettings.position = { x: 0, y: 0 };
-      this.changed = true;
       console.log(this.selectedSettings);
     },
     changeTab(changeTo) {
@@ -284,16 +181,7 @@ export default {
         refreshCurrentPage();
       }
     },
-    addHeaderRule(val) {
-      if (!this.selectedSettings.headerRules)
-        this.selectedSettings.headerRules = [];
-      this.selectedSettings?.headerRules.push(val);
-    },
-    addRequestRule(val) {
-      if (!this.selectedSettings.requestsRules)
-        this.selectedSettings.requestsRules = [];
-      this.selectedSettings.requestsRules.push(val);
-    },
+
     async save() {
       console.log(toRaw(this.selectedSettings));
       await setSettings(
@@ -310,9 +198,6 @@ export default {
     },
     copySettings() {
       copyTextToClipboard(JSON.stringify(toRaw(this.selectedSettings)));
-    },
-    customLabel(object) {
-      return `[${object.code}] ${object.name}`;
     },
   },
   mounted() {
