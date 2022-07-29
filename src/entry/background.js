@@ -1,11 +1,19 @@
-import { sendReply } from "@/helpers/scriptsComunicationHelper";
+import {
+  sendReply,
+  sendSettingsChanged,
+} from "@/helpers/scriptsComunicationHelper";
 import {
   getMostSpecificSettings,
   toggleVisibility,
   useCache,
 } from "@/helpers/storageHelper";
 import { setSettings } from "@/helpers/storageHelper";
-import { settings, requestInfo, savePosition } from "@/constants/messages";
+import {
+  settings,
+  requestInfo,
+  savePosition,
+  saveSettings,
+} from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
 
@@ -44,7 +52,30 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         request.position,
         undefined,
         undefined
-      ).then(() => sendReply(true, request.position, sendResponse));
+      )
+        .then(() => sendReply(true, request.position, sendResponse))
+        .catch((e) =>
+          sendReply(
+            false,
+            { reason: "error setting data", error: e },
+            sendResponse
+          )
+        );
+      break;
+    case saveSettings:
+      {
+        console.log("saving settings");
+        const { inject, level } = request;
+        setSettings(level ?? "global", inject)
+          .then(() => sendSettingsChanged())
+          .catch((e) =>
+            sendReply(
+              false,
+              { reason: "error setting data", error: e },
+              sendResponse
+            )
+          );
+      }
       break;
     default:
       sendReply(false, {}, sendResponse);

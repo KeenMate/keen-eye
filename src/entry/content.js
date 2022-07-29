@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import PageOverlay from "../view/PageOverlay.vue";
 import { getSettings } from "@/helpers/scriptsComunicationHelper";
-// import { getLevelColor } from "@/helpers/helpers";
 import { settingsChanged } from "@/constants/messages";
 import Popper from "vue3-popper";
 const elementId = "keen-eye-page-overlay-div";

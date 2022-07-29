@@ -3,6 +3,7 @@ import {
   requestInfo,
   savePosition,
   settingsChanged,
+  saveSettings,
 } from "@/constants/messages";
 
 export async function getRequestInfo(tabId = null) {
@@ -19,6 +20,9 @@ export async function saveDivPosition(position, level) {
     position: position,
     level: level,
   });
+}
+export async function changeInject(level, inject) {
+  return await sendMessagePromise({ type: saveSettings, level, inject });
 }
 
 export function sendMessagePromise(message) {

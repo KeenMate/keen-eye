@@ -7,7 +7,7 @@
         </h5>
         <h6>{{ time ? time + "ms" : "refresh" }}</h6>
       </div>
-      <div class="col-4">
+      <div class="col-3">
         Copy
         <CopyHeadersButtonVue :headers="filteredHeaders"
           >selected</CopyHeadersButtonVue
@@ -15,6 +15,14 @@
         <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
           >all</CopyHeadersButtonVue
         >
+      </div>
+      <div class="col-1">
+        <button
+          @click="closeOverlay"
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+        ></button>
       </div>
     </div>
 
@@ -51,6 +59,7 @@
 <script>
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
 import {
+  changeInject,
   getRequestInfo,
   saveDivPosition,
 } from "@/helpers/scriptsComunicationHelper";
@@ -146,6 +155,14 @@ export default {
       });
       //TODO rework this
       // setTimeout(this.loadRequestInfo, 2000);
+    },
+    closeOverlay() {
+      changeInject(this.level, false).then((res) => {
+        if (res && !res.ok) {
+          console.error(res);
+          //TODO maybe add real error handling
+        }
+      });
     },
   },
   async mounted() {
