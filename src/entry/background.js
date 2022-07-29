@@ -42,14 +42,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case saveSettings: {
       console.log("saving settings");
       const { settings, level } = request.data;
-      setSettings(
-        level ?? "global",
-        settings.inject,
-        settings.headerRules,
-        settings.position,
-        settings.requestsRules,
-        settings.locale
-      )
+      setSettings(level ?? "global", settings)
         .then(() => {
           if (
             settings.headerRules !== undefined ||

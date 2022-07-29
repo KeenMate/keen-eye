@@ -62,28 +62,22 @@ export async function getMostSpecificSettings() {
 }
 
 /**
- * if some of them is null, it doesnt change it
+ * if some of them is undefined, it doesnt change it
  */
-export async function setSettings(
-  level,
-  inject = undefined,
-  headers = undefined,
-  position = undefined,
-  requestsRules = undefined,
-  locale = undefined
-) {
+export async function setSettings(level, settings) {
   let storageKey = await getUrlPartCurrent(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
-  if (inject !== undefined) oldOriginInfo.inject = inject;
-  if (headers !== undefined) oldOriginInfo.headerRules = headers;
-  if (position !== undefined) {
-    oldOriginInfo.position = position;
+  if (settings.inject !== undefined) oldOriginInfo.inject = settings.inject;
+  if (settings.headerRules !== undefined)
+    oldOriginInfo.headerRules = settings.headerRules;
+  if (settings.position !== undefined) {
+    oldOriginInfo.position = settings.position;
   }
-  if (requestsRules !== undefined) {
-    oldOriginInfo.requestsRules = requestsRules;
+  if (settings.requestsRules !== undefined) {
+    oldOriginInfo.requestsRules = settings.requestsRules;
   }
-  if (locale !== undefined) {
-    oldOriginInfo.locale = locale;
+  if (settings.locale !== undefined) {
+    oldOriginInfo.locale = settings.locale;
   }
   return setItem(storageKey, oldOriginInfo);
 }
@@ -93,7 +87,7 @@ export async function toggleVisibility() {
     level,
     settings: { inject },
   } = await getMostSpecificSettings();
-  await setSettings(level, !inject);
+  await setSettings(level, { inject: !inject });
   sendSettingsChanged();
 }
 

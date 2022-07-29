@@ -140,7 +140,9 @@ export default {
     async toggleInjection() {
       console.log("TOOOGGGLLLIIING");
       this.selectedSettings.inject = !this.selectedSettings.inject;
-      await setSettings(this.selectedTab, this.selectedSettings.inject);
+      await setSettings(this.selectedTab, {
+        inject: this.selectedSettings.inject,
+      });
       sendSettingsChanged();
       console.log(this.selectedSettings);
     },
@@ -184,14 +186,15 @@ export default {
 
     async save() {
       console.log(toRaw(this.selectedSettings));
-      await setSettings(
-        this.selectedTab,
-        this.selectedSettings.inject,
-        toRaw(this.selectedSettings.headerRules),
-        this.selectedSettings.position,
-        toRaw(this.selectedSettings.requestsRules),
-        toRaw(this.selectedSettings.locale)
-      );
+
+      // * use toraw for all nonsimple types
+      await setSettings(this.selectedTab, {
+        inject: this.selectedSettings.inject,
+        headerRules: toRaw(this.selectedSettings.headerRules),
+        position: this.selectedSettings.position,
+        requestsRules: toRaw(this.selectedSettings.requestsRules),
+        locale: toRaw(this.selectedSettings.locale),
+      });
       sendSettingsChanged();
       // this.pageRefresh();
       this.loadSelectedSettings();
