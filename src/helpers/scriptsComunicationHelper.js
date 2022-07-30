@@ -5,7 +5,7 @@ import {
   saveSettings,
   newRequests,
 } from "@/constants/messages";
-import { parseTranformations } from "./storageHelper";
+import { parseTranformations } from "./transformationHelper";
 
 export async function getRequestInfo(tabId = null) {
   return await sendMessagePromise({

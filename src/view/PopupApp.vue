@@ -129,12 +129,6 @@
 
 <script>
 import {
-  deleteSettings,
-  getMostSpecificSettings,
-  getSettings,
-  setSettings,
-} from "../helpers/storageHelper";
-import {
   getRequestInfo,
   sendSettingsChanged,
 } from "../helpers/scriptsComunicationHelper";
@@ -147,6 +141,12 @@ import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import BasicSettings from "@/components/BasicSettings.vue";
 import AdvancedSettings from "@/components/AdvancedSettings.vue";
 import { levels } from "@/constants/settings";
+import {
+  deleteSettings,
+  getMostSpecificSettings,
+  getSettings,
+  setSettings,
+} from "@/providers/settingsProvider";
 
 export default {
   name: "popupView",

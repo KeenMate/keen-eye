@@ -2,17 +2,12 @@ import {
   sendReply,
   sendSettingsChanged,
 } from "@/helpers/scriptsComunicationHelper";
-import {
-  getMostSpecificSettings,
-  toggleVisibility,
-  useCache,
-} from "@/helpers/storageHelper";
-import { setSettings } from "@/helpers/storageHelper";
 import { settings, requestInfo, saveSettings } from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
 import { levels } from "@/constants/settings";
-
+import { getMostSpecificSettings, setSettings, toggleVisibility } from "@/providers/settingsProvider";
+import { useCache } from "@/providers/storageProvider";
 ("use strict");
 //setup providers
 var headers = {};

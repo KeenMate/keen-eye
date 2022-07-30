@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { clearStorage } from "@/helpers/storageHelper";
+import { clearStorage } from '@/providers/storageProvider';
 
 export default {
   name: "optionsView",
