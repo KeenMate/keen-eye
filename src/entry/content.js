@@ -16,7 +16,8 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 function loadAndRender() {
   remove();
   getSettings().then((response) => {
-    if (!response.settings?.inject) return;
+    if (!response?.settings?.inject) return;
+
     render(response.settings, response.level);
   });
 }

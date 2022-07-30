@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       break;
 
     case settings:
-      getMostSpecificSettings().then((settings) => {
+      getMostSpecificSettings(sender.url).then((settings) => {
         if (settings) {
           sendReply(true, settings, sendResponse);
         } else {

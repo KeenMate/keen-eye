@@ -51,7 +51,7 @@ export function getUrlPart(part, url) {
   }
 }
 
-export async function getUrlPartCurrent(part) {
-  let url = await getCurrentTabUrl();
+export async function getUrlPartCurrent(part, url) {
+  url = url ?? (await getCurrentTabUrl());
   return getUrlPart(part, url);
 }

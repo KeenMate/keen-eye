@@ -5,6 +5,7 @@ import {
   saveSettings,
   newRequests,
 } from "@/constants/messages";
+import { parseTranformations } from "./storageHelper";
 
 export async function getRequestInfo(tabId = null) {
   return await sendMessagePromise({
@@ -14,7 +15,10 @@ export async function getRequestInfo(tabId = null) {
 }
 
 export async function getSettings() {
-  return await sendMessagePromise({ type: settings });
+  let data = await sendMessagePromise({ type: settings });
+  // eslint-disable-next-line no-debugger
+  if (data.settings) parseTranformations(data.settings);
+  return data;
 }
 
 export async function saveDivPosition(level, position) {

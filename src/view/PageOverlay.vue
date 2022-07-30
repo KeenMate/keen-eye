@@ -59,26 +59,32 @@
           :filtering="true"
           :headers="filteredHeaders"
           :headersFilterRules="headersFilterRules"
+          :transformations="settings.transformations"
         >
         </HeaderRendererVue>
       </div>
-      <div class="row" v-if="requestsRulesSet">
-        <div class="col-6">
-          <h4>Requests</h4>
+      <template v-if="requestsRulesSet || !useFilters">
+        <div class="row">
+          <div class="col-6">
+            <h4>Requests</h4>
+          </div>
+          <!-- <div class="col-6">
+            <button
+              class="btn btn btn-secondary btn-sm"
+              @click="loadRequestInfo"
+            >
+              Refresh
+            </button>
+          </div> -->
         </div>
-        <div class="col-6">
-          <button class="btn btn btn-secondary btn-sm" @click="loadRequestInfo">
-            Refresh
-          </button>
+        <div style="max-height: 45vh; overflow-y: auto">
+          <RequestsRendererVue
+            v-if="filteredRequests"
+            :requests="filteredRequests"
+          >
+          </RequestsRendererVue>
         </div>
-      </div>
-      <div style="max-height: 45vh; overflow-y: auto">
-        <RequestsRendererVue
-          v-if="requestsRulesSet && filteredRequests"
-          :requests="filteredRequests"
-        >
-        </RequestsRendererVue>
-      </div>
+      </template>
     </div>
   </div>
   <widget-container-modal />

@@ -1,6 +1,6 @@
 <template>
   Url tranformation
-  <div class="form-group">
+  <div class="form-group" v-if="settings.transformations[0].headerRule">
     <input
       class="form-control"
       type="text"
@@ -8,7 +8,7 @@
       v-model="this.settings.transformations[0].headerRule"
     />
   </div>
-  <div class="form-group">
+  <div class="form-group" v-if="settings.transformations[0].url">
     <input
       class="form-control"
       type="text"

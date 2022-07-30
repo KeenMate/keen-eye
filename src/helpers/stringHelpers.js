@@ -17,3 +17,12 @@ export function matchWithStairs(str, rule) {
   //Returns true if it finds a match, otherwise it returns false
   return regex.test(str);
 }
+
+export function escapeHtml(unsafe) {
+  return unsafe
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}

@@ -1,4 +1,6 @@
 import { EMPTY_SETTINGS } from "@/constants/settings";
+import { BaseTransformation } from "@/types/baseTransformation";
+import { UrlTransformation } from "@/types/urlTransformation";
 import { sendSettingsChanged } from "./scriptsComunicationHelper";
 import { getUrlPartCurrent, getUrlPart } from "./urlHelper";
 
@@ -35,27 +37,54 @@ export function clearStorage() {
   chrome.storage.sync.clear();
 }
 
-export async function getSettings(level) {
-  let storageKey = await getUrlPartCurrent(level);
-  let urlInfo = await getItem(storageKey);
-  return urlInfo;
+export async function getSettings(level, url) {
+  let storageKey = await getUrlPartCurrent(level, url);
+  let setting = await getItem(storageKey);
+  parseTranformations(setting);
+  return setting;
 }
 
-export async function getMostSpecificSettings() {
-  let settings;
+export function parseTranformation(transformation) {
+  switch (transformation.type) {
+    case "base":
+      return new BaseTransformation(transformation.headerRule);
 
+    case "url":
+      return new UrlTransformation(
+        transformation.headerRule,
+        transformation.url
+      );
+
+    default:
+
+      break;
+  }
+}
+
+export function parseTranformations(settings) {
+  if (!settings?.transformations || !Array.isArray(settings.transformations))
+    return;
+  console.log("transformations set gonna parse...");
+  settings.transformations = settings.transformations.map((trans) =>
+    parseTranformation(trans)
+  );
+}
+
+export async function getMostSpecificSettings(url) {
+  let settings;
+  if (url) url = new URL(url);
   // let pageUrl = getUrlPartCurrent("page"),originUrl = getUrlPartCurrent("origin"),domainUrl = getUrlPartCurrent("domain")
   //1. try page settings
-  if ((settings = await getSettings("page")))
+  if ((settings = await getSettings("page", url)))
     return { settings, level: "page" };
   //2. try origin settings
-  if ((settings = await getSettings("origin")))
+  if ((settings = await getSettings("origin", url)))
     return { settings, level: "origin" };
   //3. try domain settings
-  if ((settings = await getSettings("domain")))
+  if ((settings = await getSettings("domain", url)))
     return { settings, level: "domain" };
   //4. get global settings
-  if ((settings = await getSettings("global")) !== undefined)
+  if ((settings = await getSettings("global", url)) !== undefined)
     return { settings, level: "global" };
 
   return { settings: { inject: false }, level: "global" };

@@ -31,7 +31,15 @@
         </td>
         <td class="limited-width">
           <Popper :content="header.value">
-            {{ header.value }}
+            <TransformationRenderer
+              v-if="getTransformation(header.name)"
+              :headerValue="header.value"
+              :transformation="getTransformation(header.name)"
+            >
+            </TransformationRenderer>
+            <template v-else>
+              {{ header.value }}
+            </template>
           </Popper>
         </td>
 
@@ -48,8 +56,12 @@
 <script>
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import filterRules from "@/helpers/filterRules";
+import TransformationRenderer from "./TransformationRenderer.vue";
+import { escapeHtml } from "@/helpers/stringHelpers";
 
 export default {
+  name: "HeaderRenderer",
+  components: { TransformationRenderer },
   props: {
     headers: Object,
     filtering: {
@@ -57,6 +69,7 @@ export default {
       default: false,
     },
     headersFilterRules: filterRules,
+    transformations: Array,
   },
   computed: {
     starSelected() {
@@ -73,6 +86,12 @@ export default {
     toggleRule(rule) {
       this.headersFilterRules.removeWildCard();
       this.headersFilterRules.toggle(rule);
+    },
+    getTransformation(name) {
+      return this.transformations?.find((trans) => trans.match(name));
+    },
+    escape(val) {
+      return escapeHtml(val);
     },
   },
 };
