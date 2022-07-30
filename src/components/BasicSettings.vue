@@ -145,11 +145,15 @@ export default {
       return `[${object.code}] ${object.name}`;
     },
     addHeaderRule(val) {
-      if (!this.settings.headerRules) this.settings.headerRules = [];
+      if (!this.settings.headerRules) {
+        this.settings.headerRules = [];
+      }
       this.settings?.headerRules.push(val);
     },
     addRequestRule(val) {
-      if (!this.settings.requestsRules) this.settings.requestsRules = [];
+      if (!this.settings.requestsRules) {
+        this.settings.requestsRules = [];
+      }
       this.settings.requestsRules.push(val);
     },
   },

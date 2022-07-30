@@ -68,8 +68,9 @@ export default {
     if (
       !this.settings.transformations ||
       this.settings.transformations.length == 0
-    )
+    ) {
       this.settings.transformations = [{ headerRule: "", url: "" }];
+    }
   },
 };
 </script>

@@ -161,6 +161,7 @@ export default {
         !this.requestInfo?.request?.timeStamp
       )
         return undefined;
+
       return (
         this.requestInfo.response.timeStamp - this.requestInfo.request.timeStamp
       ).toFixed(2);
@@ -222,8 +223,7 @@ export default {
       (pos) => saveDivPosition(this.level, pos)
     );
 
-    chrome.runtime.onMessage.addListener((message, sender) => {
-      sender;
+    chrome.runtime.onMessage.addListener((message) => {
       if (message?.type == newRequests) {
         this.requestInfo.requests = message.data;
       }

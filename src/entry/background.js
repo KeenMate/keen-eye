@@ -48,8 +48,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             settings.headerRules !== undefined ||
             settings.requestsRules !== undefined ||
             settings.inject !== undefined
-          )
+          ) {
             sendSettingsChanged();
+          }
           sendReply(true, undefined, sendResponse);
         })
         .catch((e) =>

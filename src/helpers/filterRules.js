@@ -8,8 +8,9 @@ export default class filterRules {
   rules;
   saveFunc;
   save() {
-    if (this.saveFunc && typeof this.saveFunc === "function")
+    if (this.saveFunc && typeof this.saveFunc === "function") {
       this.saveFunc(this.rules);
+    }
   }
 
   toggleAll() {
@@ -37,8 +38,12 @@ export default class filterRules {
   //add rule if not already there
   add(rule) {
     //enforce star
-    if (this.all()) this.toggleAll();
-    if (!this.exists(rule)) this.rules.push(rule);
+    if (this.all()) {
+      this.toggleAll();
+    }
+    if (!this.exists(rule)) {
+      this.rules.push(rule);
+    }
     this.save();
   }
   remove(rule) {
@@ -63,6 +68,7 @@ export default class filterRules {
   filter(data, propName) {
     if (this.all()) return data;
     if (!data) return [];
+
     return data.filter(({ [propName]: key }) => {
       return this.filterOne(key);
     });

@@ -56,7 +56,6 @@ export function parseTranformation(transformation) {
       );
 
     default:
-
       break;
   }
 }
@@ -72,7 +71,9 @@ export function parseTranformations(settings) {
 
 export async function getMostSpecificSettings(url) {
   let settings;
-  if (url) url = new URL(url);
+  if (url) {
+    url = new URL(url);
+  }
   // let pageUrl = getUrlPartCurrent("page"),originUrl = getUrlPartCurrent("origin"),domainUrl = getUrlPartCurrent("domain")
   //1. try page settings
   if ((settings = await getSettings("page", url)))
@@ -96,9 +97,13 @@ export async function getMostSpecificSettings(url) {
 export async function setSettings(level, settings) {
   let storageKey = await getUrlPartCurrent(level);
   let oldOriginInfo = (await getSettings(level)) ?? {};
-  if (settings.inject !== undefined) oldOriginInfo.inject = settings.inject;
-  if (settings.headerRules !== undefined)
+
+  if (settings.inject !== undefined) {
+    oldOriginInfo.inject = settings.inject;
+  }
+  if (settings.headerRules !== undefined) {
     oldOriginInfo.headerRules = settings.headerRules;
+  }
   if (settings.position !== undefined) {
     oldOriginInfo.position = settings.position;
   }
@@ -111,6 +116,7 @@ export async function setSettings(level, settings) {
   if (settings.transformations !== undefined) {
     oldOriginInfo.transformations = settings.transformations;
   }
+
   return setItem(storageKey, oldOriginInfo);
 }
 

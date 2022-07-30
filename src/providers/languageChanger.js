@@ -19,8 +19,9 @@ export default function (cache) {
           break;
         }
       }
-      if (!headerThere)
+      if (!headerThere) {
         details.requestHeaders.push({ name: "accept-language", value: locale });
+      }
 
       return { requestHeaders: details.requestHeaders ?? [] };
     },

@@ -28,9 +28,8 @@ function move(divid, xpos, ypos) {
   divid.style.top = ypos + "px";
 }
 function startMoving(divid, evt, containerId) {
-  if (divid.id != containerId) {
-    return;
-  }
+  if (divid.id != containerId) return;
+
   let containerEl = document.body;
   evt = evt || window.event;
   var posX = evt.clientX,

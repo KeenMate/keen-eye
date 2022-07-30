@@ -24,7 +24,9 @@ function loadAndRender() {
 
 function remove() {
   let el = document.getElementById(elementId);
-  if (el) el.remove();
+  if (el) {
+    el.remove();
+  }
 }
 
 function render(settings, level) {

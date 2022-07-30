@@ -80,7 +80,9 @@ export default {
       return getStatusCodeColor(status);
     },
     openRequestModal(request) {
-      if (request.took) openModal(RequestInfoModalVue, { request });
+      if (request.took) {
+        openModal(RequestInfoModalVue, { request });
+      }
     },
   },
 };
