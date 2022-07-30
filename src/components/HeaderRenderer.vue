@@ -35,6 +35,7 @@
               v-if="getTransformation(header.name)"
               :headerValue="header.value"
               :transformation="getTransformation(header.name)"
+              :headers="headers"
             >
             </TransformationRenderer>
             <template v-else>

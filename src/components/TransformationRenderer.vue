@@ -3,6 +3,7 @@
     v-if="transformation.type == 'url'"
     :transformation="transformation"
     :headerValue="headerValue"
+    :headers="headers"
   ></UrlTranformator>
 </template>
 
@@ -19,6 +20,7 @@ export default {
       required: true,
     },
     headerValue: String,
+    headers: Array,
   },
 };
 </script>

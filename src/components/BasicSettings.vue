@@ -74,7 +74,13 @@
       ></multiselect>
     </div>
     <div class="col-3">
-      <button class="btn btn-danger" @click="settings.locale = null">
+      <button
+        class="btn btn-danger"
+        @click="
+          settings.locale = null;
+          $emit('change');
+        "
+      >
         Remove
       </button>
     </div>
