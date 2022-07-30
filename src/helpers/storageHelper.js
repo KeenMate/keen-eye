@@ -1,4 +1,5 @@
 import { EMPTY_SETTINGS, levels } from "@/constants/settings";
+import { types } from "@/constants/transformations";
 import { BaseTransformation } from "@/types/baseTransformation";
 import { UrlTransformation } from "@/types/urlTransformation";
 import { sendSettingsChanged } from "./scriptsComunicationHelper";
@@ -46,10 +47,10 @@ export async function getSettings(level, url) {
 
 export function parseTranformation(transformation) {
   switch (transformation.type) {
-    case "base":
+    case types.basic:
       return new BaseTransformation(transformation.headerRule);
 
-    case "url":
+    case types.url:
       return new UrlTransformation(
         transformation.headerRule,
         transformation.url

@@ -11,6 +11,7 @@ import { setSettings } from "@/helpers/storageHelper";
 import { settings, requestInfo, saveSettings } from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
+import { levels } from "@/constants/settings";
 
 ("use strict");
 //setup providers
@@ -42,7 +43,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     case saveSettings: {
       console.log("saving settings");
       const { settings, level } = request.data;
-      setSettings(level ?? "global", settings)
+      setSettings(level ?? levels.global, settings)
         .then(() => {
           if (
             settings.headerRules !== undefined ||
