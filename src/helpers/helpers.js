@@ -1,3 +1,5 @@
+import { colors } from "@/constants/settings";
+
 export function refreshCurrentPage() {
   //https://stackoverflow.com/questions/32570100/how-to-reload-current-tab-from-within-a-chrome-extension-popup-html
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -6,19 +8,7 @@ export function refreshCurrentPage() {
 }
 
 export function getLevelColor(level) {
-  switch (level) {
-    case "global":
-      return "LightBlue";
-    case "domain":
-      return "LightGreen";
-    case "origin":
-      return "LightCoral";
-    case "page":
-      return "LightYellow";
-
-    default:
-      return "gray";
-  }
+  return colors[level];
 }
 
 export function getStatusCodeColor(statusCode) {

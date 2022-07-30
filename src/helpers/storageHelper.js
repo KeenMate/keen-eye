@@ -1,4 +1,4 @@
-import { EMPTY_SETTINGS } from "@/constants/settings";
+import { EMPTY_SETTINGS, levels } from "@/constants/settings";
 import { BaseTransformation } from "@/types/baseTransformation";
 import { UrlTransformation } from "@/types/urlTransformation";
 import { sendSettingsChanged } from "./scriptsComunicationHelper";
@@ -74,21 +74,24 @@ export async function getMostSpecificSettings(url) {
   if (url) {
     url = new URL(url);
   }
-  // let pageUrl = getUrlPartCurrent("page"),originUrl = getUrlPartCurrent("origin"),domainUrl = getUrlPartCurrent("domain")
   //1. try page settings
-  if ((settings = await getSettings("page", url)))
-    return { settings, level: "page" };
+  if ((settings = await getSettings(levels.page, url))) {
+    return { settings, level: levels.page };
+  }
   //2. try origin settings
-  if ((settings = await getSettings("origin", url)))
-    return { settings, level: "origin" };
+  if ((settings = await getSettings(levels.origin, url))) {
+    return { settings, level: levels.origin };
+  }
   //3. try domain settings
-  if ((settings = await getSettings("domain", url)))
-    return { settings, level: "domain" };
+  if ((settings = await getSettings(levels.domain, url))) {
+    return { settings, level: levels.domain };
+  }
   //4. get global settings
-  if ((settings = await getSettings("global", url)) !== undefined)
-    return { settings, level: "global" };
+  if ((settings = await getSettings(levels.global, url)) !== undefined) {
+    return { settings, level: levels.global };
+  }
 
-  return { settings: { inject: false }, level: "global" };
+  return { settings: { inject: false }, level: levels.global };
 }
 
 /**
@@ -135,29 +138,30 @@ export async function deleteSettings(level) {
   await setItem(storageKey, null);
 }
 
-export function getLocaleForTab() {
-  return { value: "cs-CZ" };
-}
-
 export function getSettingsFromCache(cache, url) {
   if (!cache || !url) return null;
   url = new URL(url);
   let settings;
+
   //1. try page settings
-  if ((settings = cache[getUrlPart("page", url)]))
-    return { settings, level: "page" };
+  if ((settings = cache[getUrlPart(levels.page, url)])) {
+    return { settings, level: levels.page };
+  }
   //2. try origin settings
-  if ((settings = cache[getUrlPart("origin", url)]))
-    return { settings, level: "origin" };
+  if ((settings = cache[getUrlPart(levels.origin, url)])) {
+    return { settings, level: levels.origin };
+  }
   //3. try domain settings
-  if ((settings = cache[getUrlPart("domain", url)]))
-    return { settings, level: "domain" };
-
+  if ((settings = cache[getUrlPart(levels.domain, url)])) {
+    return { settings, level: levels.domain };
+  }
   //4. get global settings
-  if ((settings = cache[getUrlPart("global", url)]))
-    return { settings, level: "global" };
+  if ((settings = cache[getUrlPart(levels.global, url)])) {
+    return { settings, level: levels.global };
+  }
 
-  return { settings: EMPTY_SETTINGS, level: "global" };
+  //always some settings will be returned to prevent checking everything for undef
+  return { settings: EMPTY_SETTINGS, level: levels.global };
 }
 
 export function useCache() {

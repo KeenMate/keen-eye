@@ -6,48 +6,48 @@
   >
     <!-- Tabs navs -->
     <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
-      <li class="nav-item" role="tab" :style="getColor('global')">
+      <li class="nav-item" role="tab" :style="getColor(levels.global)">
         <a
           class="nav-link"
-          :class="
-            (selectedTab == 'global' ? ' active ' : '') +
-            (loadedTab == 'global' ? '  font-weight-bold ' : '')
-          "
-          @click="changeTab('global')"
+          :class="{
+            active: selectedTab == levels.global,
+            'font-weight-bold': loadedTab == levels.global,
+          }"
+          @click="changeTab(levels.global)"
           >global</a
         >
       </li>
-      <li class="nav-item" role="tab" :style="getColor('domain')">
+      <li class="nav-item" role="tab" :style="getColor(levels.domain)">
         <a
           class="nav-link"
-          :class="
-            (selectedTab == 'domain' ? ' active ' : '') +
-            (loadedTab == 'domain' ? '  font-weight-bold ' : '')
-          "
-          @click="changeTab('domain')"
+          :class="{
+            active: selectedTab == levels.domain,
+            'font-weight-bold': loadedTab == levels.domain,
+          }"
+          @click="changeTab(levels.domain)"
           >domain</a
         >
       </li>
-      <li class="nav-item" role="tab" :style="getColor('origin')">
+      <li class="nav-item" role="tab" :style="getColor(levels.origin)">
         <a
           class="nav-link"
-          :class="
-            (selectedTab == 'origin' ? ' active ' : '') +
-            (loadedTab == 'origin' ? '  font-weight-bold ' : '')
-          "
-          @click="changeTab('origin')"
+          :class="{
+            active: selectedTab == levels.origin,
+            'font-weight-bold': loadedTab == levels.origin,
+          }"
+          @click="changeTab(levels.origin)"
           >Origin</a
         >
       </li>
-      <li class="nav-item" role="tab" :style="getColor('page')">
+      <li class="nav-item" role="tab" :style="getColor(levels.page)">
         <a
           class="nav-link"
           role="tab"
-          :class="
-            (selectedTab == 'page' ? ' active ' : '') +
-            (loadedTab == 'page' ? '  font-weight-bold ' : '')
-          "
-          @click="changeTab('page')"
+          :class="{
+            active: selectedTab == levels.page,
+            'font-weight-bold': loadedTab == levels.page,
+          }"
+          @click="changeTab(levels.page)"
           >Page</a
         >
       </li>
@@ -146,6 +146,7 @@ import { getLevelColor } from "@/helpers/helpers";
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import BasicSettings from "@/components/BasicSettings.vue";
 import AdvancedSettings from "@/components/AdvancedSettings.vue";
+import { levels } from "@/constants/settings";
 
 export default {
   name: "popupView",
@@ -161,6 +162,11 @@ export default {
       loadedTab: "origin",
       settingsTab: "basic",
     };
+  },
+  computed: {
+    levels() {
+      return levels;
+    },
   },
   methods: {
     getColor(level) {

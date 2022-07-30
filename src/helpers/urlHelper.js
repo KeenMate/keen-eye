@@ -1,3 +1,4 @@
+import { levels } from "@/constants/settings";
 import { parse } from "tldts";
 /**
  * gets domain from URL object based on tldts
@@ -36,13 +37,13 @@ export async function getCurrentTabUrl() {
 
 export function getUrlPart(part, url) {
   switch (part) {
-    case "global":
+    case levels.global:
       return "!global!";
-    case "domain":
+    case levels.domain:
       return getDomain(url);
-    case "origin":
+    case levels.origin:
       return url.origin;
-    case "page":
+    case levels.page:
       return getPath(url);
 
     //TODO remove this is only for compatibility reasons
