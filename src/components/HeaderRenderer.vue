@@ -30,18 +30,18 @@
           <b>{{ header.name }}</b>
         </td>
         <td class="limited-width">
-          <Popper :content="header.value">
-            <TransformationRenderer
-              v-if="getTransformation(header.name)"
-              :headerValue="header.value"
-              :transformation="getTransformation(header.name)"
-              :headers="headers"
-            >
-            </TransformationRenderer>
-            <template v-else>
+          <TransformationRenderer
+            v-if="getTransformation(header.name) !== undefined"
+            :headerValue="header.value"
+            :transformation="getTransformation(header.name)"
+            :headers="headers"
+          >
+          </TransformationRenderer>
+          <template v-else>
+            <Popper :content="header.value">
               {{ header.value }}
-            </template>
-          </Popper>
+            </Popper>
+          </template>
         </td>
 
         <td

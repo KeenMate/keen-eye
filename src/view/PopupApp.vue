@@ -136,12 +136,7 @@ import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import BasicSettings from "@/components/BasicSettings.vue";
 import AdvancedSettings from "@/components/AdvancedSettings.vue";
 import { levels } from "@/constants/settings";
-import {
-  deleteSettings,
-  getMostSpecificSettings,
-  getSettings,
-  setSettings,
-} from "@/providers/settingsProvider";
+import settingsProvider from "@/providers/settingsProvider";
 import {
   getRequestInfo,
   sendSettingsChanged,
@@ -178,7 +173,7 @@ export default {
     async toggleInjection() {
       console.log("TOOOGGGLLLIIING");
       this.selectedSettings.inject = !this.selectedSettings.inject;
-      await setSettings(this.selectedTab, {
+      await settingsProvider.setSettings(this.selectedTab, {
         inject: this.selectedSettings.inject,
       });
       sendSettingsChanged();
@@ -190,7 +185,7 @@ export default {
     },
     async loadSettings() {
       const { settings: activeSettings, level: selectedTab } =
-        await getMostSpecificSettings();
+        await settingsProvider.getMostSpecificSettings();
       this.activeSettings = activeSettings;
       this.selectedTab = selectedTab;
       this.loadedTab = selectedTab;
@@ -199,7 +194,7 @@ export default {
       this.loadSelectedSettings();
     },
     async loadSelectedSettings() {
-      let loadedSettings = await getSettings(this.selectedTab);
+      let loadedSettings = await settingsProvider.getSettings(this.selectedTab);
       //if settings arent set, use empty settings and allow saving it
       if (!loadedSettings) {
         this.selectedSettings = EMPTY_SETTINGS;
@@ -212,7 +207,7 @@ export default {
     },
     async deleteSetting() {
       if (!confirm("Do you really want to delete this settings?")) return;
-      await deleteSettings(this.selectedTab);
+      await settingsProvider.deleteSettings(this.selectedTab);
 
       this.loadSettings();
     },
@@ -226,7 +221,7 @@ export default {
       console.log(toRaw(this.selectedSettings));
 
       // * use toraw for all nonsimple types
-      await setSettings(this.selectedTab, {
+      await settingsProvider.setSettings(this.selectedTab, {
         inject: this.selectedSettings.inject,
         headerRules: toRaw(this.selectedSettings.headerRules),
         position: this.selectedSettings.position,

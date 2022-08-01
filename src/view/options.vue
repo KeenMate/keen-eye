@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { clear } from "@/providers/storageProvider";
+import storageProvider from "@/providers/storageProvider";
 
 export default {
   name: "optionsView",
@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     async clearStorage() {
-      await clear();
+      await storageProvider.clear();
       console.log("storage deleted");
     },
   },

@@ -1,11 +1,11 @@
 import { onBeforeSendHeaders } from "./chromeApiProvider";
-import { getSettingsFromCache } from "./settingsProvider";
 
-export default function (cache) {
+export default function (cacheSettingProvider) {
   const localeListenerOptions = ["blocking", "requestHeaders", "extraHeaders"];
+
   onBeforeSendHeaders(
     (details) => {
-      let res = getSettingsFromCache(cache, details.url);
+      let res = cacheSettingProvider.getMostSpecificSettingsSync(details.url);
       if (!res) return;
       const {
         settings: { locale },

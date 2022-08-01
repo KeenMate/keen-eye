@@ -3,7 +3,7 @@ import { BaseTransformation } from "@/types/baseTransformation";
 import { UrlTransformation } from "@/types/urlTransformation";
 
 export function parseTranformation(transformation) {
-  switch (transformation.type) {
+  switch (transformation?.type) {
     case types.basic:
       return new BaseTransformation(transformation.headerRule);
 
@@ -14,14 +14,17 @@ export function parseTranformation(transformation) {
       );
 
     default:
-      break;
+      return undefined;
   }
 }
 
 export function parseTranformations(settings) {
   if (!settings?.transformations || !Array.isArray(settings.transformations))
     return;
-  console.log("transformations set gonna parse...");
+
+  //this is to remove null and undefs
+  settings.transformations = settings?.transformations.filter((val) => val);
+
   settings.transformations = settings.transformations.map((trans) =>
     parseTranformation(trans)
   );

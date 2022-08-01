@@ -1,22 +1,16 @@
 import { settings, requestInfo, saveSettings } from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
-import { levels } from "@/constants/settings";
-import {
-  getMostSpecificSettings,
-  setSettings,
-  toggleVisibility,
-} from "@/providers/settingsProvider";
-import { useCache } from "@/providers/storageProvider";
+import settingsProvider from "@/providers/settingsProvider";
 import { sendSettingsChanged } from "@/providers/messagingProvider";
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
 import { onCommand, onMessage } from "@/providers/chromeApiProvider";
+
 ("use strict");
 //setup providers
 var headers = {};
 headersProvider(headers);
-var cache = useCache();
-languageChanger(cache);
+languageChanger(settingsProvider);
 
 onMessage(function (request, sender, sendResponse) {
   console.log(request);
@@ -30,7 +24,7 @@ onMessage(function (request, sender, sendResponse) {
       break;
 
     case settings:
-      getMostSpecificSettings(sender.url).then((settings) => {
+      settingsProvider.getMostSpecificSettings(sender.url).then((settings) => {
         if (settings) {
           sendReply(true, settings, sendResponse);
         } else {
@@ -40,8 +34,11 @@ onMessage(function (request, sender, sendResponse) {
       break;
     case saveSettings: {
       console.log("saving settings");
+
       const { settings, level } = request.data;
-      setSettings(level ?? levels.global, settings)
+
+      settingsProvider
+        .setSettings(level, settings)
         .then(() => {
           if (
             settings.headerRules !== undefined ||
@@ -71,6 +68,6 @@ onMessage(function (request, sender, sendResponse) {
 onCommand((command) => {
   if (command === "toggle-page-overlay") {
     console.log("toggling...");
-    toggleVisibility();
+    settingsProvider.toggleVisibility();
   }
 });

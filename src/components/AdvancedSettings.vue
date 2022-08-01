@@ -1,24 +1,20 @@
 <template>
   Url tranformation
-  <div
-    class="form-group"
-    v-if="settings.transformations[0].headerRule !== undefined"
-  >
+  <div class="form-group">
+    <label>Header Rule</label>
+
     <input
       class="form-control"
       type="text"
       name="headerName"
-      v-model="this.settings.transformations[0].headerRule"
+      v-model="headerRule"
     />
   </div>
-  <div class="form-group" v-if="settings.transformations[0].url !== undefined">
-    <input
-      class="form-control"
-      type="text"
-      name="url"
-      v-model="this.settings.transformations[0].url"
-    />
+  <div class="form-group">
+    <label>Url</label>
+    <input class="form-control" type="text" name="url" v-model="url" />
   </div>
+  <button class="btn btn-primary" @click="update">Presave</button>
 </template>
 <script>
 import { UrlTransformation } from "@/types/urlTransformation";
@@ -27,7 +23,7 @@ export default {
   emits: ["input", "change"],
   data() {
     return {
-      name: null,
+      headerRule: null,
       url: null,
     };
   },
@@ -42,38 +38,26 @@ export default {
     },
   },
   watch: {
-    selectedSettings: {
-      handler() {
-        this.$emit("input", this.selectedSettings);
-      },
-      deep: true,
-    },
-  },
-  computed: {
-    settings: {
-      get() {
-        return this.selectedSettings;
-      },
-      set(newSettings) {
-        this.$emit("input", newSettings);
-      },
+    selectedSettings(newVal) {
+      console.log("selected settings changed");
+
+      let tranformation = newVal?.transformations?.[0];
+      if (tranformation) {
+        this.headerRule = tranformation.headerRule;
+        this.url = tranformation.url;
+      }
     },
   },
   methods: {
     update() {
-      this.settings.transformations = [
-        new UrlTransformation(this.name, this.url),
+      let settingsCopy = { ...this.selectedSettings };
+      settingsCopy.transformations = [
+        new UrlTransformation(this.headerRule, this.url),
       ];
-      this.$emit("change");
+      console.log(settingsCopy);
+      this.$emit("input", settingsCopy);
     },
   },
-  beforeMount() {
-    if (
-      !this.settings.transformations ||
-      this.settings.transformations.length == 0
-    ) {
-      this.settings.transformations = [{ headerRule: "", url: "" }];
-    }
-  },
+  beforeMount() {},
 };
 </script>

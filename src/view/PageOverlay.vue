@@ -88,7 +88,7 @@ setSettings;
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { toRaw } from "@vue/reactivity";
-import { logEverything } from "@/helpers/urlHelper";
+// import { logEverything } from "@/helpers/urlHelper";
 import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
 import FilterRules from "@/helpers/filterRules";
@@ -174,7 +174,7 @@ export default {
       let requestInfo = await getRequestInfo();
       this.requestInfo = requestInfo;
       console.log("request", requestInfo);
-      logEverything(requestInfo?.response?.url);
+      // logEverything(requestInfo?.response?.url);
     },
     async closeOverlay() {
       let response = await changeInject(this.level, false);
