@@ -10,6 +10,7 @@ import { SyncStorageProvider } from "./storageProvider";
 import { CacheStorageProvider } from "./cacheStorageProvider";
 export class SettingsProvider {
   constructor(asyncSource, syncSource) {
+    if (!asyncSource) throw "you need to provide source to settings provider";
     this.asyncSource = asyncSource;
     this.syncSource = syncSource;
   }
@@ -31,6 +32,7 @@ export class SettingsProvider {
     return setting;
   }
   getSettingsSync(level, url) {
+    if (!this.syncSource) return;
     //if url is not specified use current url
     let urlParts = getUrlParts(url);
     let storageKey = urlParts[level];
@@ -93,7 +95,7 @@ export class SettingsProvider {
 
   async getMostSpecificSettings(url) {
     let settings;
-    
+
     if (url) {
       url = new URL(url);
     } else {
@@ -125,6 +127,8 @@ export class SettingsProvider {
    * @returns
    */
   getMostSpecificSettingsSync(url) {
+    if (!this.syncSource) return;
+
     let settings;
     url = new URL(url);
 
@@ -139,7 +143,7 @@ export class SettingsProvider {
     if ((settings = this.getSettingsSync(levels.domain, url))) {
       return { settings, level: levels.domain };
     }
-    
+
     if ((settings = this.getSettingsSync(levels.global, url)) !== undefined) {
       return { settings, level: levels.global };
     }
