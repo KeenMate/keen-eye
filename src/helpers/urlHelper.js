@@ -14,34 +14,28 @@ export function logEverything(url) {
   console.log("Url info", parse(url));
 }
 
-export async function getPath(url) {
+export function getPath(url) {
   //https://stackoverflow.com/questions/6257463/how-to-get-the-url-without-any-parameters-in-javascript
   return `${url.protocol}//${url.host}${url.pathname}`;
 }
 
+export function getUrlParts(url) {
+  return {
+    [levels.global]: "!global!",
+    [levels.domain]: getDomain(url),
+    [levels.origin]: url.origin,
+    [levels.page]: getPath(url),
+  };
+}
 export async function getCurrentTabUrl() {
   let currentTab = await getCurrentTab();
+
   return new URL(currentTab?.url ?? "");
 }
 
-export function getUrlPart(part, url) {
-  switch (part) {
-    case levels.global:
-      return "!global!";
-    case levels.domain:
-      return getDomain(url);
-    case levels.origin:
-      return url.origin;
-    case levels.page:
-      return getPath(url);
+export async function getCurrentUrlParts() {
+  //if url is provided will use it instead of current tab one
+  let url = await getCurrentTabUrl();
 
-    //TODO remove this is only for compatibility reasons
-    default:
-      return url.origin;
-  }
-}
-
-export async function getUrlPartCurrent(part, url) {
-  url = url ?? (await getCurrentTabUrl());
-  return getUrlPart(part, url);
+  return getUrlParts(url);
 }
