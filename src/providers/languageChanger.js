@@ -4,9 +4,8 @@ export default function (cache) {
   const localeListenerOptions = ["blocking", "requestHeaders", "extraHeaders"];
   chrome.webRequest.onBeforeSendHeaders.addListener(
     (details) => {
-      let res = getSettingsFromCache(cache.storage, details.url);
+      let res = getSettingsFromCache(cache, details.url);
       if (!res) return;
-
       const {
         settings: { locale },
       } = res;

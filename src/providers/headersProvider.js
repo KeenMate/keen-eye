@@ -14,8 +14,6 @@ export default function (headers) {
     function (details) {
       // chrome.extension.getBackgroundPage().console.log(details);
       headers[details.tabId] = { request: details, requests: undefined };
-      console.warn("MAINFRAME");
-      console.warn(headers[details.tabId]);
     },
     mainFrameFilters,
     ["requestHeaders"]

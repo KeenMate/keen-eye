@@ -1,12 +1,12 @@
 <template>
   <div class="main_app">
     <h1>Settings</h1>
-    <button @click="clear">CLEAR STORAGE</button>
+    <button @click="clearStorage">CLEAR STORAGE</button>
   </div>
 </template>
 
 <script>
-import { clearStorage } from '@/providers/storageProvider';
+import { clear } from "@/providers/storageProvider";
 
 export default {
   name: "optionsView",
@@ -16,8 +16,9 @@ export default {
     };
   },
   methods: {
-    clear() {
-      clearStorage();
+    async clearStorage() {
+      await clear();
+      console.log("storage deleted");
     },
   },
 };
