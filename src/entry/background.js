@@ -1,13 +1,15 @@
-import {
-  sendReply,
-  sendSettingsChanged,
-} from "@/helpers/scriptsComunicationHelper";
 import { settings, requestInfo, saveSettings } from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
 import { levels } from "@/constants/settings";
-import { getMostSpecificSettings, setSettings, toggleVisibility } from "@/providers/settingsProvider";
+import {
+  getMostSpecificSettings,
+  setSettings,
+  toggleVisibility,
+} from "@/providers/settingsProvider";
 import { useCache } from "@/providers/storageProvider";
+import { sendSettingsChanged } from "@/providers/messagingProvider";
+import { sendReply } from "@/helpers/scriptsComunicationHelper";
 ("use strict");
 //setup providers
 var headers = {};

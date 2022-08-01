@@ -68,14 +68,6 @@
           <div class="col-6">
             <h4>Requests</h4>
           </div>
-          <!-- <div class="col-6">
-            <button
-              class="btn btn btn-secondary btn-sm"
-              @click="loadRequestInfo"
-            >
-              Refresh
-            </button>
-          </div> -->
         </div>
         <div style="max-height: 45vh; overflow-y: auto">
           <RequestsRendererVue
@@ -87,17 +79,12 @@
       </template>
     </div>
   </div>
-  <widget-container-modal />
+  <WidgetContainerModal />
 </template>
 
 <script>
 import HeaderRendererVue from "@/components/HeaderRenderer.vue";
-import {
-  changeInject,
-  getRequestInfo,
-  saveDivPosition,
-  setSettings,
-} from "@/helpers/scriptsComunicationHelper";
+setSettings;
 import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { toRaw } from "@vue/reactivity";
@@ -106,6 +93,13 @@ import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
 import FilterRules from "@/helpers/filterRules";
 import { newRequests } from "@/constants/messages";
+import { containerName } from "@/constants/overlay";
+import {
+  changeInject,
+  getRequestInfo,
+  saveDivPosition,
+  setSettings,
+} from "@/providers/messagingProvider";
 
 export default {
   components: {
@@ -175,22 +169,18 @@ export default {
     },
   },
   methods: {
-    loadRequestInfo() {
-      getRequestInfo().then((requestInfo) => {
-        this.requestInfo = requestInfo;
-        console.log("request", requestInfo);
-        logEverything(requestInfo?.response?.url);
-      });
-      //TODO rework this
-      // setTimeout(this.loadRequestInfo, 2000);
+    async loadRequestInfo() {
+      let requestInfo = await getRequestInfo();
+      this.requestInfo = requestInfo;
+      console.log("request", requestInfo);
+      logEverything(requestInfo?.response?.url);
     },
-    closeOverlay() {
-      changeInject(this.level, false).then((res) => {
-        if (res && !res.ok) {
-          console.error(res);
-          //TODO maybe add real error handling
-        }
-      });
+    async closeOverlay() {
+      let response = await changeInject(this.level, false);
+      if (response && !response.ok) {
+        console.error(response);
+        //TODO maybe add real error handling
+      }
     },
     saveSettings() {
       setSettings(this.level, {
@@ -216,11 +206,8 @@ export default {
     await this.loadRequestInfo();
     this.createFilterObjects(this.settings);
 
-    AddDrag(
-      this.$refs.dragg,
-      "keen-eye-page-overlay-div",
-      this.settings.position,
-      (pos) => saveDivPosition(this.level, pos)
+    AddDrag(this.$refs.dragg, containerName, this.settings.position, (pos) =>
+      saveDivPosition(this.level, pos)
     );
 
     chrome.runtime.onMessage.addListener((message) => {

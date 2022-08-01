@@ -2,10 +2,12 @@ import { EMPTY_SETTINGS, levels } from "@/constants/settings";
 import { getUrlPartCurrent, getUrlPart } from "../helpers/urlHelper";
 import { getItem, setItem } from "./storageProvider";
 import { parseTranformations } from "@/helpers/transformationHelper";
-import { sendSettingsChanged } from "@/helpers/scriptsComunicationHelper";
+import { sendSettingsChanged } from "./messagingProvider";
+
 export async function getSettings(level, url) {
   let storageKey = await getUrlPartCurrent(level, url);
   let setting = await getItem(storageKey);
+  console.log(storageKey, setting);
   parseTranformations(setting);
   return setting;
 }

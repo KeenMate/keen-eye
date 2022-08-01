@@ -99,22 +99,22 @@
           >
         </li>
       </ul>
-      <basic-settings
+      <BasicSettings
         v-if="settingsTab == 'basic'"
         :selectedSettings="selectedSettings"
         :requestInfo="requestInfo"
         @input="(newVal) => (this.selectedSettings = newVal)"
         @change="changed = true"
         @toggle-injection="toggleInjection"
-      ></basic-settings>
-      <advanced-settings
+      ></BasicSettings>
+      <AdvancedSettings
         v-if="settingsTab == 'advanced'"
         :selectedSettings="selectedSettings"
         :requestInfo="requestInfo"
         @input="(newVal) => (this.selectedSettings = newVal)"
         @change="changed = true"
       >
-      </advanced-settings>
+      </AdvancedSettings>
       <div class="mb-2">
         <button :class="'btn btn-large btn-outline-success'" @click="save">
           SAVE
@@ -128,10 +128,6 @@
 </template>
 
 <script>
-import {
-  getRequestInfo,
-  sendSettingsChanged,
-} from "../helpers/scriptsComunicationHelper";
 import { refreshCurrentPage } from "@/helpers/helpers";
 import { getCurrentTab } from "../helpers/urlHelper";
 import { toRaw } from "vue";
@@ -147,10 +143,17 @@ import {
   getSettings,
   setSettings,
 } from "@/providers/settingsProvider";
+import {
+  getRequestInfo,
+  sendSettingsChanged,
+} from "@/providers/messagingProvider";
 
 export default {
-  name: "popupView",
-  components: { BasicSettings, AdvancedSettings },
+  name: "popupApp",
+  components: {
+    BasicSettings,
+    AdvancedSettings,
+  },
   data() {
     return {
       selectedSettings: EMPTY_SETTINGS,
@@ -170,7 +173,7 @@ export default {
   },
   methods: {
     getColor(level) {
-      return `background-color: ${getLevelColor(level)}`;
+      return { "background-color": getLevelColor(level) };
     },
     async toggleInjection() {
       console.log("TOOOGGGLLLIIING");

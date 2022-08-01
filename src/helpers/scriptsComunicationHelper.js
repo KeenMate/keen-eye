@@ -1,43 +1,3 @@
-import {
-  settings,
-  requestInfo,
-  settingsChanged,
-  saveSettings,
-  newRequests,
-} from "@/constants/messages";
-import { parseTranformations } from "./transformationHelper";
-
-export async function getRequestInfo(tabId = null) {
-  return await sendMessagePromise({
-    type: requestInfo,
-    data: { tabId: tabId },
-  });
-}
-
-export async function getSettings() {
-  let data = await sendMessagePromise({ type: settings });
-  // eslint-disable-next-line no-debugger
-  if (data.settings) {
-    parseTranformations(data.settings);
-  }
-  return data;
-}
-
-export async function saveDivPosition(level, position) {
-  return setSettings(level, { position });
-}
-export async function changeInject(level, inject) {
-  return setSettings(level, { inject });
-}
-
-export async function setSettings(level, settings) {
-  console.log("save settings", settings);
-  return await sendMessagePromise({
-    type: saveSettings,
-    data: { level, settings },
-  });
-}
-
 export function sendMessagePromise(message) {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(message, (response) => {
@@ -56,22 +16,14 @@ export function sendReply(succeded, data, sendResponse) {
   sendResponse({ ok: succeded, data: data });
 }
 
-export function sendToSpecificCs(tabId, type, data) {
+export function sendToSpecificCS(tabId, type, data) {
   chrome.tabs.sendMessage(tabId, { type, data });
 }
 
 export function sendToCS(type, data) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     if (tabs[0]) {
-      sendToSpecificCs(tabs[0].id, type, data);
+      sendToSpecificCS(tabs[0].id, type, data);
     }
   });
-}
-
-export function sendSettingsChanged() {
-  sendToCS(settingsChanged);
-}
-
-export function sendNewRequests(requests, tabId) {
-  sendToSpecificCs(tabId, newRequests, requests);
 }

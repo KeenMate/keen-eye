@@ -1,4 +1,4 @@
-import { sendNewRequests } from "@/helpers/scriptsComunicationHelper";
+import { sendNewRequests } from "./messagingProvider";
 
 export default function (headers) {
   var mainFrameFilters = {

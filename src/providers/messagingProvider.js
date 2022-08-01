@@ -1,0 +1,52 @@
+import {
+  settings,
+  requestInfo,
+  settingsChanged,
+  saveSettings,
+  newRequests,
+} from "@/constants/messages";
+import {
+  sendMessagePromise,
+  sendToCS,
+  sendToSpecificCS,
+} from "@/helpers/scriptsComunicationHelper";
+import { parseTranformations } from "@/helpers/transformationHelper";
+
+export async function getRequestInfo(tabId = null) {
+  return await sendMessagePromise({
+    type: requestInfo,
+    data: { tabId: tabId },
+  });
+}
+
+export async function getSettings() {
+  let data = await sendMessagePromise({ type: settings });
+  // eslint-disable-next-line no-debugger
+  if (data.settings) {
+    parseTranformations(data.settings);
+  }
+  return data;
+}
+
+export async function saveDivPosition(level, position) {
+  return setSettings(level, { position });
+}
+export async function changeInject(level, inject) {
+  return setSettings(level, { inject });
+}
+
+export async function setSettings(level, settings) {
+  console.log("save settings", settings);
+  return await sendMessagePromise({
+    type: saveSettings,
+    data: { level, settings },
+  });
+}
+
+export function sendSettingsChanged() {
+  sendToCS(settingsChanged);
+}
+
+export function sendNewRequests(requests, tabId) {
+  sendToSpecificCS(tabId, newRequests, requests);
+}
