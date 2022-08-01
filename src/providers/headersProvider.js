@@ -1,3 +1,9 @@
+import {
+  onCompleted,
+  onHeadersReceived,
+  onSendHeaders,
+  onTabRemoved,
+} from "./chromeApiProvider";
 import { sendNewRequests } from "./messagingProvider";
 
 export default function (headers) {
@@ -10,16 +16,16 @@ export default function (headers) {
     types: ["xmlhttprequest"],
   };
 
-  chrome.webRequest.onSendHeaders.addListener(
-    function (details) {
+  onSendHeaders(
+    (details) => {
       // chrome.extension.getBackgroundPage().console.log(details);
       headers[details.tabId] = { request: details, requests: undefined };
     },
     mainFrameFilters,
     ["requestHeaders"]
   );
-  chrome.webRequest.onHeadersReceived.addListener(
-    function (details) {
+  onHeadersReceived(
+    (details) => {
       // chrome.extension.getBackgroundPage().console.log(details);
       headers[details.tabId] = headers[details.tabId] || {};
       headers[details.tabId].response = details;
@@ -40,8 +46,8 @@ export default function (headers) {
     ["responseHeaders"]
   );
 
-  chrome.webRequest.onSendHeaders.addListener(
-    function (details) {
+  onSendHeaders(
+    (details) => {
       headers[details.tabId] = headers[details.tabId] ?? {};
       headers[details.tabId].requests = headers[details.tabId].requests ?? {};
       headers[details.tabId].requests[details.requestId] = {
@@ -53,7 +59,7 @@ export default function (headers) {
     fetchFilters,
     ["requestHeaders"]
   );
-  chrome.webRequest.onHeadersReceived.addListener(
+  onHeadersReceived(
     function (details) {
       //checks if some of objects arent undefined
       //I shouldnt have to do this, but chrome somtimes misbehave
@@ -78,7 +84,7 @@ export default function (headers) {
     fetchFilters,
     ["responseHeaders"]
   );
-  chrome.webRequest.onCompleted.addListener(
+  onCompleted(
     function (details) {
       //checks if some of objects arent undefined
       headers[details.tabId] = headers[details.tabId] ?? {};
@@ -95,7 +101,7 @@ export default function (headers) {
     ["responseHeaders"]
   );
 
-  chrome.tabs.onRemoved.addListener(function (tabId) {
+  onTabRemoved(function (tabId) {
     delete headers[tabId];
   });
 }

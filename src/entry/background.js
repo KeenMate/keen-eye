@@ -10,6 +10,7 @@ import {
 import { useCache } from "@/providers/storageProvider";
 import { sendSettingsChanged } from "@/providers/messagingProvider";
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
+import { onCommand, onMessage } from "@/providers/chromeApiProvider";
 ("use strict");
 //setup providers
 var headers = {};
@@ -17,7 +18,7 @@ headersProvider(headers);
 var cache = useCache();
 languageChanger(cache);
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+onMessage(function (request, sender, sendResponse) {
   console.log(request);
   //handle messsage based on type
   switch (request?.type) {
@@ -67,7 +68,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   return true;
 });
 
-chrome.commands.onCommand.addListener((command) => {
+onCommand((command) => {
   if (command === "toggle-page-overlay") {
     console.log("toggling...");
     toggleVisibility();

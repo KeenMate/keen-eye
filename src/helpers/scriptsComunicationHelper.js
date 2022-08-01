@@ -1,15 +1,20 @@
-export function sendMessagePromise(message) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage(message, (response) => {
-      console.log(response);
-      if (response === undefined) resolve();
-      if (response?.ok) {
-        resolve(response.data);
-      } else {
-        reject("Something wrong");
-      }
-    });
-  });
+import {
+  getCurrentTab,
+  sendMessage,
+  sendToTab,
+} from "@/providers/chromeApiProvider";
+
+export async function sendMessagePromise(message) {
+  let response = await sendMessage(message);
+  console.debug(response);
+  if (response === undefined) {
+    return Promise.resolve();
+  }
+  if (response?.ok) {
+    return Promise.resolve(response.data);
+  } else {
+    return Promise.reject(response);
+  }
 }
 
 export function sendReply(succeded, data, sendResponse) {
@@ -17,13 +22,10 @@ export function sendReply(succeded, data, sendResponse) {
 }
 
 export function sendToSpecificCS(tabId, type, data) {
-  chrome.tabs.sendMessage(tabId, { type, data });
+  sendToTab(tabId, { type, data });
 }
 
-export function sendToCS(type, data) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    if (tabs[0]) {
-      sendToSpecificCS(tabs[0].id, type, data);
-    }
-  });
+export async function sendToCS(type, data) {
+  let tab = await getCurrentTab();
+  sendToSpecificCS(tab.id, type, data);
 }

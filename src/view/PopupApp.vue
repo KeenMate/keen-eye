@@ -53,7 +53,7 @@
       </li>
     </ul>
     <!-- Tabs navs -->
-    <div class="container">
+    <div class="mx-2 mb-2">
       <div class="row">
         <div class="col-6"><h3>SETTINGS</h3></div>
         <div class="col-6">
@@ -129,7 +129,6 @@
 
 <script>
 import { refreshCurrentPage } from "@/helpers/helpers";
-import { getCurrentTab } from "../helpers/urlHelper";
 import { toRaw } from "vue";
 import { EMPTY_SETTINGS } from "@/constants/settings";
 import { getLevelColor } from "@/helpers/helpers";
@@ -147,6 +146,7 @@ import {
   getRequestInfo,
   sendSettingsChanged,
 } from "@/providers/messagingProvider";
+import { getCurrentTab } from "@/providers/chromeApiProvider";
 
 export default {
   name: "popupApp",

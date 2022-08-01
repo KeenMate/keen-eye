@@ -100,6 +100,7 @@ import {
   saveDivPosition,
   setSettings,
 } from "@/providers/messagingProvider";
+import { onMessage } from "@/providers/chromeApiProvider";
 
 export default {
   components: {
@@ -210,7 +211,7 @@ export default {
       saveDivPosition(this.level, pos)
     );
 
-    chrome.runtime.onMessage.addListener((message) => {
+    onMessage((message) => {
       if (message?.type == newRequests) {
         this.requestInfo.requests = message.data;
       }

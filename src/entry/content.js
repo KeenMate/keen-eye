@@ -9,8 +9,9 @@ import {
   resetCss,
 } from "@/constants/overlay";
 import { getSettings } from "@/providers/messagingProvider";
+import { getResourceUrl, onMessage } from "@/providers/chromeApiProvider";
 
-chrome.runtime.onMessage.addListener((message) => {
+onMessage((message) => {
   if (message?.type == settingsChanged) {
     console.log("SETTINGS CHANGED");
     loadAndRender();
@@ -73,9 +74,9 @@ function addScriptsAndStyles(div) {
   addStyleContent(document.body, resetCss);
   addStyleContent(div.shadowRoot, resetCss);
   addStyleContent(div.shadowRoot, bootstrapBody);
-  addStyle(div.shadowRoot, chrome.extension.getURL("css/content.css"));
-  addStyle(div.shadowRoot, chrome.extension.getURL("modal.css"));
-  addStyle(div.shadowRoot, chrome.extension.getURL("popper.css"));
+  addStyle(div.shadowRoot, getResourceUrl("css/content.css"));
+  addStyle(div.shadowRoot, getResourceUrl("modal.css"));
+  addStyle(div.shadowRoot, getResourceUrl("popper.css"));
 }
 
 function addStyle(el, href) {

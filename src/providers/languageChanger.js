@@ -1,8 +1,9 @@
+import { onBeforeSendHeaders } from "./chromeApiProvider";
 import { getSettingsFromCache } from "./settingsProvider";
 
 export default function (cache) {
   const localeListenerOptions = ["blocking", "requestHeaders", "extraHeaders"];
-  chrome.webRequest.onBeforeSendHeaders.addListener(
+  onBeforeSendHeaders(
     (details) => {
       let res = getSettingsFromCache(cache, details.url);
       if (!res) return;
