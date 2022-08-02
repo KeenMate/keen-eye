@@ -2,9 +2,12 @@
   <div class="row">
     <div class="col-6"><h6>Headers</h6></div>
     <div class="col-6">
-      Copy
-      <CopyHeadersButtonVue :headers="headers">selected</CopyHeadersButtonVue>
-      <CopyHeadersButtonVue :headers="allHeaders">all</CopyHeadersButtonVue>
+      <CopyHeadersButtonVue :headers="headers"
+        >Copy selected</CopyHeadersButtonVue
+      >
+      <CopyHeadersButtonVue :headers="allHeaders"
+        >Copy all</CopyHeadersButtonVue
+      >
     </div>
   </div>
   <table class="table table-striped table-sm">

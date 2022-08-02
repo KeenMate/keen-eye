@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-secondary btn-sm" @click="copy">
+  <button class="btn btn-sm" @click="copy">
     <slot> </slot>
   </button>
 </template>

@@ -5,7 +5,7 @@
       class="btn-primary btn form-control-sm btn-sm"
       :class="enabled ? 'btn-danger' : 'btn-success'"
     >
-      {{ enabled ? "hide" : "show" }}
+      {{ enabled ? "Hide" : "Show" }}
     </button>
   </div>
   <div class="mb-2">
@@ -16,7 +16,7 @@
   </div>
   <label>Headers</label>
 
-  <div class="mb-2" @keyup.esc.stop>
+  <div @keyup.esc.stop>
     <multiselect
       v-model="settings.headerRules"
       :clear-on-select="false"
@@ -36,7 +36,7 @@
   </div>
   <label>Requests</label>
 
-  <div class="mb-2" @keyup.esc.stop>
+  <div @keyup.esc.stop>
     <multiselect
       v-model="settings.requestsRules"
       :options="requests"
@@ -54,9 +54,9 @@
     >
     </multiselect>
   </div>
-  <label>language</label>
+  <label>Locale</label>
 
-  <div class="row mb-2">
+  <div class="form-group row">
     <div class="col-9">
       <multiselect
         @keyup.esc.stop

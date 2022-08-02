@@ -14,7 +14,7 @@
             'font-weight-bold': loadedTab == levels.global,
           }"
           @click="changeTab(levels.global)"
-          >global</a
+          >Global</a
         >
       </li>
       <li class="nav-item" role="tab" :style="getColor(levels.domain)">
@@ -25,7 +25,7 @@
             'font-weight-bold': loadedTab == levels.domain,
           }"
           @click="changeTab(levels.domain)"
-          >domain</a
+          >Domain</a
         >
       </li>
       <li class="nav-item" role="tab" :style="getColor(levels.origin)">
@@ -63,7 +63,7 @@
                 class="btn-danger btn form-control-sm btn-sm"
                 @click="deleteSetting"
               >
-                Delete settings
+                Delete
               </button>
               <button
                 class="btn-info btn form-control-sm btn-sm"
@@ -75,7 +75,7 @@
                 class="btn-success btn form-control-sm btn-sm"
                 @click="save"
               >
-                SAVE
+                Save
               </button>
               <button
                 class="btn-muted btn form-control-sm btn-sm"
@@ -93,7 +93,7 @@
             class="nav-link"
             :class="settingsTab == 'basic' ? ' active ' : ''"
             @click="settingsTab = 'basic'"
-            >basic</a
+            >Basic</a
           >
         </li>
         <li class="nav-item" role="tab">
@@ -101,7 +101,7 @@
             class="nav-link"
             :class="settingsTab == 'advanced' ? ' active ' : ''"
             @click="settingsTab = 'advanced'"
-            >advanced</a
+            >Advanced</a
           >
         </li>
       </ul>
@@ -123,11 +123,11 @@
       </AdvancedSettings>
       <div class="mb-2">
         <button :class="'btn btn-large btn-outline-success'" @click="save">
-          SAVE
+          Save
         </button>
       </div>
       <div class="alert alert-danger" v-if="changed === true">
-        carefull unsaved changes
+        Carefull unsaved changes!
       </div>
     </div>
   </div>

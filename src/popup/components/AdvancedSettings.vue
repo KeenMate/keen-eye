@@ -1,5 +1,5 @@
 <template>
-  Url tranformation
+  <h6>Url tranformation</h6>
 
   <div class="form-group">
     <label>Header Rule</label>

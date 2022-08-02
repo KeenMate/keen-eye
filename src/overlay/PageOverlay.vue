@@ -48,8 +48,8 @@
       </div>
       <div class="col-3"></div>
     </div>
-    <div style="max-width: 550px">
-      <div style="max-height: 35vh; overflow-y: auto">
+    <div>
+      <div style="max-height: 35vh; overflow-y: auto; overflow-x: hidden">
         <HeaderRendererVue
           v-if="headersFilterRules"
           :filtering="true"
