@@ -72,10 +72,16 @@
                 Refresh
               </button>
               <button
+                class="btn-success btn form-control-sm btn-sm"
+                @click="save"
+              >
+                SAVE
+              </button>
+              <button
                 class="btn-muted btn form-control-sm btn-sm"
                 @click="copySettings"
               >
-                DEBUG
+                D
               </button>
             </div>
           </div>

@@ -1,20 +1,27 @@
 <template>
   Url tranformation
+
   <div class="form-group">
     <label>Header Rule</label>
-
     <input
+      @change="update"
       class="form-control"
       type="text"
       name="headerName"
       v-model="headerRule"
     />
   </div>
+
   <div class="form-group">
     <label>Url</label>
-    <input class="form-control" type="text" name="url" v-model="url" />
+    <input
+      @change="update"
+      class="form-control"
+      type="text"
+      name="url"
+      v-model="url"
+    />
   </div>
-  <button class="btn btn-primary" @click="update">Presave</button>
 </template>
 <script>
 import { UrlTransformation } from "@/transformations/urlTransformation";
@@ -39,25 +46,34 @@ export default {
   },
   watch: {
     selectedSettings(newVal) {
-      console.log("selected settings changed");
-
-      let tranformation = newVal?.transformations?.[0];
-      if (tranformation) {
-        this.headerRule = tranformation.headerRule;
-        this.url = tranformation.url;
-      }
+      this.parse(newVal);
     },
   },
   methods: {
     update() {
       let settingsCopy = { ...this.selectedSettings };
+
       settingsCopy.transformations = [
-        new UrlTransformation(this.headerRule, this.url),
+        new UrlTransformation(this.headerRule ?? "", this.url ?? ""),
       ];
-      console.log(settingsCopy);
+
       this.$emit("input", settingsCopy);
+      this.$emit("change");
+    },
+    parse(newVal) {
+      let tranformation = newVal?.transformations?.[0];
+
+      if (tranformation) {
+        this.headerRule = tranformation.headerRule;
+        this.url = tranformation.url;
+      } else {
+        this.headerRule = "";
+        this.url = "";
+      }
     },
   },
-  beforeMount() {},
+  mounted() {
+    this.parse(this.selectedSettings);
+  },
 };
 </script>
