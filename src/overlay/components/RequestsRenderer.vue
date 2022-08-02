@@ -1,6 +1,6 @@
 <template>
   <!-- {{ requests }} -->
-  <div style="max-height: 350px; overflow: auto">
+  <div>
     <table class="table table-striped table-sm">
       <thead class="table-dark">
         <tr>
@@ -13,10 +13,7 @@
           <th>origin</th>
         </tr>
       </thead>
-      <tbody
-        class="table-group-divider"
-        style="max-height: 500px; overflow-y: scroll"
-      >
+      <tbody class="table-group-divider">
         <tr v-for="request in requests" :key="request.requestId">
           <td style="cursor: pointer" @click="openRequestModal(request)">
             more

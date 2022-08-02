@@ -48,8 +48,8 @@
       </div>
       <div class="col-3"></div>
     </div>
-    <div>
-      <div style="max-height: 45vh; overflow-y: auto">
+    <div style="max-width: 550px">
+      <div style="max-height: 35vh; overflow-y: auto">
         <HeaderRendererVue
           v-if="headersFilterRules"
           :filtering="true"
@@ -66,7 +66,7 @@
             <h4>Requests</h4>
           </div>
         </div>
-        <div style="max-height: 45vh; overflow-y: auto">
+        <div style="max-height: 35vh; overflow-y: auto">
           <RequestsRendererVue
             v-if="filteredRequests"
             :requests="filteredRequests"
