@@ -87,7 +87,7 @@
   </div>
 </template>
 <script>
-import languages from "@/constants/languages";
+import languages from "@/languages/languages";
 import Multiselect from "vue-multiselect";
 
 export default {

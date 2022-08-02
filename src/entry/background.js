@@ -1,6 +1,6 @@
 import { settings, requestInfo, saveSettings } from "@/messaging/messages";
 import headersHandler from "@/requestInfo/requestsHandler";
-import languageChanger from "@/providers/languageChanger";
+import { LanguageChanger } from "@/languages/languageChanger";
 import settingsProvider from "@/settings/settingsProvider";
 import { sendSettingsChanged } from "@/messaging/messagingProvider";
 import { sendReply } from "@/messaging/scriptsComunicationHelper";
@@ -10,8 +10,10 @@ import { RequestInfo } from "@/requestInfo/requestInfo";
 ("use strict");
 //setup providers
 var requestInfoStore = new RequestInfo();
+
 headersHandler(requestInfoStore);
-languageChanger(settingsProvider);
+
+new LanguageChanger(settingsProvider);
 
 onMessage(function (request, sender, sendResponse) {
   console.log(request);
@@ -72,7 +74,6 @@ onMessage(function (request, sender, sendResponse) {
 
 onCommand((command) => {
   if (command === "toggle-page-overlay") {
-    console.log("toggling...");
     settingsProvider.toggleVisibility();
   }
 });
