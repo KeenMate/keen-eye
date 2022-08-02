@@ -231,6 +231,10 @@ export default {
         transformations: toRaw(this.selectedSettings.transformations),
       });
       sendSettingsChanged();
+
+      if (this.selectedSettings.locale) {
+        this.pageRefresh();
+      }
       // this.pageRefresh();
       this.loadSelectedSettings();
     },

@@ -71,6 +71,10 @@ function addScriptsAndStyles(div) {
     div.shadowRoot,
     "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
   );
+  addStyle(
+    div.shadowRoot,
+    "https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css"
+  );
   addStyleContent(document.body, resetCss);
   addStyleContent(div.shadowRoot, resetCss);
   addStyleContent(div.shadowRoot, bootstrapBody);

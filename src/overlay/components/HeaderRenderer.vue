@@ -1,5 +1,12 @@
 <template>
-  <h6>Headers</h6>
+  <div class="row">
+    <div class="col-6"><h6>Headers</h6></div>
+    <div class="col-6">
+      Copy
+      <CopyHeadersButtonVue :headers="headers">selected</CopyHeadersButtonVue>
+      <CopyHeadersButtonVue :headers="allHeaders">all</CopyHeadersButtonVue>
+    </div>
+  </div>
   <table class="table table-striped table-sm">
     <thead class="table-dark">
       <tr>
@@ -59,12 +66,14 @@ import { copyTextToClipboard } from "@/helpers/clipboardHelper";
 import filterRules from "@/settings/filterRules";
 import TransformationRenderer from "./TransformationRenderer.vue";
 import { escapeHtml } from "@/helpers/stringHelpers";
+import CopyHeadersButtonVue from "@/overlay/components/CopyHeadersButton.vue";
 
 export default {
   name: "HeaderRenderer",
-  components: { TransformationRenderer },
+  components: { TransformationRenderer, CopyHeadersButtonVue },
   props: {
     headers: Object,
+    allHeaders: Array,
     filtering: {
       type: Boolean,
       default: false,

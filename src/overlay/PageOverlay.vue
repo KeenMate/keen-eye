@@ -1,21 +1,17 @@
 <template>
-  <div class="container position-relative pt-2 pb-2">
+  <div class="m-1 position-relative pt-2 pb-2">
     <div class="row">
-      <div class="col-8">
+      <div class="col-6">
         <h5 class="title user-select-none" ref="dragg" style="cursor: pointer">
           {{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
         </h5>
         <h6>{{ time ? time + "ms" : "refresh" }}</h6>
       </div>
-      <div class="col-3">
-        Copy
-        <CopyHeadersButtonVue :headers="filteredHeaders"
-          >selected</CopyHeadersButtonVue
-        >
-        <CopyHeadersButtonVue :headers="requestInfo?.response?.responseHeaders"
-          >all</CopyHeadersButtonVue
-        >
+      <div class="col-5">
+        <LocaleSelector :locale="settings?.locale" @change="saveLocale">
+        </LocaleSelector>
       </div>
+
       <div class="col-1">
         <button
           @click="closeOverlay"
@@ -58,6 +54,7 @@
           v-if="headersFilterRules"
           :filtering="true"
           :headers="filteredHeaders"
+          :allHeaders="this.requestInfo?.response?.responseHeaders"
           :headersFilterRules="headersFilterRules"
           :transformations="settings.transformations"
         >
@@ -99,15 +96,15 @@ import {
 import { onMessage } from "@/providers/chromeApiProvider";
 
 import HeaderRendererVue from "@/overlay/components/HeaderRenderer.vue";
-import CopyHeadersButtonVue from "@/overlay/components/CopyHeadersButton.vue";
 import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue";
+import LocaleSelector from "./components/LocaleSelector.vue";
 
 export default {
   components: {
     HeaderRendererVue,
-    CopyHeadersButtonVue,
     RequestsRendererVue,
     WidgetContainerModal: container,
+    LocaleSelector,
   },
   props: {
     settings: Object,
@@ -186,6 +183,14 @@ export default {
     saveSettings() {
       setSettings(this.level, {
         headerRules: toRaw(this.headersFilterRules.rules),
+      });
+    },
+    saveLocale(locale) {
+      console.log(locale);
+      setSettings(this.level, {
+        locale: toRaw(locale),
+      }).then(() => {
+        location.reload();
       });
     },
     createFilterObjects(settings) {
