@@ -3,7 +3,7 @@
   <table class="table table-striped table-sm">
     <thead class="table-dark">
       <tr>
-        <th v-if="filtering">
+        <th v-if="filtering" class="autowidth">
           <span :class="{ 'text-warning': starSelected }" @click="toggleAll"
             >EYE</span
           >
@@ -19,7 +19,7 @@
         :key="index"
         class="autowidth-table"
       >
-        <td v-if="filtering">
+        <td v-if="filtering" class="autowidth">
           <span
             :class="{ 'text-warning': headersFilterRules.exists(header.name) }"
             @click="toggleRule(header.name)"
