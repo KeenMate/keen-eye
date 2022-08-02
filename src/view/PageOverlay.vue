@@ -173,7 +173,7 @@ export default {
     async loadRequestInfo() {
       let requestInfo = await getRequestInfo();
       this.requestInfo = requestInfo;
-      console.log("request", requestInfo);
+      console.log("requestInfo", requestInfo);
       // logEverything(requestInfo?.response?.url);
     },
     async closeOverlay() {

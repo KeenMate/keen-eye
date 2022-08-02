@@ -1,15 +1,16 @@
 import { settings, requestInfo, saveSettings } from "@/messaging/messages";
-import headersProvider from "@/requestInfo/headersProvider";
+import headersHandler from "@/requestInfo/requestsHandler";
 import languageChanger from "@/providers/languageChanger";
 import settingsProvider from "@/settings/settingsProvider";
 import { sendSettingsChanged } from "@/messaging/messagingProvider";
 import { sendReply } from "@/messaging/scriptsComunicationHelper";
 import { onCommand, onMessage } from "@/providers/chromeApiProvider";
+import { RequestInfo } from "@/requestInfo/requestInfo";
 
 ("use strict");
 //setup providers
-var headers = {};
-headersProvider(headers);
+var requestInfoStore = new RequestInfo();
+headersHandler(requestInfoStore);
 languageChanger(settingsProvider);
 
 onMessage(function (request, sender, sendResponse) {
@@ -19,7 +20,11 @@ onMessage(function (request, sender, sendResponse) {
     case requestInfo:
       {
         const { tabId } = request.data;
-        sendReply(true, headers[tabId ?? sender.tab.id], sendResponse);
+        sendReply(
+          true,
+          requestInfoStore.getInfoForTab(tabId ?? sender.tab.id),
+          sendResponse
+        );
       }
       break;
 
