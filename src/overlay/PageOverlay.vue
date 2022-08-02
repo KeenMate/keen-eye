@@ -83,17 +83,13 @@
 </template>
 
 <script>
-import HeaderRendererVue from "@/components/HeaderRenderer.vue";
-setSettings;
-import CopyHeadersButtonVue from "@/components/CopyHeadersButton.vue";
-import RequestsRendererVue from "@/components/RequestsRenderer.vue";
 import { toRaw } from "@vue/reactivity";
 // import { logEverything } from "@/helpers/urlHelper";
 import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
 import FilterRules from "@/settings/filterRules";
 import { newRequests } from "@/messaging/messages";
-import { containerName } from "@/constants/overlay";
+import { containerName } from "@/overlay/overlayConstants";
 import {
   changeInject,
   getRequestInfo,
@@ -101,6 +97,10 @@ import {
   setSettings,
 } from "@/messaging/messagingProvider";
 import { onMessage } from "@/providers/chromeApiProvider";
+
+import HeaderRendererVue from "@/overlay/components/HeaderRenderer.vue";
+import CopyHeadersButtonVue from "@/overlay/components/CopyHeadersButton.vue";
+import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue";
 
 export default {
   components: {

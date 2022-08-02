@@ -4,6 +4,7 @@ import { headerName, localeListenerOptions } from "./languageConstants";
 export class LanguageChanger {
   constructor(settingsProvider, filter) {
     this.settingsProvider = settingsProvider;
+
     this.filter = filter ?? { urls: ["<all_urls>"] };
 
     this.init();
@@ -12,7 +13,6 @@ export class LanguageChanger {
   init() {
     onBeforeSendHeaders(
       (detail) => this.handler(detail, this.filter),
-
       this.filter,
       localeListenerOptions
     );
