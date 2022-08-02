@@ -2,6 +2,7 @@
   <div class="form-horizontal">
     <div class="d-inline-block">
       <multiselect
+        class="multiselect-sm overflow"
         @keyup.esc.stop
         v-model="seletedLocale"
         :options="langs"
@@ -12,13 +13,12 @@
         group-values="languages"
         group-label="type"
         :custom-label="customLabel"
-        @input="(val) => changeLocale(val)"
         @remove="(val) => changeLocale(val)"
         @select="(val) => changeLocale(val)"
       ></multiselect>
     </div>
 
-    <button class="btn btn-danger" @click="changeLocale(null)">X</button>
+    <button class="btn btn-sm btn-danger" @click="changeLocale(null)">X</button>
   </div>
 </template>
 

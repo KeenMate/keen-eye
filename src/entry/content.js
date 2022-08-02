@@ -81,6 +81,7 @@ function addScriptsAndStyles(div) {
   addStyle(div.shadowRoot, getResourceUrl("css/content.css"));
   addStyle(div.shadowRoot, getResourceUrl("modal.css"));
   addStyle(div.shadowRoot, getResourceUrl("popper.css"));
+  addStyle(div.shadowRoot, getResourceUrl("overrides.css"));
 }
 
 function addStyle(el, href) {
