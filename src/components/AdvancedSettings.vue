@@ -17,7 +17,7 @@
   <button class="btn btn-primary" @click="update">Presave</button>
 </template>
 <script>
-import { UrlTransformation } from "@/types/urlTransformation";
+import { UrlTransformation } from "@/transformations/urlTransformation";
 export default {
   name: "AdvancedSettings",
   emits: ["input", "change"],

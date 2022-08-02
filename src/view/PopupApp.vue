@@ -130,13 +130,13 @@
 <script>
 import { refreshCurrentPage } from "@/helpers/helpers";
 import { toRaw } from "vue";
-import { EMPTY_SETTINGS } from "@/constants/settings";
+import { EMPTY_SETTINGS } from "@/settings/settingConstants";
 import { getLevelColor } from "@/helpers/helpers";
 import { copyTextToClipboard } from "@/helpers/clipboard-helper";
 import BasicSettings from "@/components/BasicSettings.vue";
 import AdvancedSettings from "@/components/AdvancedSettings.vue";
-import { levels } from "@/constants/settings";
-import settingsProvider from "@/providers/settingsProvider";
+import { levels } from "@/settings/settingConstants";
+import settingsProvider from "@/settings/settingsProvider";
 import {
   getRequestInfo,
   sendSettingsChanged,

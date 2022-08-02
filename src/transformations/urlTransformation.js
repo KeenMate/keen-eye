@@ -1,4 +1,4 @@
-import { types } from "@/constants/transformations";
+import { types } from "@/transformations/transformationConstants";
 import { BaseTransformation } from "./baseTransformation";
 
 export class UrlTransformation extends BaseTransformation {

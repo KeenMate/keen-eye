@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { UrlTransformation } from "@/types/urlTransformation";
+import { UrlTransformation } from "@/transformations/urlTransformation";
 
 export default {
   name: "UrlTransformator",

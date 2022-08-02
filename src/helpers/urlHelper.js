@@ -1,4 +1,4 @@
-import { levels } from "@/constants/settings";
+import { levels } from "@/settings/settingConstants";
 import { getCurrentTab } from "@/providers/chromeApiProvider";
 import { parse } from "tldts";
 /**

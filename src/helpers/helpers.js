@@ -1,4 +1,4 @@
-import { colors } from "@/constants/settings";
+import { colors } from "@/settings/settingConstants";
 import { getCurrentTab, refreshTab } from "@/providers/chromeApiProvider";
 
 export function refreshCurrentPage() {

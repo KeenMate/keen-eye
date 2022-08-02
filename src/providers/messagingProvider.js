@@ -10,7 +10,7 @@ import {
   sendToCS,
   sendToSpecificCS,
 } from "@/helpers/scriptsComunicationHelper";
-import { parseTranformations } from "@/helpers/transformationHelper";
+import { parseTranformations } from "@/transformations/transformationHelper";
 
 export async function getRequestInfo(tabId = null) {
   return await sendMessagePromise({

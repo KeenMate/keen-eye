@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { BaseTransformation } from "@/types/baseTransformation";
+import { BaseTransformation } from "@/transformations/baseTransformation";
 import UrlTranformator from "./UrlTranformator.vue";
 
 export default {

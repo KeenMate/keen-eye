@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import storageProvider from "@/providers/storageProvider";
+import storageProvider from "@/settings/storageProvider";
 
 export default {
   name: "optionsView",

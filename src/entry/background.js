@@ -1,7 +1,7 @@
 import { settings, requestInfo, saveSettings } from "@/constants/messages";
 import headersProvider from "@/providers/headersProvider";
 import languageChanger from "@/providers/languageChanger";
-import settingsProvider from "@/providers/settingsProvider";
+import settingsProvider from "@/settings/settingsProvider";
 import { sendSettingsChanged } from "@/providers/messagingProvider";
 import { sendReply } from "@/helpers/scriptsComunicationHelper";
 import { onCommand, onMessage } from "@/providers/chromeApiProvider";

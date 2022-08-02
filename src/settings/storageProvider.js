@@ -1,4 +1,4 @@
-import { clearStorage, storageGet, storageSet } from "./chromeApiProvider";
+import { clearStorage, storageGet, storageSet } from "../providers/chromeApiProvider";
 
 export class SyncStorageProvider {
   setItem(key, value) {

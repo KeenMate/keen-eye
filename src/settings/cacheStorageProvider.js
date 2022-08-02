@@ -1,4 +1,4 @@
-import { onStorageChange } from "./chromeApiProvider";
+import { onStorageChange } from "../providers/chromeApiProvider";
 import { SyncStorageProvider } from "./storageProvider";
 
 export class CacheStorageProvider {

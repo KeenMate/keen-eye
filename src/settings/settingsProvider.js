@@ -1,11 +1,11 @@
-import { EMPTY_SETTINGS, levels } from "@/constants/settings";
+import { EMPTY_SETTINGS, levels } from "@/settings/settingConstants";
 import {
   getCurrentTabUrl,
   getCurrentUrlParts,
   getUrlParts,
 } from "../helpers/urlHelper";
-import { parseTranformations } from "@/helpers/transformationHelper";
-import { sendSettingsChanged } from "./messagingProvider";
+import { parseTranformations } from "@/transformations/transformationHelper";
+import { sendSettingsChanged } from "../providers/messagingProvider";
 import { SyncStorageProvider } from "./storageProvider";
 import { CacheStorageProvider } from "./cacheStorageProvider";
 export class SettingsProvider {
