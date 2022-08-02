@@ -55,8 +55,8 @@
   </table>
 </template>
 <script>
-import { copyTextToClipboard } from "@/helpers/clipboard-helper";
-import filterRules from "@/helpers/filterRules";
+import { copyTextToClipboard } from "@/helpers/clipboardHelper";
+import filterRules from "@/settings/filterRules";
 import TransformationRenderer from "./TransformationRenderer.vue";
 import { escapeHtml } from "@/helpers/stringHelpers";
 

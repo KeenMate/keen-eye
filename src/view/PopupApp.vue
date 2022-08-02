@@ -132,7 +132,7 @@ import { refreshCurrentPage } from "@/helpers/helpers";
 import { toRaw } from "vue";
 import { EMPTY_SETTINGS } from "@/settings/settingConstants";
 import { getLevelColor } from "@/helpers/helpers";
-import { copyTextToClipboard } from "@/helpers/clipboard-helper";
+import { copyTextToClipboard } from "@/helpers/clipboardHelper";
 import BasicSettings from "@/components/BasicSettings.vue";
 import AdvancedSettings from "@/components/AdvancedSettings.vue";
 import { levels } from "@/settings/settingConstants";
@@ -140,7 +140,7 @@ import settingsProvider from "@/settings/settingsProvider";
 import {
   getRequestInfo,
   sendSettingsChanged,
-} from "@/providers/messagingProvider";
+} from "@/messaging/messagingProvider";
 import { getCurrentTab } from "@/providers/chromeApiProvider";
 
 export default {

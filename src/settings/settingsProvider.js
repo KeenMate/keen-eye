@@ -5,7 +5,7 @@ import {
   getUrlParts,
 } from "../helpers/urlHelper";
 import { parseTranformations } from "@/transformations/transformationHelper";
-import { sendSettingsChanged } from "../providers/messagingProvider";
+import { sendSettingsChanged } from "../messaging/messagingProvider";
 import { SyncStorageProvider } from "./storageProvider";
 import { CacheStorageProvider } from "./cacheStorageProvider";
 export class SettingsProvider {

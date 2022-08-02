@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import PageOverlay from "../view/PageOverlay.vue";
-import { settingsChanged } from "@/constants/messages";
+import { settingsChanged } from "@/messaging/messages";
 import Popper from "vue3-popper";
 import {
   bootstrapBody,
@@ -8,7 +8,7 @@ import {
   containerStyle,
   resetCss,
 } from "@/constants/overlay";
-import { getSettings } from "@/providers/messagingProvider";
+import { getSettings } from "@/messaging/messagingProvider";
 import { getResourceUrl, onMessage } from "@/providers/chromeApiProvider";
 
 onMessage((message) => {

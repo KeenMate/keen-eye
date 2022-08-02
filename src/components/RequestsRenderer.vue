@@ -48,7 +48,7 @@
   </div>
 </template>
 <script>
-import { copyTextToClipboard } from "@/helpers/clipboard-helper";
+import { copyTextToClipboard } from "@/helpers/clipboardHelper";
 import { getStatusCodeColor } from "@/helpers/helpers";
 import { openModal } from "jenesius-vue-modal";
 import RequestInfoModalVue from "./RequestInfoModal.vue";

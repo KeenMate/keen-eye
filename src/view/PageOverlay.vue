@@ -91,15 +91,15 @@ import { toRaw } from "@vue/reactivity";
 // import { logEverything } from "@/helpers/urlHelper";
 import { container } from "jenesius-vue-modal";
 import AddDrag from "@/helpers/dragHelper";
-import FilterRules from "@/helpers/filterRules";
-import { newRequests } from "@/constants/messages";
+import FilterRules from "@/settings/filterRules";
+import { newRequests } from "@/messaging/messages";
 import { containerName } from "@/constants/overlay";
 import {
   changeInject,
   getRequestInfo,
   saveDivPosition,
   setSettings,
-} from "@/providers/messagingProvider";
+} from "@/messaging/messagingProvider";
 import { onMessage } from "@/providers/chromeApiProvider";
 
 export default {

@@ -1,9 +1,9 @@
-import { settings, requestInfo, saveSettings } from "@/constants/messages";
-import headersProvider from "@/providers/headersProvider";
+import { settings, requestInfo, saveSettings } from "@/messaging/messages";
+import headersProvider from "@/requestInfo/headersProvider";
 import languageChanger from "@/providers/languageChanger";
 import settingsProvider from "@/settings/settingsProvider";
-import { sendSettingsChanged } from "@/providers/messagingProvider";
-import { sendReply } from "@/helpers/scriptsComunicationHelper";
+import { sendSettingsChanged } from "@/messaging/messagingProvider";
+import { sendReply } from "@/messaging/scriptsComunicationHelper";
 import { onCommand, onMessage } from "@/providers/chromeApiProvider";
 
 ("use strict");

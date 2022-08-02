@@ -3,8 +3,8 @@ import {
   onHeadersReceived,
   onSendHeaders,
   onTabRemoved,
-} from "./chromeApiProvider";
-import { sendNewRequests } from "./messagingProvider";
+} from "../providers/chromeApiProvider";
+import { sendNewRequests } from "../messaging/messagingProvider";
 
 export default function (headers) {
   var mainFrameFilters = {

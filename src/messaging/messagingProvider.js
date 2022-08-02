@@ -4,12 +4,12 @@ import {
   settingsChanged,
   saveSettings,
   newRequests,
-} from "@/constants/messages";
+} from "@/messaging/messages";
 import {
   sendMessagePromise,
   sendToCS,
   sendToSpecificCS,
-} from "@/helpers/scriptsComunicationHelper";
+} from "@/messaging/scriptsComunicationHelper";
 import { parseTranformations } from "@/transformations/transformationHelper";
 
 export async function getRequestInfo(tabId = null) {
