@@ -50,6 +50,9 @@ export function onTabRemoved(handler) {
 }
 
 //* WEBREQUEST
+export function onBeforeRequest(handler, filter, extra) {
+  chrome.webRequest.onBeforeRequest.addListener(handler, filter, extra);
+}
 export function onBeforeSendHeaders(handler, filter, extra) {
   chrome.webRequest.onBeforeSendHeaders.addListener(handler, filter, extra);
 }

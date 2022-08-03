@@ -39,3 +39,16 @@ export async function getCurrentUrlParts() {
 
   return getUrlParts(url);
 }
+
+export function updateQueryStringParameter(uri, key, value) {
+  //https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+
+  var separator = uri.indexOf("?") !== -1 ? "&" : "?";
+
+  if (uri.match(re)) {
+    return uri.replace(re, "$1" + key + "=" + value + "$2");
+  } else {
+    return uri + separator + key + "=" + value;
+  }
+}

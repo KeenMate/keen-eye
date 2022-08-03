@@ -1,5 +1,13 @@
-import { onBeforeSendHeaders } from "../providers/chromeApiProvider";
-import { headerName } from "./languageConstants";
+import { updateQueryStringParameter } from "@/helpers/urlHelper";
+import {
+  onBeforeSendHeaders,
+  onBeforeRequest,
+} from "../providers/chromeApiProvider";
+import {
+  headerName,
+  beforeHeadersOptions,
+  beforeRequestOptions,
+} from "./languageConstants";
 
 export class LanguageChanger {
   constructor(settingsProvider, filter) {
@@ -11,19 +19,38 @@ export class LanguageChanger {
   }
 
   init() {
-    onBeforeSendHeaders((detail) => this.handler(detail), this.filter, [
-      "blocking",
-      "requestHeaders",
-      "extraHeaders",
-    ]);
+    onBeforeSendHeaders(
+      (detail) => this.handleBeforeHeadersSend(detail),
+      this.filter,
+      beforeHeadersOptions
+    );
+    onBeforeRequest(
+      (detail) => this.handleBeforeRequest(detail),
+      this.filter,
+      beforeRequestOptions
+    );
   }
 
-  handler(details) {
+  handleBeforeHeadersSend(details) {
     let settings = this.getSettings(details);
-    if (this.shouldChange(settings) === false) {
+    if (!this.shouldChange(settings)) {
       return;
     }
     return this.changeHeader(settings, details);
+  }
+
+  handleBeforeRequest(details) {
+    let settings = this.getSettings(details);
+
+    if (!this.shouldChange(settings)) {
+      return;
+    }
+
+    let url = details.url;
+
+    url = this.changeQueryString(url, settings);
+    console.log(url);
+    return this.redirect(details, url);
   }
 
   shouldChange(settings) {
@@ -52,6 +79,10 @@ export class LanguageChanger {
   }
 
   getSettings(details) {
+    if (!details.url) {
+      return;
+    }
+
     return this.settingsProvider.getMostSpecificSettingsSync(details.url)
       ?.settings;
   }
@@ -66,7 +97,7 @@ export class LanguageChanger {
     let regex = new RegExp(`(?<=${cookieKey}=)([^;]+)`);
 
     cookieString = cookieString.replace(regex, settings.locale.code);
-    
+
     return cookieString;
   }
 
@@ -75,7 +106,9 @@ export class LanguageChanger {
 
     let headerThere = false;
 
-    for (const header of details.requestHeaders ?? []) {
+    details.requestHeaders = details.requestHeaders ?? [];
+
+    for (const header of details.requestHeaders) {
       if (header.name.toLowerCase() === headerName) {
         header.value = locale.code ?? locale;
 
@@ -95,5 +128,38 @@ export class LanguageChanger {
     }
 
     return { requestHeaders: details.requestHeaders ?? [] };
+  }
+
+  shouldChangeQueryString(settings) {
+    const { localeReplace } = settings;
+    if (!localeReplace) {
+      return false;
+    }
+    const { queryStringKey } = localeReplace;
+
+    if (!queryStringKey) {
+      return false;
+    }
+
+    return true;
+  }
+
+  changeQueryString(url, settings) {
+    if (!this.shouldChangeQueryString(settings)) {
+      return url;
+    }
+    let param = settings.localeReplace.queryStringKey;
+    let locale = settings.locale;
+
+    return updateQueryStringParameter(url, param, locale.code);
+  }
+
+  redirect(details, url) {
+    if (details.url === url) {
+      return;
+    }
+
+    console.log("redirecting..");
+    return { redirectUrl: url };
   }
 }

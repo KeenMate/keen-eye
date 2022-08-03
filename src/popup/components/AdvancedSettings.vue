@@ -34,6 +34,16 @@
       v-model="cookieKey"
     />
   </div>
+  <div class="form-group">
+    <label>Url Query string key</label>
+    <input
+      @change="update"
+      class="form-control"
+      type="text"
+      name="headerName"
+      v-model="queryStringKey"
+    />
+  </div>
 </template>
 <script>
 import { UrlTransformation } from "@/transformations/urlTransformation";
@@ -45,6 +55,7 @@ export default {
       headerRule: null,
       url: null,
       cookieKey: null,
+      queryStringKey: null,
     };
   },
   props: {
@@ -78,7 +89,9 @@ export default {
       let settingsCopy = { ...this.selectedSettings };
 
       settingsCopy.localeReplace = settingsCopy.localeReplace ?? {};
+
       settingsCopy.localeReplace.cookieKey = this.cookieKey;
+      settingsCopy.localeReplace.queryStringKey = this.queryStringKey;
 
       this.$emit("input", settingsCopy);
       this.$emit("change");
@@ -96,6 +109,7 @@ export default {
       }
 
       this.cookieKey = newVal?.localeReplace?.cookieKey ?? "";
+      this.queryStringKey = newVal?.localeReplace?.queryStringKey ?? "";
     },
   },
   mounted() {
