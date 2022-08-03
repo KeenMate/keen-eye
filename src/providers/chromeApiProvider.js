@@ -2,6 +2,7 @@
 export function onMessage(handler) {
   chrome.runtime.onMessage.addListener(handler);
 }
+
 export function sendMessage(message) {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage(message, (response) => {
@@ -9,8 +10,11 @@ export function sendMessage(message) {
     });
   });
 }
+
 export function sendToTab(tabId, message) {
-  chrome.tabs.sendMessage(tabId, message);
+  if (tabId > 0) {
+    chrome.tabs.sendMessage(tabId, message);
+  }
 }
 
 //* COMMANDS
@@ -31,13 +35,16 @@ export async function queryTabs(options) {
     });
   });
 }
+
 export async function getCurrentTab() {
   let tabs = await queryTabs({ active: true, currentWindow: true });
   return tabs[0];
 }
+
 export function refreshTab(tab) {
   chrome.tabs.update(tab.id, { url: tab.url });
 }
+
 export function onTabRemoved(handler) {
   chrome.tabs.onRemoved.addListener(handler);
 }
@@ -46,6 +53,7 @@ export function onTabRemoved(handler) {
 export function onBeforeSendHeaders(handler, filter, extra) {
   chrome.webRequest.onBeforeSendHeaders.addListener(handler, filter, extra);
 }
+
 export function onSendHeaders(handler, filter, extra) {
   chrome.webRequest.onSendHeaders.addListener(handler, filter, extra);
 }
@@ -53,6 +61,7 @@ export function onSendHeaders(handler, filter, extra) {
 export function onHeadersReceived(handler, filter, extra) {
   chrome.webRequest.onHeadersReceived.addListener(handler, filter, extra);
 }
+
 export function onCompleted(handler, filter, extra) {
   chrome.webRequest.onCompleted.addListener(handler, filter, extra);
 }
@@ -69,6 +78,7 @@ export function storageSet(items) {
     });
   });
 }
+
 export function storageGet(keys) {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get(keys, (result) => {
@@ -79,6 +89,7 @@ export function storageGet(keys) {
     });
   });
 }
+
 export function clearStorage() {
   return new Promise((resolve) => {
     chrome.storage.sync.clear(() => {
@@ -86,6 +97,7 @@ export function clearStorage() {
     });
   });
 }
+
 export function onStorageChange(handler) {
   chrome.storage.onChanged.addListener(handler);
 }
