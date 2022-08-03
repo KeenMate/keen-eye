@@ -24,6 +24,7 @@ export class LanguageChanger {
       this.filter,
       beforeHeadersOptions
     );
+
     onBeforeRequest(
       (detail) => this.handleBeforeRequest(detail),
       this.filter,
@@ -33,9 +34,11 @@ export class LanguageChanger {
 
   handleBeforeHeadersSend(details) {
     let settings = this.getSettings(details);
+
     if (!this.shouldChange(settings)) {
       return;
     }
+
     return this.changeHeader(settings, details);
   }
 
@@ -49,7 +52,7 @@ export class LanguageChanger {
     let url = details.url;
 
     url = this.changeQueryString(url, settings);
-    console.log(url);
+
     return this.redirect(details, url);
   }
 
@@ -132,9 +135,11 @@ export class LanguageChanger {
 
   shouldChangeQueryString(settings) {
     const { localeReplace } = settings;
+
     if (!localeReplace) {
       return false;
     }
+
     const { queryStringKey } = localeReplace;
 
     if (!queryStringKey) {
@@ -148,6 +153,7 @@ export class LanguageChanger {
     if (!this.shouldChangeQueryString(settings)) {
       return url;
     }
+
     let param = settings.localeReplace.queryStringKey;
     let locale = settings.locale;
 
@@ -159,7 +165,6 @@ export class LanguageChanger {
       return;
     }
 
-    console.log("redirecting..");
     return { redirectUrl: url };
   }
 }
