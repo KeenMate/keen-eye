@@ -1,7 +1,9 @@
+import { parseRegex } from "@/helpers/regexHelper";
 import { updateQueryStringParameter } from "@/helpers/urlHelper";
 import {
   onBeforeSendHeaders,
   onBeforeRequest,
+  onTabRemoved,
 } from "../providers/chromeApiProvider";
 import {
   headerName,
@@ -15,21 +17,25 @@ export class LanguageChanger {
 
     this.filter = filter ?? { urls: ["<all_urls>"] };
 
+    this.redirects = {};
+
     this.init();
   }
 
   init() {
+    onBeforeRequest(
+      (detail) => this.handleBeforeRequest(detail),
+      { ...this.filter, types: ["main_frame"] },
+      beforeRequestOptions
+    );
+
     onBeforeSendHeaders(
       (detail) => this.handleBeforeHeadersSend(detail),
-      this.filter,
+      { ...this.filter },
       beforeHeadersOptions
     );
 
-    onBeforeRequest(
-      (detail) => this.handleBeforeRequest(detail),
-      this.filter,
-      beforeRequestOptions
-    );
+    onTabRemoved((detail) => this.removeRedirect(detail));
   }
 
   handleBeforeHeadersSend(details) {
@@ -51,10 +57,22 @@ export class LanguageChanger {
 
     let url = details.url;
 
+    if (!this.firstRedirect(details, settings)) {
+      console.log("not first time stop");
+
+      return;
+    }
+
     url = this.changeQueryString(url, settings);
     url = this.changeUrl(url, settings);
-    console.log(url);
+
     return this.redirect(details, url);
+  }
+
+  removeRedirect(tabId) {
+    console.log("removed", tabId);
+    
+    delete this.redirects[tabId];
   }
 
   shouldChange(settings) {
@@ -192,14 +210,26 @@ export class LanguageChanger {
     if (!this.shouldChangeUrl(settings)) {
       return url;
     }
-    console.log(settings.localeReplace.urlRegex);
 
-    let regex = new RegExp(settings.localeReplace.urlRegex);
+    let regex = parseRegex(settings.localeReplace.urlRegex);
 
-    return url.replace(regex, settings.locale.code);
+    let replaceStr = `$1${settings.locale.code}$3`;
+
+    let replacedUrl = url.replace(regex, replaceStr);
+    return replacedUrl;
+  }
+
+  firstRedirect(details, settings) {
+    console.log(this.redirects);
+    if (this.redirects[details.tabId] === settings.locale.code) {
+      return false;
+    }
+    this.redirects[details.tabId] = settings.locale.code;
+    return true;
   }
 
   redirect(details, url) {
+    console.log(details.url, url);
     if (details.url === url) {
       return;
     }
