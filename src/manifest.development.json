@@ -26,6 +26,7 @@
     "storage",
     "webRequest",
     "webRequestBlocking",
+    "cookies",
     "<all_urls>"
   ],
   "options_page": "options.html",

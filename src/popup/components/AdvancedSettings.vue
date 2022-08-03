@@ -4,7 +4,7 @@
   <div class="form-group">
     <label>Header Rule</label>
     <input
-      @change="update"
+      @change="updateTrans"
       class="form-control"
       type="text"
       name="headerName"
@@ -15,11 +15,23 @@
   <div class="form-group">
     <label>Url</label>
     <input
-      @change="update"
+      @change="updateTrans"
       class="form-control"
       type="text"
       name="url"
       v-model="url"
+    />
+  </div>
+  <h6>Url tranformation</h6>
+
+  <div class="form-group">
+    <label>Cookie Key</label>
+    <input
+      @change="update"
+      class="form-control"
+      type="text"
+      name="headerName"
+      v-model="cookieKey"
     />
   </div>
 </template>
@@ -32,6 +44,7 @@ export default {
     return {
       headerRule: null,
       url: null,
+      cookieKey: null,
     };
   },
   props: {
@@ -50,7 +63,7 @@ export default {
     },
   },
   methods: {
-    update() {
+    updateTrans() {
       let settingsCopy = { ...this.selectedSettings };
 
       settingsCopy.transformations = [
@@ -60,6 +73,17 @@ export default {
       this.$emit("input", settingsCopy);
       this.$emit("change");
     },
+
+    update() {
+      let settingsCopy = { ...this.selectedSettings };
+
+      settingsCopy.localeReplace = settingsCopy.localeReplace ?? {};
+      settingsCopy.localeReplace.cookieKey = this.cookieKey;
+
+      this.$emit("input", settingsCopy);
+      this.$emit("change");
+    },
+
     parse(newVal) {
       let tranformation = newVal?.transformations?.[0];
 
@@ -70,6 +94,8 @@ export default {
         this.headerRule = "";
         this.url = "";
       }
+
+      this.cookieKey = newVal?.localeReplace?.cookieKey ?? "";
     },
   },
   mounted() {

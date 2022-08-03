@@ -88,6 +88,9 @@ export class SettingsProvider {
     if (settings.transformations !== undefined) {
       oldOriginInfo.transformations = settings.transformations;
     }
+    if (settings.localeReplace !== undefined) {
+      oldOriginInfo.localeReplace = settings.localeReplace;
+    }
     //#endregion
 
     return this.asyncSource.setItem(storageKey, oldOriginInfo);

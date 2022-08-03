@@ -5,6 +5,9 @@ export const EMPTY_SETTINGS = {
   locale: null,
   position: { x: 0, y: 0 },
   transformations: [],
+  localeReplace: {
+    cookieKey: null,
+  },
 };
 
 export const levels = {

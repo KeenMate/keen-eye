@@ -1,5 +1,5 @@
 import { onBeforeSendHeaders } from "../providers/chromeApiProvider";
-import { headerName, localeListenerOptions } from "./languageConstants";
+import { headerName } from "./languageConstants";
 
 export class LanguageChanger {
   constructor(settingsProvider, filter) {
@@ -11,11 +11,11 @@ export class LanguageChanger {
   }
 
   init() {
-    onBeforeSendHeaders(
-      (detail) => this.handler(detail, this.filter),
-      this.filter,
-      localeListenerOptions
-    );
+    onBeforeSendHeaders((detail) => this.handler(detail), this.filter, [
+      "blocking",
+      "requestHeaders",
+      "extraHeaders",
+    ]);
   }
 
   handler(details) {
@@ -37,9 +37,37 @@ export class LanguageChanger {
     return true;
   }
 
+  shouldChangeCookies(settings) {
+    const { localeReplace } = settings;
+    if (!localeReplace) {
+      return false;
+    }
+    const { cookieKey } = localeReplace;
+
+    if (!cookieKey) {
+      return false;
+    }
+
+    return true;
+  }
+
   getSettings(details) {
     return this.settingsProvider.getMostSpecificSettingsSync(details.url)
       ?.settings;
+  }
+
+  changeCookie(cookieString, settings) {
+    if (!cookieString || !this.shouldChangeCookies(settings)) {
+      return;
+    }
+
+    let cookieKey = settings.localeReplace.cookieKey;
+
+    let regex = new RegExp(`(?<=${cookieKey}=)([^;]+)`);
+
+    cookieString = cookieString.replace(regex, settings.locale.code);
+    
+    return cookieString;
   }
 
   changeHeader(settings, details) {
@@ -52,8 +80,12 @@ export class LanguageChanger {
         header.value = locale.code ?? locale;
 
         headerThere = true;
+      }
 
-        break;
+      if (header.name.toLowerCase() === "cookie") {
+        if (!this.shouldChangeCookies(settings)) continue;
+
+        header.value = this.changeCookie(header.value, settings);
       }
     }
 

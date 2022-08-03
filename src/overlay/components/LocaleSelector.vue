@@ -10,6 +10,7 @@
         track-by="code"
         label="name"
         placeholder="Select language"
+        :show-labels="false"
         group-values="languages"
         group-label="type"
         :custom-label="customLabel"

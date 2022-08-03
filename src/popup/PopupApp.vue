@@ -235,6 +235,7 @@ export default {
         requestsRules: toRaw(this.selectedSettings.requestsRules),
         locale: toRaw(this.selectedSettings.locale),
         transformations: toRaw(this.selectedSettings.transformations),
+        localeReplace: toRaw(this.selectedSettings.localeReplace),
       });
       sendSettingsChanged();
 

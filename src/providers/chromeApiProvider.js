@@ -67,7 +67,7 @@ export function onCompleted(handler, filter, extra) {
 }
 
 //* STORAGE
-export function storageSet(items) {
+export function setToStorage(items) {
   console.log(items);
   return new Promise((resolve, reject) => {
     chrome.storage.sync.set(items, () => {
@@ -79,7 +79,7 @@ export function storageSet(items) {
   });
 }
 
-export function storageGet(keys) {
+export function getFromStorage(keys) {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.get(keys, (result) => {
       if (chrome.runtime.lastError) {
