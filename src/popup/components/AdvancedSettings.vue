@@ -40,8 +40,18 @@
       @change="update"
       class="form-control"
       type="text"
-      name="headerName"
+      name="queryStringKey"
       v-model="queryStringKey"
+    />
+  </div>
+  <div class="form-group">
+    <label>Url regex</label>
+    <input
+      @change="update"
+      class="form-control"
+      type="text"
+      name="urlRegex"
+      v-model="urlRegex"
     />
   </div>
 </template>
@@ -56,6 +66,7 @@ export default {
       url: null,
       cookieKey: null,
       queryStringKey: null,
+      urlRegex: null,
     };
   },
   props: {
@@ -92,6 +103,7 @@ export default {
 
       settingsCopy.localeReplace.cookieKey = this.cookieKey;
       settingsCopy.localeReplace.queryStringKey = this.queryStringKey;
+      settingsCopy.localeReplace.urlRegex = this.urlRegex;
 
       this.$emit("input", settingsCopy);
       this.$emit("change");
@@ -110,6 +122,7 @@ export default {
 
       this.cookieKey = newVal?.localeReplace?.cookieKey ?? "";
       this.queryStringKey = newVal?.localeReplace?.queryStringKey ?? "";
+      this.urlRegex = newVal?.localeReplace?.urlRegex ?? "";
     },
   },
   mounted() {

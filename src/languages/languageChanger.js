@@ -52,7 +52,8 @@ export class LanguageChanger {
     let url = details.url;
 
     url = this.changeQueryString(url, settings);
-
+    url = this.changeUrl(url, settings);
+    console.log(url);
     return this.redirect(details, url);
   }
 
@@ -67,14 +68,57 @@ export class LanguageChanger {
     return true;
   }
 
-  shouldChangeCookies(settings) {
+  shoudlReplaceLocale(settings) {
     const { localeReplace } = settings;
+
     if (!localeReplace) {
       return false;
     }
-    const { cookieKey } = localeReplace;
+    return true;
+  }
+
+  shouldChangeCookies(settings) {
+    if (!this.shoudlReplaceLocale(settings)) {
+      return false;
+    }
+
+    const {
+      localeReplace: { cookieKey },
+    } = settings;
 
     if (!cookieKey) {
+      return false;
+    }
+
+    return true;
+  }
+
+  shouldChangeQueryString(settings) {
+    if (!this.shoudlReplaceLocale(settings)) {
+      return false;
+    }
+
+    const {
+      localeReplace: { queryStringKey },
+    } = settings;
+
+    if (!queryStringKey) {
+      return false;
+    }
+
+    return true;
+  }
+
+  shouldChangeUrl(settings) {
+    if (!this.shoudlReplaceLocale(settings)) {
+      return false;
+    }
+
+    const {
+      localeReplace: { urlRegex },
+    } = settings;
+
+    if (!urlRegex) {
       return false;
     }
 
@@ -133,22 +177,6 @@ export class LanguageChanger {
     return { requestHeaders: details.requestHeaders ?? [] };
   }
 
-  shouldChangeQueryString(settings) {
-    const { localeReplace } = settings;
-
-    if (!localeReplace) {
-      return false;
-    }
-
-    const { queryStringKey } = localeReplace;
-
-    if (!queryStringKey) {
-      return false;
-    }
-
-    return true;
-  }
-
   changeQueryString(url, settings) {
     if (!this.shouldChangeQueryString(settings)) {
       return url;
@@ -158,6 +186,17 @@ export class LanguageChanger {
     let locale = settings.locale;
 
     return updateQueryStringParameter(url, param, locale.code);
+  }
+
+  changeUrl(url, settings) {
+    if (!this.shouldChangeUrl(settings)) {
+      return url;
+    }
+    console.log(settings.localeReplace.urlRegex);
+
+    let regex = new RegExp(settings.localeReplace.urlRegex);
+
+    return url.replace(regex, settings.locale.code);
   }
 
   redirect(details, url) {
