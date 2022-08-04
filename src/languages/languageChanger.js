@@ -1,239 +1,255 @@
 import { parseRegex } from "@/helpers/regexHelper";
 import { updateQueryStringParameter } from "@/helpers/urlHelper";
 import {
-  onBeforeSendHeaders,
-  onBeforeRequest,
-  onTabRemoved,
+	onBeforeSendHeaders,
+	onBeforeRequest,
+	onTabRemoved,
 } from "../providers/chromeApiProvider";
 import {
-  headerName,
-  beforeHeadersOptions,
-  beforeRequestOptions,
+	headerName,
+	beforeHeadersOptions,
+	beforeRequestOptions,
 } from "./languageConstants";
 
 export class LanguageChanger {
-  constructor(settingsProvider, filter) {
-    this.settingsProvider = settingsProvider;
+	constructor(settingsProvider, filter) {
+		this.settingsProvider = settingsProvider;
 
-    this.filter = filter ?? { urls: ["<all_urls>"] };
+		this.filter = filter ?? { urls: ["<all_urls>"] };
 
-    this.redirects = {};
+		this.redirects = {};
 
-    this.init();
-  }
+		this.init();
+	}
 
-  init() {
-    onBeforeRequest(
-      (detail) => this.handleBeforeRequest(detail),
-      { ...this.filter, types: ["main_frame"] },
-      beforeRequestOptions
-    );
+	init() {
+		onBeforeRequest(
+			(detail) => this.handleBeforeRequest(detail),
+			{ ...this.filter, types: ["main_frame"] },
+			beforeRequestOptions
+		);
 
-    onBeforeSendHeaders(
-      (detail) => this.handleBeforeHeadersSend(detail),
-      { ...this.filter },
-      beforeHeadersOptions
-    );
+		onBeforeSendHeaders(
+			(detail) => this.handleBeforeHeadersSend(detail),
+			{ ...this.filter },
+			beforeHeadersOptions
+		);
 
-    onTabRemoved((detail) => this.removeRedirect(detail));
-  }
+		onTabRemoved((detail) => this.removeRedirect(detail));
+	}
 
-  handleBeforeHeadersSend(details) {
-    let settings = this.getSettings(details);
+	handleBeforeHeadersSend(details) {
+		let settings = this.getSettings(details);
 
-    if (!this.shouldChange(settings)) {
-      return;
-    }
+		if (!this.shouldChange(settings)) {
+			return;
+		}
 
-    return this.changeHeader(settings, details);
-  }
+		return this.changeHeader(settings, details);
+	}
 
-  handleBeforeRequest(details) {
-    let settings = this.getSettings(details);
+	handleBeforeRequest(details) {
+		let settings = this.getSettings(details);
 
-    if (!this.shouldChange(settings)) {
-      return;
-    }
+		if (!this.shouldChange(settings)) {
+			return;
+		}
 
-    let url = details.url;
+		let url = details.url;
 
-    if (!this.firstRedirect(details, settings)) {
-      console.log("not first time stop");
+		if (!this.firstRedirect(details, settings)) {
+			console.log("not first time stop");
 
-      return;
-    }
+			return;
+		}
 
-    url = this.changeQueryString(url, settings);
-    url = this.changeUrl(url, settings);
+		url = this.changeQueryString(url, settings);
+		url = this.changeUrl(url, settings);
 
-    return this.redirect(details, url);
-  }
+		return this.redirect(details, url);
+	}
 
-  removeRedirect(tabId) {
-    console.log("removed", tabId);
-    
-    delete this.redirects[tabId];
-  }
+	removeRedirect(tabId) {
+		console.log("removed", tabId);
 
-  shouldChange(settings) {
-    if (!settings) return false;
+		delete this.redirects[tabId];
+	}
 
-    const { locale } = settings;
+	shouldChange(settings) {
+		if (!settings) return false;
 
-    //only change if some language is specified
-    if (!locale) return false;
+		const { locale } = settings;
 
-    return true;
-  }
+		//only change if some language is specified
+		if (!locale) return false;
 
-  shoudlReplaceLocale(settings) {
-    const { localeReplace } = settings;
+		return true;
+	}
 
-    if (!localeReplace) {
-      return false;
-    }
-    return true;
-  }
+	shoudlReplaceLocale(settings) {
+		const { localeReplace } = settings;
 
-  shouldChangeCookies(settings) {
-    if (!this.shoudlReplaceLocale(settings)) {
-      return false;
-    }
+		if (!localeReplace) {
+			return false;
+		}
+		return true;
+	}
 
-    const {
-      localeReplace: { cookieKey },
-    } = settings;
+	shouldChangeCookies(settings) {
+		if (!this.shoudlReplaceLocale(settings)) {
+			return false;
+		}
 
-    if (!cookieKey) {
-      return false;
-    }
+		const {
+			localeReplace: { cookieKey },
+		} = settings;
 
-    return true;
-  }
+		if (!cookieKey) {
+			return false;
+		}
 
-  shouldChangeQueryString(settings) {
-    if (!this.shoudlReplaceLocale(settings)) {
-      return false;
-    }
+		return true;
+	}
 
-    const {
-      localeReplace: { queryStringKey },
-    } = settings;
+	shouldChangeQueryString(settings) {
+		if (!this.shoudlReplaceLocale(settings)) {
+			return false;
+		}
 
-    if (!queryStringKey) {
-      return false;
-    }
+		const {
+			localeReplace: { queryStringKey },
+		} = settings;
 
-    return true;
-  }
+		if (!queryStringKey) {
+			return false;
+		}
 
-  shouldChangeUrl(settings) {
-    if (!this.shoudlReplaceLocale(settings)) {
-      return false;
-    }
+		return true;
+	}
 
-    const {
-      localeReplace: { urlRegex },
-    } = settings;
+	shouldChangeUrl(settings) {
+		if (!this.shoudlReplaceLocale(settings)) {
+			return false;
+		}
 
-    if (!urlRegex) {
-      return false;
-    }
+		const {
+			localeReplace: { urlRegex },
+		} = settings;
 
-    return true;
-  }
+		if (!urlRegex) {
+			return false;
+		}
 
-  getSettings(details) {
-    if (!details.url) {
-      return;
-    }
+		return true;
+	}
 
-    return this.settingsProvider.getMostSpecificSettingsSync(details.url)
-      ?.settings;
-  }
+	getSettings(details) {
+		if (!details.url) {
+			return;
+		}
 
-  changeCookie(cookieString, settings) {
-    if (!cookieString || !this.shouldChangeCookies(settings)) {
-      return;
-    }
+		return this.settingsProvider.getMostSpecificSettingsSync(details.url)
+			?.settings;
+	}
 
-    let cookieKey = settings.localeReplace.cookieKey;
+	changeCookie(cookieString, settings) {
+		if (!cookieString || !this.shouldChangeCookies(settings)) {
+			return;
+		}
 
-    let regex = new RegExp(`(?<=${cookieKey}=)([^;]+)`);
+		let cookieKey = settings.localeReplace.cookieKey;
 
-    cookieString = cookieString.replace(regex, settings.locale.code);
+		let regex = new RegExp(`(?<=${cookieKey}=)([^;]+)`);
 
-    return cookieString;
-  }
+		cookieString = cookieString.replace(regex, settings.locale.code);
 
-  changeHeader(settings, details) {
-    const { locale } = settings;
+		return cookieString;
+	}
 
-    let headerThere = false;
+	changeHeader(settings, details) {
+		const { locale } = settings;
 
-    details.requestHeaders = details.requestHeaders ?? [];
+		let headerThere = false;
 
-    for (const header of details.requestHeaders) {
-      if (header.name.toLowerCase() === headerName) {
-        header.value = locale.code ?? locale;
+		details.requestHeaders = details.requestHeaders ?? [];
 
-        headerThere = true;
-      }
+		for (const header of details.requestHeaders) {
+			if (header.name.toLowerCase() === headerName) {
+				header.value = locale.code ?? locale;
 
-      if (header.name.toLowerCase() === "cookie") {
-        if (!this.shouldChangeCookies(settings)) continue;
+				headerThere = true;
+			}
 
-        header.value = this.changeCookie(header.value, settings);
-      }
-    }
+			if (header.name.toLowerCase() === "cookie") {
+				if (!this.shouldChangeCookies(settings)) continue;
 
-    //need to add header if it is not present there alerady
-    if (!headerThere) {
-      details.requestHeaders.push({ name: headerName, value: locale });
-    }
+				header.value = this.changeCookie(header.value, settings);
+			}
+		}
 
-    return { requestHeaders: details.requestHeaders ?? [] };
-  }
+		//need to add header if it is not present there alerady
+		if (!headerThere) {
+			details.requestHeaders.push({ name: headerName, value: locale });
+		}
 
-  changeQueryString(url, settings) {
-    if (!this.shouldChangeQueryString(settings)) {
-      return url;
-    }
+		return { requestHeaders: details.requestHeaders ?? [] };
+	}
 
-    let param = settings.localeReplace.queryStringKey;
-    let locale = settings.locale;
+	changeQueryString(url, settings) {
+		if (!this.shouldChangeQueryString(settings)) {
+			return url;
+		}
 
-    return updateQueryStringParameter(url, param, locale.code);
-  }
+		let settingsValue = settings.localeReplace.queryStringKey
 
-  changeUrl(url, settings) {
-    if (!this.shouldChangeUrl(settings)) {
-      return url;
-    }
+		let updatedUrl = url;
 
-    let regex = parseRegex(settings.localeReplace.urlRegex);
+		if (settingsValue.indexOf(';') > -1) {
+			let keys = settingsValue.split(';')
 
-    let replaceStr = `$1${settings.locale.code}$3`;
+			keys.forEach(key => {
+				let locale = settings.locale;
+				updatedUrl = updateQueryStringParameter(updatedUrl, key, locale.code)
+			});
+		}
+		else
+		{
+			let key = settingsValue;
+			let locale = settings.locale;
+			updatedUrl = updateQueryStringParameter(updatedUrl, key, locale.code)
+		}
 
-    let replacedUrl = url.replace(regex, replaceStr);
-    return replacedUrl;
-  }
+		return updatedUrl;
+	}
 
-  firstRedirect(details, settings) {
-    console.log(this.redirects);
-    if (this.redirects[details.tabId] === settings.locale.code) {
-      return false;
-    }
-    this.redirects[details.tabId] = settings.locale.code;
-    return true;
-  }
+	changeUrl(url, settings) {
+		if (!this.shouldChangeUrl(settings)) {
+			return url;
+		}
 
-  redirect(details, url) {
-    console.log(details.url, url);
-    if (details.url === url) {
-      return;
-    }
+		let regex = parseRegex(settings.localeReplace.urlRegex);
 
-    return { redirectUrl: url };
-  }
+		let replaceStr = `$1${settings.locale.code}$3`;
+
+		let replacedUrl = url.replace(regex, replaceStr);
+		return replacedUrl;
+	}
+
+	firstRedirect(details, settings) {
+		console.log(this.redirects);
+		if (this.redirects[details.tabId] === settings.locale.code) {
+			return false;
+		}
+		this.redirects[details.tabId] = settings.locale.code;
+		return true;
+	}
+
+	redirect(details, url) {
+		console.log(details.url, url);
+		if (details.url === url) {
+			return;
+		}
+
+		return { redirectUrl: url };
+	}
 }

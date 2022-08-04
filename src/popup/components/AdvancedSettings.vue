@@ -1,58 +1,29 @@
 <template>
-  <h6>Url tranformation</h6>
-
+  <h6>Custom header rules</h6>
+  <p>Helps you to format header values to links leading for example to Grafana</p>
   <div class="form-group">
     <label>Header Rule</label>
-    <input
-      @change="updateTrans"
-      class="form-control"
-      type="text"
-      name="headerName"
-      v-model="headerRule"
-    />
+    <input @change="updateTrans" class="form-control" type="text" name="headerName" v-model="headerRule" />
   </div>
 
   <div class="form-group">
     <label>Url</label>
-    <input
-      @change="updateTrans"
-      class="form-control"
-      type="text"
-      name="url"
-      v-model="url"
-    />
+    <input @change="updateTrans" class="form-control" type="text" name="url" v-model="url" />
   </div>
-  <h6>Url tranformation</h6>
+  <h6>Custom language transformations</h6>
+  <p>Helps you transform additional values in query string, url path thanks to Regex or in sent cookie.</p>
 
   <div class="form-group">
     <label>Cookie Key</label>
-    <input
-      @change="update"
-      class="form-control"
-      type="text"
-      name="headerName"
-      v-model="cookieKey"
-    />
+    <input @change="update" class="form-control" type="text" name="headerName" v-model="cookieKey" />
   </div>
   <div class="form-group">
-    <label>Url Query string key</label>
-    <input
-      @change="update"
-      class="form-control"
-      type="text"
-      name="queryStringKey"
-      v-model="queryStringKey"
-    />
+    <label>Url Query string key (can be multiple separated with semicolon)</label>
+    <input @change="update" class="form-control" type="text" name="queryStringKey" v-model="queryStringKey" />
   </div>
   <div class="form-group">
     <label>Url regex</label>
-    <input
-      @change="update"
-      class="form-control"
-      type="text"
-      name="urlRegex"
-      v-model="urlRegex"
-    />
+    <input @change="update" class="form-control" type="text" name="urlRegex" v-model="urlRegex" />
   </div>
 </template>
 <script>

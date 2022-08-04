@@ -36,6 +36,7 @@
     "css/options.css",
     "css/content.css",
     "/css/content.css",
+		"overrides.css",
     "*.css",
     "css/*.css"
   ],

@@ -31,7 +31,7 @@
             id="useFilters"
             v-model="useFilters"
           />
-          <label class="form-check-label" for="useFilters">use filters</label>
+          <label class="form-check-label" for="useFilters">Use filters</label>
         </div>
       </div>
       <div class="col-3">
@@ -43,7 +43,7 @@
           }"
           @click="saveSettings"
         >
-          save settings
+          Save settings
         </button>
       </div>
       <div class="col-3"></div>
@@ -190,7 +190,8 @@ export default {
       setSettings(this.level, {
         locale: toRaw(locale),
       }).then(() => {
-        location.reload();
+        if(locale)
+					location.reload();
       });
     },
     createFilterObjects(settings) {
