@@ -1,4 +1,4 @@
-import { EMPTY_SETTINGS, levels } from "@/settings/settingConstants";
+import { EmptySettings, PopupScopes } from "@/settings/settingConstants";
 import {
   getCurrentTabUrl,
   getCurrentUrlParts,
@@ -66,7 +66,7 @@ export class SettingsProvider {
       return Promise.reject("couldnt get current url");
     }
 
-    let oldOriginInfo = (await this.getSettings(level)) ?? EMPTY_SETTINGS;
+    let oldOriginInfo = (await this.getSettings(level)) ?? EmptySettings;
 
     //TODO use for
     //#region replce if undef
@@ -105,23 +105,23 @@ export class SettingsProvider {
       url = await getCurrentTabUrl();
     }
 
-    if ((settings = await this.getSettings(levels.page, url))) {
-      return { settings, level: levels.page };
+    if ((settings = await this.getSettings(PopupScopes.page, url))) {
+      return { settings, level: PopupScopes.page };
     }
 
-    if ((settings = await this.getSettings(levels.origin, url))) {
-      return { settings, level: levels.origin };
+    if ((settings = await this.getSettings(PopupScopes.origin, url))) {
+      return { settings, level: PopupScopes.origin };
     }
 
-    if ((settings = await this.getSettings(levels.domain, url))) {
-      return { settings, level: levels.domain };
+    if ((settings = await this.getSettings(PopupScopes.domain, url))) {
+      return { settings, level: PopupScopes.domain };
     }
 
-    if ((settings = await this.getSettings(levels.global, url)) !== undefined) {
-      return { settings, level: levels.global };
+    if ((settings = await this.getSettings(PopupScopes.global, url)) !== undefined) {
+      return { settings, level: PopupScopes.global };
     }
 
-    return { settings: { inject: false }, level: levels.global };
+    return { settings: { inject: false }, level: PopupScopes.global };
   }
 
   /**
@@ -135,23 +135,23 @@ export class SettingsProvider {
     let settings;
     url = new URL(url);
 
-    if ((settings = this.getSettingsSync(levels.page, url))) {
-      return { settings, level: levels.page };
+    if ((settings = this.getSettingsSync(PopupScopes.page, url))) {
+      return { settings, level: PopupScopes.page };
     }
 
-    if ((settings = this.getSettingsSync(levels.origin, url))) {
-      return { settings, level: levels.origin };
+    if ((settings = this.getSettingsSync(PopupScopes.origin, url))) {
+      return { settings, level: PopupScopes.origin };
     }
 
-    if ((settings = this.getSettingsSync(levels.domain, url))) {
-      return { settings, level: levels.domain };
+    if ((settings = this.getSettingsSync(PopupScopes.domain, url))) {
+      return { settings, level: PopupScopes.domain };
     }
 
-    if ((settings = this.getSettingsSync(levels.global, url)) !== undefined) {
-      return { settings, level: levels.global };
+    if ((settings = this.getSettingsSync(PopupScopes.global, url)) !== undefined) {
+      return { settings, level: PopupScopes.global };
     }
 
-    return { settings: { inject: false }, level: levels.global };
+    return { settings: { inject: false }, level: PopupScopes.global };
   }
 
   async toggleVisibility() {

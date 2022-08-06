@@ -1,0 +1,25 @@
+.multiselect {
+	flex: 1;
+	min-height: auto !important;
+
+	.multiselect__select {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		top: 0;
+		height: 100%;
+
+		&::before {
+			position: static;
+			top: unset;
+			right: unset;
+			margin-top: 0;
+		}
+	}
+
+	.multiselect__tags {
+		min-height: auto;
+		height: calc(1.8125rem + 2px);
+		padding: 0.25rem 40px 0 0.5rem;
+	}
+}

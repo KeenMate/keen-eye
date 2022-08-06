@@ -1,4 +1,4 @@
-import { levels } from "@/settings/settingConstants";
+import { PopupScopes } from "@/settings/settingConstants";
 import { getCurrentTab } from "@/providers/chromeApiProvider";
 import { parse } from "tldts";
 /**
@@ -17,10 +17,10 @@ export function getPath(url) {
 
 export function getUrlParts(url) {
   return {
-    [levels.global]: "!global!",
-    [levels.domain]: getDomain(url),
-    [levels.origin]: url.origin,
-    [levels.page]: getPath(url),
+    [PopupScopes.global]: "!global!",
+    [PopupScopes.domain]: getDomain(url),
+    [PopupScopes.origin]: url.origin,
+    [PopupScopes.page]: getPath(url),
   };
 }
 export async function getCurrentTabUrl() {
