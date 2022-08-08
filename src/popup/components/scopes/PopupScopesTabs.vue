@@ -1,14 +1,14 @@
 <template>
-  <Tabs class="mb-3">
-    <ScopeItem
-      v-for="scope in PopupScopes"
-      :key="scope.code"
-      :is-current="selectedTab === scope.code"
-      @click="() => $emit('change-tab', scope)"
-    >
-      {{ scope.title }}
-    </ScopeItem>
-  </Tabs>
+	<Tabs class="mb-3">
+		<ScopeItem
+			v-for="scope in PopupScopes"
+			:key="scope.code"
+			:is-current="selectedTab === scope.code"
+			@click="() => $emit('change-tab', scope)"
+		>
+			{{ scope.title }}
+		</ScopeItem>
+	</Tabs>
 </template>
 
 <script>

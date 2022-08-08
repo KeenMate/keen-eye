@@ -1,23 +1,23 @@
 <template>
-  <div class="settings">
-    <Tabs class="mb-3">
-      <TabItem
-        v-for="tab in settingsTabs"
-        :key="tab.code"
-        :is-active="currentSettingsTab === tab.code"
-        @click="currentSettingsTab = tab.code"
-      >
-        {{ tab.title }}
-      </TabItem>
-    </Tabs>
+	<div class="settings">
+		<Tabs class="mb-3">
+			<TabItem
+				v-for="tab in settingsTabs"
+				:key="tab.code"
+				:is-active="currentSettingsTab === tab.code"
+				@click="currentSettingsTab = tab.code"
+			>
+				{{ tab.title }}
+			</TabItem>
+		</Tabs>
 
-    <component
-      :is="currentSettingsComponent"
-      :settings="currentSettings"
-      :request-info="requestInfo"
-      @change="$emit('change', $event)"
-    />
-  </div>
+		<component
+			:is="currentSettingsComponent"
+			:settings="currentSettings"
+			:request-info="requestInfo"
+			@change="$emit('change', $event)"
+		/>
+	</div>
 </template>
 
 <script>

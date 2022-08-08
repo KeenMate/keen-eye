@@ -1,89 +1,89 @@
 <template>
-  <div class="m-1 position-relative pt-2 pb-2">
-    <div class="row">
-      <div class="col-6">
-        <h5
-          ref="dragg"
-          class="title user-select-none"
-          style="cursor: pointer"
-        >
-          {{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
-        </h5>
-        <h6>{{ time ? time + "ms" : "refresh" }}</h6>
-      </div>
-      <div class="col-5">
-        <LocaleSelector
-          :locale="settings?.locale"
-          @change="saveLocale"
-        />
-      </div>
+	<div class="m-1 position-relative pt-2 pb-2">
+		<div class="row">
+			<div class="col-6">
+				<h5
+					ref="dragg"
+					class="title user-select-none"
+					style="cursor: pointer"
+				>
+					{{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
+				</h5>
+				<h6>{{ time ? time + "ms" : "refresh" }}</h6>
+			</div>
+			<div class="col-5">
+				<LocaleSelector
+					:locale="settings?.locale"
+					@change="saveLocale"
+				/>
+			</div>
 
-      <div class="col-1">
-        <button
-          type="button"
-          class="btn-close"
-          aria-label="Close"
-          @click="closeOverlay"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-3">
-        <div class="form-check form-switch">
-          <input
-            id="useFilters"
-            v-model="useFilters"
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-          >
-          <label
-            class="form-check-label"
-            for="useFilters"
-          >Use filters</label>
-        </div>
-      </div>
-      <div class="col-3">
-        <button
-          class="btn btn-sm"
-          :class="{
-            'btn-secondary': !changesToSave,
-            'btn-success': changesToSave,
-          }"
-          @click="saveSettings"
-        >
-          Save settings
-        </button>
-      </div>
-      <div class="col-3" />
-    </div>
-    <div>
-      <div style="max-height: 35vh; overflow-y: auto; overflow-x: hidden">
-        <HeaderRendererVue
-          v-if="headersFilterRules"
-          :filtering="true"
-          :headers="filteredHeaders"
-          :all-headers="requestInfo?.response?.responseHeaders"
-          :headers-filter-rules="headersFilterRules"
-          :transformations="settings.transformations"
-        />
-      </div>
-      <template v-if="requestsRulesSet || !useFilters">
-        <div class="row">
-          <div class="col-6">
-            <h4>Requests</h4>
-          </div>
-        </div>
-        <div style="max-height: 35vh; overflow-y: auto">
-          <RequestsRendererVue
-            v-if="filteredRequests"
-            :requests="filteredRequests"
-          />
-        </div>
-      </template>
-    </div>
-  </div>
-  <WidgetContainerModal />
+			<div class="col-1">
+				<button
+					type="button"
+					class="btn-close"
+					aria-label="Close"
+					@click="closeOverlay"
+				/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-3">
+				<div class="form-check form-switch">
+					<input
+						id="useFilters"
+						v-model="useFilters"
+						class="form-check-input"
+						type="checkbox"
+						role="switch"
+					>
+					<label
+						class="form-check-label"
+						for="useFilters"
+					>Use filters</label>
+				</div>
+			</div>
+			<div class="col-3">
+				<button
+					class="btn btn-sm"
+					:class="{
+						'btn-secondary': !changesToSave,
+						'btn-success': changesToSave,
+					}"
+					@click="saveSettings"
+				>
+					Save settings
+				</button>
+			</div>
+			<div class="col-3" />
+		</div>
+		<div>
+			<div style="max-height: 35vh; overflow-y: auto; overflow-x: hidden">
+				<HeaderRendererVue
+					v-if="headersFilterRules"
+					:filtering="true"
+					:headers="filteredHeaders"
+					:all-headers="requestInfo?.response?.responseHeaders"
+					:headers-filter-rules="headersFilterRules"
+					:transformations="settings.transformations"
+				/>
+			</div>
+			<template v-if="requestsRulesSet || !useFilters">
+				<div class="row">
+					<div class="col-6">
+						<h4>Requests</h4>
+					</div>
+				</div>
+				<div style="max-height: 35vh; overflow-y: auto">
+					<RequestsRendererVue
+						v-if="filteredRequests"
+						:requests="filteredRequests"
+					/>
+				</div>
+			</template>
+		</div>
+	</div>
+	<WidgetContainerModal />
 </template>
 
 <script>

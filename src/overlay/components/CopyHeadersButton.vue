@@ -1,10 +1,10 @@
 <template>
-  <button
-    class="btn btn-sm"
-    @click="copy"
-  >
-    <slot />
-  </button>
+	<button
+		class="btn btn-sm"
+		@click="copy"
+	>
+		<slot />
+	</button>
 </template>
 <script>
 import { copyTextToClipboard } from "@/helpers/clipboardHelper";

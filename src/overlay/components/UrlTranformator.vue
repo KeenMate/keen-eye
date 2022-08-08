@@ -1,8 +1,8 @@
 <template>
-  <a
-    :href="link"
-    target="_blank"
-  >{{ headerValue }}</a>
+	<a
+		:href="link"
+		target="_blank"
+	>{{ headerValue }}</a>
 </template>
 
 <script>

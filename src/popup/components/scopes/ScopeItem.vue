@@ -1,11 +1,11 @@
 <template>
-  <TabItem
-	  :is-active="isCurrent"
-	  :style="tabStyles"
-	  @click="$emit('click', $event)"
-  >
-	  <slot />
-  </TabItem>
+	<TabItem
+		:is-active="isCurrent"
+		:style="tabStyles"
+		@click="$emit('click', $event)"
+	>
+		<slot />
+	</TabItem>
 </template>
 
 <script>

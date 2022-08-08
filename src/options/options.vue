@@ -1,10 +1,10 @@
 <template>
-  <div class="main_app">
-    <h1>Settings</h1>
-    <button @click="clearStorage">
-      CLEAR STORAGE
-    </button>
-  </div>
+	<div class="main_app">
+		<h1>Settings</h1>
+		<button @click="clearStorage">
+			CLEAR STORAGE
+		</button>
+	</div>
 </template>
 
 <script>

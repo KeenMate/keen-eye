@@ -1,10 +1,10 @@
 <template>
-  <ul
-    class="nav nav-tabs"
-    role="tablist"
-  >
-    <slot />
-  </ul>
+	<ul
+		class="nav nav-tabs"
+		role="tablist"
+	>
+		<slot />
+	</ul>
 </template>
 
 <script>

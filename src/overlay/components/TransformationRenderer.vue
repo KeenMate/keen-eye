@@ -1,10 +1,10 @@
 <template>
-  <UrlTranformator
-    v-if="transformation.type == 'url'"
-    :transformation="transformation"
-    :header-value="headerValue"
-    :headers="headers"
-  />
+	<UrlTranformator
+		v-if="transformation.type == 'url'"
+		:transformation="transformation"
+		:header-value="headerValue"
+		:headers="headers"
+	/>
 </template>
 
 <script>

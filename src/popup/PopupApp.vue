@@ -1,51 +1,52 @@
 <template>
-  <div
-    style="min-width: 500px; min-height: 600px"
-    class="card"
-    @keydown.esc.stop.prevent
-  >
-    <!-- Tabs navs -->
-    <PopupScopesTabs
-      :selected-tab="selectedTab"
-      @change-tab="changeTab"
-    />
-    <!-- Tabs navs -->
-    <div class="mx-2 mb-2">
-      <div class="row justify-content-between">
-        <div class="col-auto">
-          <h3>Settings</h3>
-        </div>
-        <div class="col-auto">
-          <SettingsActions
-            :current-settings="selectedSettings"
-            class="mb-2"
-            @toggle-injection="toggleInjection"
-          />
-        </div>
-      </div>
+	<div
+		style="min-width: 500px; min-height: 600px"
+		class="card"
+		@keydown.esc.stop.prevent
+	>
+		<!-- Tabs navs -->
+		<PopupScopesTabs
+			:selected-tab="selectedTab"
+			@change-tab="changeTab"
+		/>
+		<!-- Tabs navs -->
+		<div class="mx-2 mb-2">
+			<div class="row justify-content-between">
+				<div class="col-auto">
+					<h3>Settings</h3>
+				</div>
+				<div class="col-auto">
+					<SettingsActions
+						:current-settings="selectedSettings"
+						class="mb-2"
+						@toggle-injection="toggleInjection"
+						@reset-div="onResetDiv"
+					/>
+				</div>
+			</div>
 
-      <Settings
-        :current-settings="currentSettings"
-        :request-info="requestInfo"
-        @change="x => this.currentSettings = x"
-      />
+			<Settings
+				:current-settings="currentSettings"
+				:request-info="requestInfo"
+				@change="x => currentSettings = x"
+			/>
 
-      <div class="mb-2">
-        <button
-          class="btn btn-large btn-outline-success"
-          @click="save"
-        >
-          Save
-        </button>
-      </div>
-      <div
-        v-if="changed"
-        class="alert alert-danger"
-      >
-        Carefull unsaved changes!
-      </div>
-    </div>
-  </div>
+			<div class="mb-2">
+				<button
+					class="btn btn-large btn-outline-success"
+					@click="save"
+				>
+					Save
+				</button>
+			</div>
+			<div
+				v-if="changed"
+				class="alert alert-danger"
+			>
+				Carefull unsaved changes!
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -96,6 +97,11 @@ export default {
 		}, 25)
 	},
 	methods: {
+		onResetDiv() {
+			this.currentSettings.position = {x: 0, y: 0}
+			this.$emit("change")
+			console.log(this.settings)
+		},
 		async toggleInjection() {
 			console.log("TOOOGGGLLLIIING")
 			this.selectedSettings.inject = !this.selectedSettings.inject

@@ -1,54 +1,54 @@
 <template>
-  <!-- {{ requests }} -->
-  <div>
-    <table class="table table-striped table-sm">
-      <thead class="table-dark">
-        <tr>
-          <th>more</th>
-          <th>code</th>
-          <th>method</th>
-          <th>path</th>
-          <th>ttfb</th>
-          <th>time</th>
-          <th>origin</th>
-        </tr>
-      </thead>
-      <tbody class="table-group-divider">
-        <tr
-          v-for="request in requests"
-          :key="request.requestId"
-        >
-          <td
-            style="cursor: pointer"
-            @click="openRequestModal(request)"
-          >
-            more
-          </td>
-          <td :class="`text-${getColor(request.statusCode)}`">
-            {{ request.statusCode ?? "..." }}
-          </td>
-          <td>
-            {{ request.method }}
-          </td>
-          <td class="limited-width">
-            <Popper :content="request.url">
-              <b>{{ getPath(request.url) }}</b>
-            </Popper>
-          </td>
-          <td>
-            {{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "..." }}
-          </td>
-          <td>
-            {{ request.took ? request.took.toFixed(2) + "ms" : "..." }}
-          </td>
+	<!-- {{ requests }} -->
+	<div>
+		<table class="table table-striped table-sm">
+			<thead class="table-dark">
+				<tr>
+					<th>more</th>
+					<th>code</th>
+					<th>method</th>
+					<th>path</th>
+					<th>ttfb</th>
+					<th>time</th>
+					<th>origin</th>
+				</tr>
+			</thead>
+			<tbody class="table-group-divider">
+				<tr
+					v-for="request in requests"
+					:key="request.requestId"
+				>
+					<td
+						style="cursor: pointer"
+						@click="openRequestModal(request)"
+					>
+						more
+					</td>
+					<td :class="`text-${getColor(request.statusCode)}`">
+						{{ request.statusCode ?? "..." }}
+					</td>
+					<td>
+						{{ request.method }}
+					</td>
+					<td class="limited-width">
+						<Popper :content="request.url">
+							<b>{{ getPath(request.url) }}</b>
+						</Popper>
+					</td>
+					<td>
+						{{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "..." }}
+					</td>
+					<td>
+						{{ request.took ? request.took.toFixed(2) + "ms" : "..." }}
+					</td>
 
-          <td>
-            {{ getOrigin(request.url) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+					<td>
+						{{ getOrigin(request.url) }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </template>
 <script>
 import { copyTextToClipboard } from "@/helpers/clipboardHelper";

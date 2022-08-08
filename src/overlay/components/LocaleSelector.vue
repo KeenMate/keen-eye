@@ -1,31 +1,31 @@
 <template>
-  <div class="form-horizontal">
-    <div class="d-inline-block">
-      <multiselect
-        v-model="seletedLocale"
-        :options="langs"
-        :custom-label="customLabel"
-        class="multiselect-sm overflow"
-        track-by="code"
-        label="name"
-        placeholder="Select language"
-        group-values="languages"
-        group-label="type"
-        :show-labels="false"
-        :multiple="false"
-        @keyup.esc.stop
-        @remove="(val) => changeLocale(val)"
-        @select="(val) => changeLocale(val)"
-      />
-    </div>
+	<div class="form-horizontal">
+		<div class="d-inline-block">
+			<multiselect
+				v-model="seletedLocale"
+				:options="langs"
+				:custom-label="customLabel"
+				class="multiselect-sm overflow"
+				track-by="code"
+				label="name"
+				placeholder="Select language"
+				group-values="languages"
+				group-label="type"
+				:show-labels="false"
+				:multiple="false"
+				@keyup.esc.stop
+				@remove="(val) => changeLocale(val)"
+				@select="(val) => changeLocale(val)"
+			/>
+		</div>
 
-    <button
-      class="btn btn-sm btn-danger"
-      @click="changeLocale(null)"
-    >
-      X
-    </button>
-  </div>
+		<button
+			class="btn btn-sm btn-danger"
+			@click="changeLocale(null)"
+		>
+			X
+		</button>
+	</div>
 </template>
 
 <script>
