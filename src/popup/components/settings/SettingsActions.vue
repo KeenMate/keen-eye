@@ -1,51 +1,51 @@
 <template>
-	<div class="btn-group">
-		<button
-			class="btn-danger btn form-control-sm btn-sm"
-			@click="deleteSetting"
-		>
-			Delete
-		</button>
-		<button
-			class="btn-info btn form-control-sm btn-sm"
-			@click="loadSelectedSettings"
-		>
-			Refresh
-		</button>
-		<button
-			class="btn-success btn form-control-sm btn-sm"
-			@click="save"
-		>
-			Save
-		</button>
-		<!--<button-->
-		<!--	class="btn-muted btn form-control-sm btn-sm"-->
-		<!--	@click="copySettings"-->
-		<!--&gt;-->
-		<!--	D-->
-		<!--</button>-->
-		<button
-			@click="$emit('toggle-injection')"
-			class="btn-primary btn form-control-sm btn-sm"
-			:class="enabled ? 'btn-danger' : 'btn-success'"
-		>
-			{{enabled ? "Hide" : "Show"}}
-		</button>
-		<button
-			class="btn-warning btn form-control-sm btn-sm"
-			:title="selectedSettings?.position"
-			@click="resetDiv"
-		>
-			Reset overlay position
-		</button>
-	</div>
+  <div class="btn-group">
+    <button
+      class="btn-danger btn form-control-sm btn-sm"
+      @click="deleteSetting"
+    >
+      Delete
+    </button>
+    <button
+      class="btn-info btn form-control-sm btn-sm"
+      @click="loadSelectedSettings"
+    >
+      Refresh
+    </button>
+    <button
+      class="btn-success btn form-control-sm btn-sm"
+      @click="save"
+    >
+      Save
+    </button>
+    <!--<button-->
+    <!--	class="btn-muted btn form-control-sm btn-sm"-->
+    <!--	@click="copySettings"-->
+    <!--&gt;-->
+    <!--	D-->
+    <!--</button>-->
+    <button
+      class="btn-primary btn form-control-sm btn-sm"
+      :class="enabled ? 'btn-danger' : 'btn-success'"
+      @click="$emit('toggle-injection')"
+    >
+      {{ enabled ? "Hide" : "Show" }}
+    </button>
+    <button
+      class="btn-warning btn form-control-sm btn-sm"
+      :title="selectedSettings?.position"
+      @click="resetDiv"
+    >
+      Reset overlay position
+    </button>
+  </div>
 </template>
 
 <script>
 import settingsProvider from "@/settings/settingsProvider"
-import {EmptySettings} from "@/settings/settingConstants"
-import {toRaw} from "vue/dist/vue"
+import {getEmptySettings} from "@/settings/settingConstants"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
+import {toRaw} from "@vue/reactivity"
 
 export default {
 	name: "SettingsActions",
@@ -54,13 +54,13 @@ export default {
 			if (!confirm("Do you really want to delete this settings?")) return
 			await settingsProvider.deleteSettings(this.selectedTab)
 
-			this.loadSettings()
+			await this.loadSettings()
 		},
 		async loadSelectedSettings() {
 			let loadedSettings = await settingsProvider.getSettings(this.selectedTab)
 			//if settings arent set, use empty settings and allow saving it
 			if (!loadedSettings) {
-				this.selectedSettings = EmptySettings
+				this.selectedSettings = getEmptySettings()
 				this.changed = true
 			} else {
 				this.selectedSettings = loadedSettings

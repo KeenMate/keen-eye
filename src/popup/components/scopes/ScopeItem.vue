@@ -1,13 +1,11 @@
 <template>
-	<TabItem :style="this.tabStyles">
-		<a
-			class="nav-link"
-			:class="linkClasses"
-			@click="$emit('click', $event)"
-		>
-			<slot />
-		</a>
-	</TabItem>
+  <TabItem
+	  :is-active="isCurrent"
+	  :style="tabStyles"
+	  @click="$emit('click', $event)"
+  >
+	  <slot />
+  </TabItem>
 </template>
 
 <script>
@@ -21,12 +19,6 @@ export default {
 		isCurrent: Boolean
 	},
 	computed: {
-		linkClasses() {
-			return {
-				active: this.isCurrent,
-				"font-weight-bold": this.isCurrent
-			}
-		},
 		tabStyles() {
 			return {
 				"background-color": this.color

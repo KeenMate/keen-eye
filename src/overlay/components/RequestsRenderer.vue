@@ -14,8 +14,14 @@
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr v-for="request in requests" :key="request.requestId">
-          <td style="cursor: pointer" @click="openRequestModal(request)">
+        <tr
+          v-for="request in requests"
+          :key="request.requestId"
+        >
+          <td
+            style="cursor: pointer"
+            @click="openRequestModal(request)"
+          >
             more
           </td>
           <td :class="`text-${getColor(request.statusCode)}`">
@@ -50,37 +56,37 @@ import { getStatusCodeColor } from "@/helpers/helpers";
 import { openModal } from "jenesius-vue-modal";
 import RequestInfoModalVue from "./RequestInfoModal.vue";
 export default {
-  data() {
-    return {
-      showModal: false,
-      modalRequest: {},
-      modalTitle: "Modal Title",
-    };
-  },
-  props: {
-    requests: Object,
-  },
-  methods: {
-    copy(name, value) {
-      copyTextToClipboard(`${name}: ${value}`);
-    },
-    getPath(urlString) {
-      return new URL(urlString).pathname;
-    },
-    getOrigin(urlString) {
-      return new URL(urlString).host;
-    },
-    getName(urlString) {
-      return (new URL(urlString).pathname ?? "").split("/").pop();
-    },
-    getColor(status) {
-      return getStatusCodeColor(status);
-    },
-    openRequestModal(request) {
-      if (request.took) {
-        openModal(RequestInfoModalVue, { request });
-      }
-    },
-  },
+	props: {
+		requests: Object,
+	},
+	data() {
+		return {
+			showModal: false,
+			modalRequest: {},
+			modalTitle: "Modal Title",
+		};
+	},
+	methods: {
+		copy(name, value) {
+			copyTextToClipboard(`${name}: ${value}`);
+		},
+		getPath(urlString) {
+			return new URL(urlString).pathname;
+		},
+		getOrigin(urlString) {
+			return new URL(urlString).host;
+		},
+		getName(urlString) {
+			return (new URL(urlString).pathname ?? "").split("/").pop();
+		},
+		getColor(status) {
+			return getStatusCodeColor(status);
+		},
+		openRequestModal(request) {
+			if (request.took) {
+				openModal(RequestInfoModalVue, { request });
+			}
+		},
+	},
 };
 </script>

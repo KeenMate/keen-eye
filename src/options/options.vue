@@ -1,7 +1,9 @@
 <template>
   <div class="main_app">
     <h1>Settings</h1>
-    <button @click="clearStorage">CLEAR STORAGE</button>
+    <button @click="clearStorage">
+      CLEAR STORAGE
+    </button>
   </div>
 </template>
 
@@ -9,18 +11,18 @@
 import storageProvider from "@/settings/storageProvider";
 
 export default {
-  name: "optionsView",
-  data() {
-    return {
-      msg: "options",
-    };
-  },
-  methods: {
-    async clearStorage() {
-      await storageProvider.clear();
-      console.log("storage deleted");
-    },
-  },
+	name: "OptionsView",
+	data() {
+		return {
+			msg: "options",
+		};
+	},
+	methods: {
+		async clearStorage() {
+			await storageProvider.clear();
+			console.log("storage deleted");
+		},
+	},
 };
 </script>
 

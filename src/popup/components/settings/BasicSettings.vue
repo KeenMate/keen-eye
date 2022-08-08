@@ -1,64 +1,66 @@
 <template>
-	<div class="basic-settings">
-		<label>Headers</label>
-		<div @keyup.esc.stop>
-			<multiselect
-				:value="settings.headerRules"
-				:clear-on-select="false"
-				:options="pageHeaders"
-				:show-labels="false"
-				:multiple="true"
-				tag-placeholder="Add"
-				placeholder="Search or add a header rule"
-				taggable
-				:close-on-select="false"
-				@tag="addHeaderRule"
-				@input="val => updateSettings('headerRules', val)"
-			/>
-		</div>
+  <div class="basic-settings">
+    <label>Headers</label>
+    <div @keyup.esc.stop>
+      <multiselect
+        :value="settings.headerRules"
+        :clear-on-select="false"
+        :options="pageHeaders"
+        :show-labels="false"
+        :multiple="true"
+        tag-placeholder="Add"
+        placeholder="Search or add a header rule"
+        taggable
+        :close-on-select="false"
+        @tag="addHeaderRule"
+        @input="val => updateSettings('headerRules', val)"
+      />
+    </div>
 
-		<label>Requests</label>
-		<div @keyup.esc.stop>
-			<multiselect
-				:value="settings.requestsRules"
-				:options="requests"
-				:clear-on-select="false"
-				:show-labels="false"
-				:multiple="true"
-				tag-placeholder="Add"
-				placeholder="Search or add a request rule"
-				taggable
-				:close-on-select="false"
-				@tag="addRequestRule"
-				@input="val => updateSettings('requestsRules', val)"
-			/>
-		</div>
-		<label>Locale</label>
+    <div class="form-group" @keyup.esc.stop>
+      <label>Requests</label>
+      <multiselect
+        :value="settings.requestsRules"
+        :options="requests"
+        :clear-on-select="false"
+        :show-labels="false"
+        :multiple="true"
+        tag-placeholder="Add"
+        placeholder="Search or add a request rule"
+        taggable
+        :close-on-select="false"
+        @tag="addRequestRule"
+        @input="val => updateSettings('requestsRules', val)"
+      />
+    </div>
 
-		<div class="form-group row">
-			<div class="input-group">
-				<multiselect
-					:value="settings.locale"
-					:options="languages"
-					:multiple="false"
-					track-by="code"
-					label="name"
-					group-values="languages"
-					group-label="type"
-					class="form-control"
-					:custom-label="customLabel"
-					@input="val => updateSettings('locale', val)"
-					@keyup.esc.stop
-				/>
-			</div>
-			<button
-				class="btn btn-danger"
-				@click="onRemoveLocale"
-			>
-				Remove
-			</button>
-		</div>
-	</div>
+    <div class="form-group">
+	    <label>Locale</label>
+      <div class="input-group">
+        <multiselect
+          :value="settings.locale"
+          :options="languages"
+          :multiple="false"
+          track-by="code"
+          label="name"
+          group-values="languages"
+          group-label="type"
+          class="form-control form-control-sm"
+          :custom-label="customLabel"
+          @input="val => updateSettings('locale', val)"
+          @keyup.esc.stop
+        />
+	      <div class="input-group-append">
+		      <button
+			      class="btn btn-danger"
+			      @click="onRemoveLocale"
+		      >
+			      Remove
+		      </button>
+	      </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -68,10 +70,6 @@ import Multiselect from "vue-multiselect"
 export default {
 	name: "BasicSettings",
 	components: {Multiselect},
-	emits: ["change"],
-	data() {
-		return {}
-	},
 	props: {
 		settings: {
 			type: Object,
@@ -81,6 +79,10 @@ export default {
 			type: Object,
 			required: true
 		}
+	},
+	emits: ["change"],
+	data() {
+		return {}
 	},
 	computed: {
 		pageHeaders() {
@@ -101,8 +103,7 @@ export default {
 			if (!this.settings)
 				return
 
-			this.settings.locale = null
-			this.$emit("change")
+			this.updateSettings("locale", null)
 		},
 		customLabel(object) {
 			return `[${object.code}] ${object.name}`

@@ -1,7 +1,7 @@
 export const beforeHeadersOptions = [
-  "blocking",
-  "requestHeaders",
-  "extraHeaders",
+	"blocking",
+	"requestHeaders",
+	"extraHeaders",
 ];
 
 export const beforeRequestOptions = ["blocking", "extraHeaders", "requestBody"];

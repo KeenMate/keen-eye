@@ -1,13 +1,18 @@
 .multiselect {
 	flex: 1;
 	min-height: auto !important;
+	display: flex;
+	align-items: center;
 
 	.multiselect__select {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		top: 0;
-		height: 100%;
+		//top: 0;
+		height: auto;
+		position: static;
+		order: 2;
+		width: 30px;
 
 		&::before {
 			position: static;
@@ -18,8 +23,38 @@
 	}
 
 	.multiselect__tags {
+		flex: 1;
 		min-height: auto;
-		height: calc(1.8125rem + 2px);
-		padding: 0.25rem 40px 0 0.5rem;
+		border: none;
+		height: calc(2rem + 2px);
+		padding: 0.2rem 0 2rem 0.5rem;
+		
+		.multiselect__input {
+			font-size: 1em;
+			padding-left: 0 !important;
+		}
+	}
+	
+	.multiselect__content-wrapper {
+		.multiselect__option {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			min-height: 0;
+			padding: .5rem;
+
+			&:after {
+				position: static;
+				line-height: 100%;
+				font-size: .8em;
+			}
+		}
+	}
+}
+
+.input-group {
+	.multiselect {
+		padding: 0 !important;
 	}
 }

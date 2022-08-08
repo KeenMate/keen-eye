@@ -1,4 +1,4 @@
 export const types = {
-  url: "url",
-  basic: "base",
+	url: "url",
+	basic: "base",
 };

@@ -66,7 +66,7 @@
 </template>
 <script>
 import { copyTextToClipboard } from "@/helpers/clipboardHelper";
-import filterRules from "@/settings/filterRules";
+import FilterRules from "@/settings/filterRules";
 import TransformationRenderer from "./TransformationRenderer.vue";
 import { escapeHtml } from "@/helpers/stringHelpers";
 import CopyHeadersButtonVue from "@/overlay/components/CopyHeadersButton.vue";
@@ -81,7 +81,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    headersFilterRules: filterRules,
+    headersFilterRules: FilterRules,
     transformations: Array,
   },
   computed: {

@@ -1,12 +1,14 @@
-export const EmptySettings = {
-	inject: false,
-	headerRules: [],
-	requestsRules: [],
-	locale: null,
-	position: {x: 0, y: 0},
-	transformations: [],
-	localeReplace: {
-		cookieKey: null
+export function getEmptySettings() {
+	return {
+		inject: false,
+		headerRules: [],
+		requestsRules: [],
+		locale: null,
+		position: {x: 0, y: 0},
+		transformations: [],
+		localeReplace: {
+			cookieKey: null
+		}
 	}
 }
 

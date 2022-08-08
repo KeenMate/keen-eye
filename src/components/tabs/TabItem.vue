@@ -1,13 +1,16 @@
 <template>
-	<li class="nav-item" role="tab">
-		<a
-			class="nav-link"
-			:class="linkClasses"
-			@click="$emit('click', $event)"
-		>
-			<slot />
-		</a>
-	</li>
+  <li
+    class="nav-item"
+    role="tab"
+  >
+    <a
+      class="nav-link"
+      :class="linkClasses"
+      @click="$emit('click', $event)"
+    >
+      <slot />
+    </a>
+  </li>
 </template>
 
 <script>

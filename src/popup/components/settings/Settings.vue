@@ -1,22 +1,23 @@
 <template>
-	<div class="settings">
-		<Tabs class="mb-3">
-			<TabItem
-				v-for="tab in settingsTabs"
-				:is-active="currentSettingsTab === tab.code"
-				@click="currentSettingsTab = tab.code"
-			>
-				{{tab.title}}
-			</TabItem>
-		</Tabs>
+  <div class="settings">
+    <Tabs class="mb-3">
+      <TabItem
+        v-for="tab in settingsTabs"
+        :key="tab.code"
+        :is-active="currentSettingsTab === tab.code"
+        @click="currentSettingsTab = tab.code"
+      >
+        {{ tab.title }}
+      </TabItem>
+    </Tabs>
 
-		<component
-			:is="currentSettingsComponent"
-			:settings="currentSettings"
-			:requestInfo="requestInfo"
-			@change="$emit('change', $event)"
-		/>
-	</div>
+    <component
+      :is="currentSettingsComponent"
+      :settings="currentSettings"
+      :request-info="requestInfo"
+      @change="$emit('change', $event)"
+    />
+  </div>
 </template>
 
 <script>
@@ -31,13 +32,6 @@ export default {
 	props: {
 		currentSettings: Object,
 		requestInfo: Object
-	},
-	computed: {
-		currentSettingsComponent() {
-			return this.settingsTabs
-				.find(x => x.code === this.currentSettingsTab)
-				.component
-		}
 	},
 	data() {
 		return {
@@ -54,6 +48,13 @@ export default {
 				}
 			],
 			currentSettingsTab: "basic"
+		}
+	},
+	computed: {
+		currentSettingsComponent() {
+			return this.settingsTabs
+				.find(x => x.code === this.currentSettingsTab)
+				.component
 		}
 	}
 }

@@ -1,50 +1,56 @@
 <template>
-	<div
-		style="min-width: 500px; min-height: 600px"
-		class="card"
-		@keydown.esc.stop.prevent
-	>
-		<!-- Tabs navs -->
-		<PopupScopesTabs
-			:selected-tab="selectedTab"
-			@change-tab="changeTab"
-		/>
-		<!-- Tabs navs -->
-		<div class="mx-2 mb-2">
-			<div class="row justify-content-between">
-				<div class="col-auto">
-					<h3>Settings</h3>
-				</div>
-				<div class="col-auto">
-					<SettingsActions
-						class="mb-2"
-						@toggle-injection="toggleInjection"
-					/>
-				</div>
-			</div>
+  <div
+    style="min-width: 500px; min-height: 600px"
+    class="card"
+    @keydown.esc.stop.prevent
+  >
+    <!-- Tabs navs -->
+    <PopupScopesTabs
+      :selected-tab="selectedTab"
+      @change-tab="changeTab"
+    />
+    <!-- Tabs navs -->
+    <div class="mx-2 mb-2">
+      <div class="row justify-content-between">
+        <div class="col-auto">
+          <h3>Settings</h3>
+        </div>
+        <div class="col-auto">
+          <SettingsActions
+            :current-settings="selectedSettings"
+            class="mb-2"
+            @toggle-injection="toggleInjection"
+          />
+        </div>
+      </div>
 
-			<Settings
-				:current-settings="currentSettings"
-				:request-info="requestInfo"
-				@change="x => this.currentSettings = x"
-			/>
+      <Settings
+        :current-settings="currentSettings"
+        :request-info="requestInfo"
+        @change="x => this.currentSettings = x"
+      />
 
-			<div class="mb-2">
-				<button class="btn btn-large btn-outline-success" @click="save">
-					Save
-				</button>
-			</div>
-			<div class="alert alert-danger" v-if="changed">
-				Carefull unsaved changes!
-			</div>
-		</div>
-	</div>
+      <div class="mb-2">
+        <button
+          class="btn btn-large btn-outline-success"
+          @click="save"
+        >
+          Save
+        </button>
+      </div>
+      <div
+        v-if="changed"
+        class="alert alert-danger"
+      >
+        Carefull unsaved changes!
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import {refreshCurrentPage} from "@/helpers/helpers"
-import {toRaw} from "vue"
-import {EmptySettings} from "@/settings/settingConstants"
+import {getEmptySettings} from "@/settings/settingConstants"
 import {copyTextToClipboard} from "@/helpers/clipboardHelper"
 import {PopupScopes} from "@/settings/settingConstants"
 import settingsProvider from "@/settings/settingsProvider"
@@ -57,6 +63,7 @@ import {getCurrentTab} from "@/providers/chromeApiProvider"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
+import {toRaw} from "@vue/reactivity"
 
 export default {
 	name: "PopupApp",
@@ -67,10 +74,10 @@ export default {
 	},
 	data() {
 		return {
-			selectedSettings: EmptySettings,
+			selectedSettings: getEmptySettings(),
 			allowedOrigins: [],
 			selectedTab: "origin",
-			currentSettings: EmptySettings,
+			currentSettings: getEmptySettings(),
 			requestInfo: {},
 			changed: false,
 			loadedTab: "origin",
@@ -81,6 +88,12 @@ export default {
 		levels() {
 			return PopupScopes
 		}
+	},
+	mounted() {
+		setTimeout(async () => {
+			await this.loadSettings()
+			await this.loadSelectedSettings()
+		}, 25)
 	},
 	methods: {
 		async toggleInjection() {
@@ -115,7 +128,7 @@ export default {
 			let loadedSettings = await settingsProvider.getSettings(this.selectedTab)
 
 			//if settings arent set, use empty settings and allow saving it
-			this.selectedSettings = loadedSettings || EmptySettings
+			this.selectedSettings = loadedSettings || getEmptySettings()
 			this.changed = loadedSettings
 
 			console.debug(toRaw(this.selectedSettings))
@@ -158,12 +171,6 @@ export default {
 		copySettings() {
 			copyTextToClipboard(JSON.stringify(toRaw(this.selectedSettings)))
 		}
-	},
-	mounted() {
-		setTimeout(async () => {
-			await this.loadSettings()
-			await this.loadSelectedSettings()
-		}, 25)
 	}
 }
 </script>
