@@ -1,17 +1,3 @@
-export function getEmptySettings() {
-	return {
-		inject: false,
-		headerRules: [],
-		requestsRules: [],
-		locale: null,
-		position: {x: 0, y: 0},
-		transformations: [],
-		localeReplace: {
-			cookieKey: null
-		}
-	}
-}
-
 export const PopupScopes = [
 	{
 		code: "page",
@@ -34,6 +20,24 @@ export const PopupScopes = [
 		color: "LightBlue"
 	}
 ]
+
+export function getEmptySettings() {
+	return {
+		inject: false,
+		headerRules: [],
+		requestsRules: [],
+		locale: null,
+		position: {x: 0, y: 0},
+		transformations: [],
+		localeReplace: {
+			cookieKey: null
+		}
+	}
+}
+
+export function getPopupScope(code) {
+	return PopupScopes.find(x => x.code === code)
+}
 
 // export const Levels2 = {
 // 	page: "page",

@@ -14,7 +14,7 @@
 				:multiple="true"
 				:close-on-select="false"
 				@tag="addHeaderRule"
-				@input="val => updateSettings('headerRules', val)"
+				@select="val => updateSettings({headerRules: val})"
 			/>
 		</div>
 
@@ -32,13 +32,13 @@
 				:show-labels="false"
 				:close-on-select="false"
 				@tag="addRequestRule"
-				@input="val => updateSettings('requestsRules', val)"
+				@select="val => updateSettings({requestsRules: val})"
 			/>
 		</div>
 
 		<div class="form-group">
 			<label>Locale</label>
-			<div class="input-group">
+			<div class="input-group" @keyup.esc.stop>
 				<multiselect
 					:value="settings.locale"
 					:options="languages"
@@ -49,15 +49,15 @@
 					group-label="type"
 					class="form-control form-control-sm"
 					:multiple="false"
-					@input="val => updateSettings('locale', val)"
-					@keyup.esc.stop
+					@select="val => this.updateSettings({locale: val})"
 				/>
+				<!-- val => this.updateSettings('locale', val) -->
 				<div class="input-group-append">
 					<button
 						class="btn btn-danger"
 						@click="onRemoveLocale"
 					>
-						Remove
+						Remove {{prop}}
 					</button>
 				</div>
 			</div>
@@ -78,22 +78,30 @@ export default {
 			required: true
 		},
 		requestInfo: {
-			type: Object,
+			type: [Object, null],
 			required: true
 		}
 	},
 	emits: ["change"],
 	data() {
-		return {}
+		return {
+			prop: 1
+		}
 	},
 	computed: {
 		pageHeaders() {
 			return (
-				this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
+				this.requestInfo
+					?.response
+					?.responseHeaders
+					?.map(o => o.name)
+				?? []
 			)
 		},
 		requests() {
-			if (!this.requestInfo?.requests) return []
+			if (!this.requestInfo?.requests)
+				return []
+
 			return Object.values(this.requestInfo.requests).map((req) => req.url)
 		},
 		languages() {
@@ -105,19 +113,19 @@ export default {
 			if (!this.settings)
 				return
 
-			this.updateSettings("locale", null)
+			this.updateSettings({locale: null})
 		},
 		customLabel(object) {
 			return `[${object.code}] ${object.name}`
 		},
 		addHeaderRule(val) {
-			this.updateSettings("headerRules", [...(this.settings.headerRules || []), val])
+			this.updateSettings({headerRules: [...this.settings.headerRules, val]})
 		},
 		addRequestRule(val) {
-			this.updateSettings("requestsRules", [...(this.settings.headerRules || []), val])
+			this.updateSettings({requestsRules: [...this.settings.requestRules, val]})
 		},
-		updateSettings(key, value) {
-			this.$emit("change", {...(this.settings || {}), [key]: value})
+		updateSettings(partialSettings) {
+			this.$emit("change", {...(this.settings || {}), ...partialSettings})
 		}
 	}
 }

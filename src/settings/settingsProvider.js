@@ -1,170 +1,176 @@
-import { getEmptySettings, PopupScopes } from "@/settings/settingConstants";
+import {getEmptySettings} from "@/settings/settingConstants"
 import {
 	getCurrentTabUrl,
 	getCurrentUrlParts,
-	getUrlParts,
-} from "../helpers/urlHelper";
-import { parseTranformations } from "@/transformations/transformationHelper";
-import { sendSettingsChanged } from "../messaging/messagingProvider";
-import { SyncStorageProvider } from "./storageProvider";
-import { CacheStorageProvider } from "./cacheStorageProvider";
+	getUrlParts
+} from "@/helpers/urlHelper"
+import {parseTranformations} from "@/transformations/transformationHelper"
+import {sendSettingsChanged} from "@/messaging/messagingProvider"
+import {SyncStorageProvider} from "./storageProvider"
+import {CacheStorageProvider} from "./cacheStorageProvider"
+
 export class SettingsProvider {
 	constructor(asyncSource, syncSource) {
-		if (!asyncSource) throw "you need to provide source to settings provider";
-		this.asyncSource = asyncSource;
-		this.syncSource = syncSource;
+		if (!asyncSource) throw "you need to provide source to settings provider"
+		this.asyncSource = asyncSource
+		this.syncSource = syncSource
 	}
+
 	async getSettings(level, url) {
-		//if url is not specified use current url
-		let urlParts =
-      url !== undefined ? getUrlParts(url) : await getCurrentUrlParts();
-		let storageKey = urlParts[level];
-
-		if (storageKey === undefined) {
-			return Promise.reject("couldnt get current url");
-		}
+		const storageKey = url
+			&& this.getStorageKeyForUrl(getUrlParts(url), level)
+			|| await this.getStorageKey(level)
 
 		// console.log(url, urlParts, storageKey);
 
-		let setting = await this.asyncSource.getItem(storageKey);
-		parseTranformations(setting);
+		const setting = await this.asyncSource.getItem(storageKey)
+		parseTranformations(setting)
 
-		return setting;
+		return setting
 	}
+
 	getSettingsSync(level, url) {
-		if (!this.syncSource) return;
+		if (!this.syncSource)
+			return
+
 		//if url is not specified use current url
-		let urlParts = getUrlParts(url);
-		let storageKey = urlParts[level];
+		const storageKey = this.getStorageKeyForUrl(getUrlParts(url), level)
 
-		if (storageKey === undefined) {
-			return Promise.reject("couldnt get current url");
-		}
+		const settings = this.syncSource.getItem(storageKey)
+		parseTranformations(settings)
 
-		// console.log(url, urlParts, storageKey);
-
-		let setting = this.syncSource.getItem(storageKey);
-		parseTranformations(setting);
-
-		return setting;
+		return settings
 	}
 
 	async deleteSettings(level) {
-		let urlParts = await getCurrentUrlParts();
-		let storageKey = urlParts[level];
-		console.log("removing from " + storageKey);
-		await this.asyncSource.setItem(storageKey, null);
+		const storageKey = await this.getStorageKey(level)
+		console.log("removing from " + storageKey)
+		await this.asyncSource.setItem(storageKey, null)
 	}
 
 	/**
-   * if some of them is undefined, it doesnt change it
-   */
+	 * if some of them is undefined, it doesnt change it
+	 */
 	async setSettings(level, settings) {
-		let urlParts = await getCurrentUrlParts();
-		let storageKey = urlParts[level];
-		if (storageKey === undefined) {
-			return Promise.reject("couldnt get current url");
-		}
+		const storageKey = await this.getStorageKey(level)
 
-		let oldOriginInfo = (await this.getSettings(level)) ?? getEmptySettings();
+		let oldOriginInfo = (await this.getSettings(level)) ?? getEmptySettings()
 
 		//TODO use for
 		//#region replce if undef
 		if (settings.inject !== undefined) {
-			oldOriginInfo.inject = settings.inject;
+			oldOriginInfo.inject = settings.inject
 		}
 		if (settings.headerRules !== undefined) {
-			oldOriginInfo.headerRules = settings.headerRules;
+			oldOriginInfo.headerRules = settings.headerRules
 		}
 		if (settings.position !== undefined) {
-			oldOriginInfo.position = settings.position;
+			oldOriginInfo.position = settings.position
 		}
 		if (settings.requestsRules !== undefined) {
-			oldOriginInfo.requestsRules = settings.requestsRules;
+			oldOriginInfo.requestsRules = settings.requestsRules
 		}
 		if (settings.locale !== undefined) {
-			oldOriginInfo.locale = settings.locale;
+			oldOriginInfo.locale = settings.locale
 		}
 		if (settings.transformations !== undefined) {
-			oldOriginInfo.transformations = settings.transformations;
+			oldOriginInfo.transformations = settings.transformations
 		}
 		if (settings.localeReplace !== undefined) {
-			oldOriginInfo.localeReplace = settings.localeReplace;
+			oldOriginInfo.localeReplace = settings.localeReplace
 		}
 		//#endregion
 
-		return this.asyncSource.setItem(storageKey, oldOriginInfo);
+		return this.asyncSource.setItem(storageKey, oldOriginInfo)
 	}
 
 	async getMostSpecificSettings(url) {
-		let settings;
+		let settings
 
 		if (url) {
-			url = new URL(url);
+			url = new URL(url)
 		} else {
-			url = await getCurrentTabUrl();
+			url = await getCurrentTabUrl()
+		}
+		console.log("Getting most specific settings for url", url)
+
+		if ((settings = await this.getSettings("page", url))) {
+			return {settings, level: "page"}
 		}
 
-		if ((settings = await this.getSettings(PopupScopes.page, url))) {
-			return { settings, level: PopupScopes.page };
+		if ((settings = await this.getSettings("origin", url))) {
+			return {settings, level: "origin"}
 		}
 
-		if ((settings = await this.getSettings(PopupScopes.origin, url))) {
-			return { settings, level: PopupScopes.origin };
+		if ((settings = await this.getSettings("domain", url))) {
+			return {settings, level: "domain"}
 		}
 
-		if ((settings = await this.getSettings(PopupScopes.domain, url))) {
-			return { settings, level: PopupScopes.domain };
+		if ((settings = await this.getSettings("global", url))) {
+			return {settings, level: "global"}
 		}
 
-		if ((settings = await this.getSettings(PopupScopes.global, url)) !== undefined) {
-			return { settings, level: PopupScopes.global };
-		}
-
-		return { settings: { inject: false }, level: PopupScopes.global };
+		return {settings: {inject: false}, level: "global"}
 	}
 
 	/**
-   * only use with sync storageProvider
-   * @param {*} url
-   * @returns
-   */
+	 * only use with sync storageProvider
+	 * @param {*} url
+	 * @returns
+	 */
 	getMostSpecificSettingsSync(url) {
-		if (!this.syncSource) return;
+		if (!this.syncSource) return
 
-		let settings;
-		url = new URL(url);
+		let settings
+		url = new URL(url)
 
-		if ((settings = this.getSettingsSync(PopupScopes.page, url))) {
-			return { settings, level: PopupScopes.page };
+		if ((settings = this.getSettingsSync("page", url))) {
+			return {settings, level: "page"}
 		}
 
-		if ((settings = this.getSettingsSync(PopupScopes.origin, url))) {
-			return { settings, level: PopupScopes.origin };
+		if ((settings = this.getSettingsSync("origin", url))) {
+			return {settings, level: "origin"}
 		}
 
-		if ((settings = this.getSettingsSync(PopupScopes.domain, url))) {
-			return { settings, level: PopupScopes.domain };
+		if ((settings = this.getSettingsSync("domain", url))) {
+			return {settings, level: "domain"}
 		}
 
-		if ((settings = this.getSettingsSync(PopupScopes.global, url)) !== undefined) {
-			return { settings, level: PopupScopes.global };
+		if ((settings = this.getSettingsSync("global", url)) !== undefined) {
+			return {settings, level: "global"}
 		}
 
-		return { settings: { inject: false }, level: PopupScopes.global };
+		return {settings: {inject: false}, level: "global"}
 	}
 
 	async toggleVisibility() {
 		let {
 			level,
-			settings: { inject },
-		} = await this.getMostSpecificSettings();
-		await this.setSettings(level, { inject: !inject });
-		sendSettingsChanged();
+			settings: {inject}
+		} = await this.getMostSpecificSettings()
+
+		await this.setSettings(level, {inject: !inject})
+
+		sendSettingsChanged()
+	}
+
+	async getStorageKey(level) {
+		const urlParts = await getCurrentUrlParts()
+
+		return this.getStorageKeyForUrl(urlParts, level)
+	}
+
+	getStorageKeyForUrl(urlParts, level) {
+		const storageKey = urlParts[level]
+
+		if (!storageKey)
+			throw new Error(`Url part: [${level}] is not in url: ${JSON.stringify(urlParts)}`)
+
+		return storageKey
 	}
 }
 
 export default new SettingsProvider(
 	new SyncStorageProvider(),
 	new CacheStorageProvider()
-);
+)

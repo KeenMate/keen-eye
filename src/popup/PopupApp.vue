@@ -1,12 +1,8 @@
 <template>
-	<div
-		style="min-width: 500px; min-height: 600px"
-		class="card"
-		@keydown.esc.stop.prevent
-	>
+	<div class="popup-app card" @keydown.esc.stop.prevent>
 		<!-- Tabs navs -->
 		<PopupScopesTabs
-			:selected-tab="selectedTab"
+			:selected-tab="currentTab"
 			@change-tab="changeTab"
 		/>
 		<!-- Tabs navs -->
@@ -17,9 +13,10 @@
 				</div>
 				<div class="col-auto">
 					<SettingsActions
-						:current-settings="selectedSettings"
-						class="mb-2"
+						:current-settings="currentSettings"
+						@delete="onDeleteSettings"
 						@toggle-injection="toggleInjection"
+						@refresh-settings="onRefreshSettings"
 						@reset-div="onResetDiv"
 					/>
 				</div>
@@ -28,22 +25,16 @@
 			<Settings
 				:current-settings="currentSettings"
 				:request-info="requestInfo"
-				@change="x => currentSettings = x"
+				@change="updateCurrentSettings($event, true)"
 			/>
 
 			<div class="mb-2">
 				<button
 					class="btn btn-large btn-outline-success"
-					@click="save"
+					@click="saveSettings"
 				>
 					Save
 				</button>
-			</div>
-			<div
-				v-if="changed"
-				class="alert alert-danger"
-			>
-				Carefull unsaved changes!
 			</div>
 		</div>
 	</div>
@@ -60,7 +51,6 @@ import {
 	sendSettingsChanged
 } from "@/messaging/messagingProvider"
 import {getCurrentTab} from "@/providers/chromeApiProvider"
-
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
@@ -75,14 +65,10 @@ export default {
 	},
 	data() {
 		return {
-			selectedSettings: getEmptySettings(),
 			allowedOrigins: [],
-			selectedTab: "origin",
+			currentTab: "origin",
 			currentSettings: getEmptySettings(),
-			requestInfo: {},
-			changed: false,
-			loadedTab: "origin",
-			settingsTab: "basic"
+			requestInfo: {}
 		}
 	},
 	computed: {
@@ -93,27 +79,35 @@ export default {
 	mounted() {
 		setTimeout(async () => {
 			await this.loadSettings()
-			await this.loadSelectedSettings()
 		}, 25)
 	},
 	methods: {
 		onResetDiv() {
-			this.currentSettings.position = {x: 0, y: 0}
-			this.$emit("change")
-			console.log(this.settings)
+			this.updateCurrentSettings({position: {x: 0, y: 0}})
+		},
+		async onDeleteSettings() {
+			await this.deleteCurrentSettings()
+
+			// await this.loadSettings()
+			this.currentSettings = getEmptySettings()
+		},
+		onRefreshSettings() {
+			this.loadCurrentSettings()
 		},
 		async toggleInjection() {
-			console.log("TOOOGGGLLLIIING")
-			this.selectedSettings.inject = !this.selectedSettings.inject
-			await settingsProvider.setSettings(this.selectedTab, {
-				inject: this.selectedSettings.inject
+			this.currentSettings.inject = !this.currentSettings.inject
+
+			await settingsProvider.setSettings(this.currentTab, {
+				inject: this.currentSettings.inject
 			})
 			sendSettingsChanged()
-			console.log(this.selectedSettings)
 		},
 		changeTab(scope) {
-			this.selectedTab = scope.code
-			this.loadSelectedSettings()
+			this.currentTab = scope.code
+			this.loadCurrentSettings()
+		},
+		async deleteCurrentSettings() {
+			return await settingsProvider.deleteSettings(this.currentTab)
 		},
 		async loadSettings() {
 			const {
@@ -122,28 +116,27 @@ export default {
 			} = await settingsProvider.getMostSpecificSettings()
 
 			this.currentSettings = currentSettings
-			this.selectedTab = selectedTab
-			this.loadedTab = selectedTab
+			this.currentTab = selectedTab
 
-			let currentTab = await getCurrentTab()
+			const currentTab = await getCurrentTab()
 			this.requestInfo = await getRequestInfo(currentTab.id)
 
-			await this.loadSelectedSettings()
+			await this.loadCurrentSettings()
 		},
-		async loadSelectedSettings() {
-			let loadedSettings = await settingsProvider.getSettings(this.selectedTab)
+		async loadCurrentSettings() {
+			console.log("Loading current settings", this.currentTab)
+			const loadedSettings = await settingsProvider.getSettings(this.currentTab)
 
 			//if settings arent set, use empty settings and allow saving it
-			this.selectedSettings = loadedSettings || getEmptySettings()
-			this.changed = loadedSettings
+			this.currentSettings = loadedSettings || getEmptySettings()
 
-			console.debug(toRaw(this.selectedSettings))
+			console.debug(toRaw(this.currentSettings))
 		},
 		async deleteSetting() {
 			if (!confirm("Do you really want to delete this settings?"))
 				return
 
-			await settingsProvider.deleteSettings(this.selectedTab)
+			await settingsProvider.deleteSettings(this.currentTab)
 
 			await this.loadSettings()
 		},
@@ -153,30 +146,44 @@ export default {
 
 			refreshCurrentPage()
 		},
-		async save() {
-			console.log(toRaw(this.selectedSettings))
+		async updateCurrentSettings(newSettings, notPartial = false) {
+			const settings = notPartial
+				&& newSettings
+				|| {...this.currentSettings, ...newSettings}
 
+			this.currentSettings = settings
+
+			await this.saveSettings(settings)
+		},
+		async saveSettings(settings) {
 			// * use toraw for all nonsimple types
-			await settingsProvider.setSettings(this.selectedTab, {
-				inject: this.selectedSettings.inject,
-				headerRules: toRaw(this.selectedSettings.headerRules),
-				position: this.selectedSettings.position,
-				requestsRules: toRaw(this.selectedSettings.requestsRules),
-				locale: toRaw(this.selectedSettings.locale),
-				transformations: toRaw(this.selectedSettings.transformations),
-				localeReplace: toRaw(this.selectedSettings.localeReplace)
+			await settingsProvider.setSettings(this.currentTab, {
+				inject: settings.inject,
+				headerRules: toRaw(settings.headerRules),
+				position: settings.position,
+				requestsRules: toRaw(settings.requestsRules),
+				locale: toRaw(settings.locale),
+				transformations: toRaw(settings.transformations),
+				localeReplace: toRaw(settings.localeReplace)
 			})
 			sendSettingsChanged()
 
-			if (this.selectedSettings.locale) {
-				this.pageRefresh()
+			if (settings.locale) {
+				refreshCurrentPage()
 			}
-			// this.pageRefresh();
-			await this.loadSelectedSettings()
+
+			// this.pageRefresh()
 		},
 		copySettings() {
-			copyTextToClipboard(JSON.stringify(toRaw(this.selectedSettings)))
+			copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
 		}
 	}
 }
 </script>
+
+<style lang="scss">
+.popup-app {
+	min-width: 500px;
+	min-height: 600px
+}
+</style>

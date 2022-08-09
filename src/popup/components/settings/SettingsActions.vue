@@ -1,27 +1,27 @@
 <template>
 	<div class="btn-group">
-		<button
-			class="btn-success btn form-control-sm btn-sm"
-			@click="save"
-		>
-			Save
-		</button>
+		<!--<button-->
+		<!--	class="btn-success btn form-control-sm btn-sm"-->
+		<!--	@click="saveSettings"-->
+		<!--&gt;-->
+		<!--	Save-->
+		<!--</button>-->
 		<button
 			class="btn-info btn form-control-sm btn-sm"
-			@click="loadSelectedSettings"
+			@click="$emit('refresh-settings')"
 		>
 			Refresh
 		</button>
 		<button
 			class="btn-primary btn form-control-sm btn-sm"
-			:class="enabled ? 'btn-danger' : 'btn-success'"
+			:class="overlayVisible ? 'btn-danger' : 'btn-success'"
 			@click="$emit('toggle-injection')"
 		>
-			{{ enabled ? "Hide" : "Show" }}
+			{{overlayVisible ? "Hide" : "Show"}}
 		</button>
 		<button
 			class="btn-danger btn form-control-sm btn-sm"
-			@click="deleteSetting"
+			@click="onDeleteSettings"
 		>
 			Delete
 		</button>
@@ -33,8 +33,8 @@
 		<!--</button>-->
 		<button
 			class="btn-warning btn form-control-sm btn-sm"
-			:title="selectedSettings?.position"
-			@click="() => $emit('reset-div')"
+			:title="overlayPosition"
+			@click="$emit('reset-div')"
 		>
 			Reset overlay position
 		</button>
@@ -42,52 +42,19 @@
 </template>
 
 <script>
-import settingsProvider from "@/settings/settingsProvider"
-import {getEmptySettings} from "@/settings/settingConstants"
-import {sendSettingsChanged} from "@/messaging/messagingProvider"
-import {toRaw} from "@vue/reactivity"
-
 export default {
 	name: "SettingsActions",
+	emits: ["reset-div", "delete", "toggle-injection", "refresh-settings"],
+	props: {
+		overlayPosition: Object,
+		overlayVisible: Boolean
+	},
 	methods: {
-		async deleteSetting() {
-			if (!confirm("Do you really want to delete this settings?")) return
-			await settingsProvider.deleteSettings(this.selectedTab)
+		onDeleteSettings() {
+			if (!confirm("Do you really want to delete these settings?"))
+				return
 
-			await this.loadSettings()
-		},
-		async loadSelectedSettings() {
-			let loadedSettings = await settingsProvider.getSettings(this.selectedTab)
-			//if settings arent set, use empty settings and allow saving it
-			if (!loadedSettings) {
-				this.selectedSettings = getEmptySettings()
-				this.changed = true
-			} else {
-				this.selectedSettings = loadedSettings
-				this.changed = false
-			}
-			console.debug(toRaw(this.selectedSettings))
-		},
-		async save() {
-			console.log(toRaw(this.selectedSettings))
-
-			// * use toraw for all nonsimple types
-			await settingsProvider.setSettings(this.selectedTab, {
-				inject: this.selectedSettings.inject,
-				headerRules: toRaw(this.selectedSettings.headerRules),
-				position: this.selectedSettings.position,
-				requestsRules: toRaw(this.selectedSettings.requestsRules),
-				locale: toRaw(this.selectedSettings.locale),
-				transformations: toRaw(this.selectedSettings.transformations),
-				localeReplace: toRaw(this.selectedSettings.localeReplace)
-			})
-			sendSettingsChanged()
-
-			if (this.selectedSettings.locale) {
-				this.pageRefresh()
-			}
-			// this.pageRefresh();
-			await this.loadSelectedSettings()
+			this.$emit("delete")
 		}
 	}
 }

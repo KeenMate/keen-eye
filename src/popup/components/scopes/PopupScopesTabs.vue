@@ -4,7 +4,7 @@
 			v-for="scope in PopupScopes"
 			:key="scope.code"
 			:is-current="selectedTab === scope.code"
-			@click="() => $emit('change-tab', scope)"
+			@click="$emit('change-tab', scope)"
 		>
 			{{ scope.title }}
 		</ScopeItem>
@@ -18,6 +18,7 @@ import ScopeItem from "@/popup/components/scopes/ScopeItem"
 
 export default {
 	name: "PopupScopesTabs",
+	emits: ["change-tab"],
 	components: {
 		ScopeItem,
 		Tabs

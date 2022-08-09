@@ -7,7 +7,7 @@
 				:is-active="currentSettingsTab === tab.code"
 				@click="currentSettingsTab = tab.code"
 			>
-				{{ tab.title }}
+				{{tab.title}}
 			</TabItem>
 		</Tabs>
 
@@ -25,13 +25,15 @@ import Tabs from "@/components/tabs/Tabs"
 import TabItem from "@/components/tabs/TabItem"
 import BasicSettings from "@/popup/components/settings/BasicSettings"
 import AdvancedSettings from "@/popup/components/settings/AdvancedSettings"
+import {markRaw} from "vue"
+import {toRaw} from "@vue/reactivity"
 
 export default {
 	name: "Settings",
 	components: {AdvancedSettings, BasicSettings, TabItem, Tabs},
 	props: {
 		currentSettings: Object,
-		requestInfo: Object
+		requestInfo: [Object, null, undefined]
 	},
 	data() {
 		return {
@@ -39,12 +41,12 @@ export default {
 				{
 					code: "basic",
 					title: "Basic",
-					component: BasicSettings
+					component: markRaw(BasicSettings)
 				},
 				{
 					code: "advanced",
 					title: "Advanced",
-					component: AdvancedSettings
+					component: markRaw(AdvancedSettings)
 				}
 			],
 			currentSettingsTab: "basic"
@@ -52,9 +54,11 @@ export default {
 	},
 	computed: {
 		currentSettingsComponent() {
-			return this.settingsTabs
+			const component = this.settingsTabs
 				.find(x => x.code === this.currentSettingsTab)
 				.component
+
+			return toRaw(component)
 		}
 	}
 }
