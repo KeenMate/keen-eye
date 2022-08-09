@@ -40,7 +40,7 @@
 			<label>Locale</label>
 			<div class="input-group" @keyup.esc.stop>
 				<multiselect
-					:value="settings.locale"
+					v-model="locale"
 					:options="languages"
 					track-by="code"
 					label="name"
@@ -57,7 +57,7 @@
 						class="btn btn-danger"
 						@click="onRemoveLocale"
 					>
-						Remove {{prop}}
+						Remove
 					</button>
 				</div>
 			</div>
@@ -83,9 +83,13 @@ export default {
 		}
 	},
 	emits: ["change"],
+
+	mounted() {
+		this.locale = this.settings?.locale
+	},
 	data() {
 		return {
-			prop: 1
+			locale: this.settings?.locale
 		}
 	},
 	computed: {
