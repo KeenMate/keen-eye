@@ -8,7 +8,7 @@ export async function sendMessagePromise(message) {
 	let response = await sendMessage(message);
 	console.debug(response);
 	if (response === undefined) {
-		return Promise.resolve();
+		return Promise.resolve(null);
 	}
 	if (response?.ok) {
 		return Promise.resolve(response.data);

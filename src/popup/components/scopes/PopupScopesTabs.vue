@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Tabs from "@/components/tabs/Tabs.vue"
+import Tabs from "@/components/tab/Tabs.vue"
 import {PopupScopes} from "@/settings/settingConstants"
 import ScopeItem from "@/popup/components/scopes/ScopeItem"
 

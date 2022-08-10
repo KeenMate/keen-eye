@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import Tabs from "@/components/tabs/Tabs"
-import TabItem from "@/components/tabs/TabItem"
+import Tabs from "@/components/tab/Tabs"
+import TabItem from "@/components/tab/TabItem"
 import BasicSettings from "@/popup/components/settings/BasicSettings"
 import AdvancedSettings from "@/popup/components/settings/AdvancedSettings"
 import {markRaw} from "vue"
@@ -33,7 +33,7 @@ export default {
 	components: {AdvancedSettings, BasicSettings, TabItem, Tabs},
 	props: {
 		currentSettings: Object,
-		requestInfo: [Object, null, undefined]
+		requestInfo: [Object, null]
 	},
 	data() {
 		return {

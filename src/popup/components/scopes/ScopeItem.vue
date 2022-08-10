@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TabItem from "@/components/tabs/TabItem"
+import TabItem from "@/components/tab/TabItem"
 
 export default {
 	name: "ScopeItem",

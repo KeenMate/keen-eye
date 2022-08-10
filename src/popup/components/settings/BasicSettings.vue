@@ -14,7 +14,7 @@
 				:multiple="true"
 				:close-on-select="false"
 				@tag="addHeaderRule"
-				@select="val => updateSettings({headerRules: val})"
+				@select="updateSettings({headerRules: $event})"
 			/>
 		</div>
 
@@ -32,46 +32,29 @@
 				:show-labels="false"
 				:close-on-select="false"
 				@tag="addRequestRule"
-				@select="val => updateSettings({requestsRules: val})"
+				@select="updateSettings({requestsRules: $event})"
 			/>
 		</div>
 
-		<div class="form-group">
-			<label>Locale</label>
-			<div class="input-group" @keyup.esc.stop>
-				<multiselect
-					v-model="locale"
-					:options="languages"
-					track-by="code"
-					label="name"
-					:custom-label="customLabel"
-					group-values="languages"
-					group-label="type"
-					class="form-control form-control-sm"
-					:multiple="false"
-					@select="val => this.updateSettings({locale: val})"
-				/>
-				<!-- val => this.updateSettings('locale', val) -->
-				<div class="input-group-append">
-					<button
-						class="btn btn-danger"
-						@click="onRemoveLocale"
-					>
-						Remove
-					</button>
-				</div>
-			</div>
-		</div>
+		<LocaleInput
+			:locale="locale"
+			:locales="locales"
+			@input="this.updateSettings({locale: $event})"
+			@remove-locale="onRemoveLocale"
+			@set-custom-locales="onSetCustomLocales"
+			@remove-custom-locales="onRemoveCustomLocales"
+		/>
 	</div>
 </template>
 
 <script>
-import languages from "@/languages/languages"
 import Multiselect from "vue-multiselect"
+import LocaleInput from "@/popup/components/settings/LocaleInput"
+import LocaleStorage from "@/settings/locale-storage"
 
 export default {
 	name: "BasicSettings",
-	components: {Multiselect},
+	components: {LocaleInput, Multiselect},
 	props: {
 		settings: {
 			type: Object,
@@ -83,13 +66,10 @@ export default {
 		}
 	},
 	emits: ["change"],
-
-	mounted() {
-		this.locale = this.settings?.locale
-	},
 	data() {
 		return {
-			locale: this.settings?.locale
+			locale: this.settings?.locale,
+			locales: []
 		}
 	},
 	computed: {
@@ -107,20 +87,27 @@ export default {
 				return []
 
 			return Object.values(this.requestInfo.requests).map((req) => req.url)
-		},
-		languages() {
-			return languages
 		}
 	},
+	async mounted() {
+		this.locale = this.settings?.locale
+		await this.loadLocales()
+	},
 	methods: {
+		async onRemoveCustomLocales() {
+			LocaleStorage.clearCustomLocales()
+			await this.loadLocales()
+		},
+		async onSetCustomLocales(customLocales) {
+			LocaleStorage.saveCustomLocales(customLocales)
+
+			this.locales = customLocales
+		},
 		onRemoveLocale() {
 			if (!this.settings)
 				return
 
 			this.updateSettings({locale: null})
-		},
-		customLabel(object) {
-			return `[${object.code}] ${object.name}`
 		},
 		addHeaderRule(val) {
 			this.updateSettings({headerRules: [...this.settings.headerRules, val]})
@@ -130,6 +117,9 @@ export default {
 		},
 		updateSettings(partialSettings) {
 			this.$emit("change", {...(this.settings || {}), ...partialSettings})
+		},
+		async loadLocales() {
+			this.locales = await LocaleStorage.getLocales()
 		}
 	}
 }

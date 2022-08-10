@@ -1,255 +1,210 @@
-import { parseRegex } from "@/helpers/regexHelper";
-import { updateQueryStringParameter } from "@/helpers/urlHelper";
+import {parseRegex} from "@/helpers/regexHelper"
+import {updateQueryStringParameter} from "@/helpers/urlHelper"
 import {
 	onBeforeSendHeaders,
 	onBeforeRequest,
-	onTabRemoved,
-} from "../providers/chromeApiProvider";
+	onTabRemoved
+} from "../providers/chromeApiProvider"
 import {
 	headerName,
 	beforeHeadersOptions,
-	beforeRequestOptions,
-} from "./languageConstants";
+	beforeRequestOptions
+} from "./languageConstants"
 
 export class LanguageChanger {
 	constructor(settingsProvider, filter) {
-		this.settingsProvider = settingsProvider;
+		this.settingsProvider = settingsProvider
 
-		this.filter = filter ?? { urls: ["<all_urls>"] };
+		this.filter = filter ?? {urls: ["<all_urls>"]}
 
-		this.redirects = {};
+		this.redirects = {}
 
-		this.init();
+		this.init()
 	}
 
 	init() {
 		onBeforeRequest(
 			(detail) => this.handleBeforeRequest(detail),
-			{ ...this.filter, types: ["main_frame"] },
+			{...this.filter, types: ["main_frame"]},
 			beforeRequestOptions
-		);
+		)
 
 		onBeforeSendHeaders(
 			(detail) => this.handleBeforeHeadersSend(detail),
-			{ ...this.filter },
+			{...this.filter},
 			beforeHeadersOptions
-		);
+		)
 
-		onTabRemoved((detail) => this.removeRedirect(detail));
+		onTabRemoved((detail) => this.removeRedirect(detail))
 	}
 
 	handleBeforeHeadersSend(details) {
-		let settings = this.getSettings(details);
+		let settings = this.getSettings(details)
 
 		if (!this.shouldChange(settings)) {
-			return;
+			return
 		}
 
-		return this.changeHeader(settings, details);
+		return this.changeHeader(settings, details)
 	}
 
 	handleBeforeRequest(details) {
-		let settings = this.getSettings(details);
+		let settings = this.getSettings(details)
 
 		if (!this.shouldChange(settings)) {
-			return;
+			return
 		}
 
-		let url = details.url;
+		let url = details.url
 
 		if (!this.firstRedirect(details, settings)) {
-			console.log("not first time stop");
+			console.log("not first time stop")
 
-			return;
+			return
 		}
 
-		url = this.changeQueryString(url, settings);
-		url = this.changeUrl(url, settings);
+		url = this.changeQueryString(url, settings)
+		url = this.changeUrl(url, settings)
 
-		return this.redirect(details, url);
+		return this.redirect(details, url)
 	}
 
 	removeRedirect(tabId) {
-		console.log("removed", tabId);
+		console.log("removed", tabId)
 
-		delete this.redirects[tabId];
+		delete this.redirects[tabId]
 	}
 
 	shouldChange(settings) {
-		if (!settings) return false;
-
-		const { locale } = settings;
-
 		//only change if some language is specified
-		if (!locale) return false;
-
-		return true;
+		return settings && !!settings.locale
 	}
 
-	shoudlReplaceLocale(settings) {
-		const { localeReplace } = settings;
+	shouldReplaceLocale(settings) {
+		return !!settings.localeReplace
+	}
 
-		if (!localeReplace) {
-			return false;
-		}
-		return true;
+	shouldChangeProperty(settings, property) {
+		return this.shouldReplaceLocale(settings)
+			&& !!settings.localeReplace[property]
 	}
 
 	shouldChangeCookies(settings) {
-		if (!this.shoudlReplaceLocale(settings)) {
-			return false;
-		}
-
-		const {
-			localeReplace: { cookieKey },
-		} = settings;
-
-		if (!cookieKey) {
-			return false;
-		}
-
-		return true;
+		return this.shouldChangeProperty(settings, "cookieKey")
 	}
 
 	shouldChangeQueryString(settings) {
-		if (!this.shoudlReplaceLocale(settings)) {
-			return false;
-		}
-
-		const {
-			localeReplace: { queryStringKey },
-		} = settings;
-
-		if (!queryStringKey) {
-			return false;
-		}
-
-		return true;
+		return this.shouldChangeProperty(settings, "queryStringKey")
 	}
 
 	shouldChangeUrl(settings) {
-		if (!this.shoudlReplaceLocale(settings)) {
-			return false;
-		}
-
-		const {
-			localeReplace: { urlRegex },
-		} = settings;
-
-		if (!urlRegex) {
-			return false;
-		}
-
-		return true;
+		return this.shouldChangeProperty(settings, "urlRegex")
 	}
 
 	getSettings(details) {
 		if (!details.url) {
-			return;
+			return
 		}
 
 		return this.settingsProvider.getMostSpecificSettingsSync(details.url)
-			?.settings;
+			?.settings
 	}
 
 	changeCookie(cookieString, settings) {
 		if (!cookieString || !this.shouldChangeCookies(settings)) {
-			return;
+			return
 		}
 
-		let cookieKey = settings.localeReplace.cookieKey;
+		const cookieKey = settings.localeReplace.cookieKey
 
-		let regex = new RegExp(`(?<=${cookieKey}=)([^;]+)`);
+		const regex = new RegExp(`(?<=${cookieKey}=)([^;]+)`)
+		cookieString = cookieString.replace(regex, settings.locale.code)
 
-		cookieString = cookieString.replace(regex, settings.locale.code);
-
-		return cookieString;
+		return cookieString
 	}
 
 	changeHeader(settings, details) {
-		const { locale } = settings;
+		const {locale} = settings
 
-		let headerThere = false;
+		let headerThere = false
 
-		details.requestHeaders = details.requestHeaders ?? [];
+		details.requestHeaders = details.requestHeaders ?? []
 
 		for (const header of details.requestHeaders) {
 			if (header.name.toLowerCase() === headerName) {
-				header.value = locale.code ?? locale;
+				header.value = locale.code ?? locale
 
-				headerThere = true;
+				headerThere = true
 			}
 
 			if (header.name.toLowerCase() === "cookie") {
-				if (!this.shouldChangeCookies(settings)) continue;
+				if (!this.shouldChangeCookies(settings)) continue
 
-				header.value = this.changeCookie(header.value, settings);
+				header.value = this.changeCookie(header.value, settings)
 			}
 		}
 
 		//need to add header if it is not present there alerady
 		if (!headerThere) {
-			details.requestHeaders.push({ name: headerName, value: locale });
+			details.requestHeaders.push({name: headerName, value: locale})
 		}
 
-		return { requestHeaders: details.requestHeaders ?? [] };
+		return {requestHeaders: details.requestHeaders ?? []}
 	}
 
 	changeQueryString(url, settings) {
 		if (!this.shouldChangeQueryString(settings)) {
-			return url;
+			return url
 		}
 
 		let settingsValue = settings.localeReplace.queryStringKey
 
-		let updatedUrl = url;
+		let updatedUrl = url
 
-		if (settingsValue.indexOf(';') > -1) {
-			let keys = settingsValue.split(';')
+		if (settingsValue.indexOf(";") > -1) {
+			let keys = settingsValue.split(";")
 
 			keys.forEach(key => {
-				let locale = settings.locale;
+				let locale = settings.locale
 				updatedUrl = updateQueryStringParameter(updatedUrl, key, locale.code)
-			});
-		}
-		else
-		{
-			let key = settingsValue;
-			let locale = settings.locale;
+			})
+		} else {
+			let key = settingsValue
+			let locale = settings.locale
 			updatedUrl = updateQueryStringParameter(updatedUrl, key, locale.code)
 		}
 
-		return updatedUrl;
+		return updatedUrl
 	}
 
 	changeUrl(url, settings) {
 		if (!this.shouldChangeUrl(settings)) {
-			return url;
+			return url
 		}
 
-		let regex = parseRegex(settings.localeReplace.urlRegex);
+		let regex = parseRegex(settings.localeReplace.urlRegex)
 
-		let replaceStr = `$1${settings.locale.code}$3`;
+		let replaceStr = `$1${settings.locale.code}$3`
 
-		let replacedUrl = url.replace(regex, replaceStr);
-		return replacedUrl;
+		let replacedUrl = url.replace(regex, replaceStr)
+		return replacedUrl
 	}
 
 	firstRedirect(details, settings) {
-		console.log(this.redirects);
+		console.log(this.redirects)
 		if (this.redirects[details.tabId] === settings.locale.code) {
-			return false;
+			return false
 		}
-		this.redirects[details.tabId] = settings.locale.code;
-		return true;
+		this.redirects[details.tabId] = settings.locale.code
+		return true
 	}
 
 	redirect(details, url) {
-		console.log(details.url, url);
+		console.log(details.url, url)
 		if (details.url === url) {
-			return;
+			return
 		}
 
-		return { redirectUrl: url };
+		return {redirectUrl: url}
 	}
 }

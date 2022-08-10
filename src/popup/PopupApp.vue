@@ -28,14 +28,14 @@
 				@change="updateCurrentSettings($event, true)"
 			/>
 
-			<div class="mb-2">
-				<button
-					class="btn btn-large btn-outline-success"
-					@click="saveSettings"
-				>
-					Save
-				</button>
-			</div>
+			<!--<div class="mb-2">-->
+			<!--	<button-->
+			<!--		class="btn btn-large btn-outline-success"-->
+			<!--		@click="saveSettings"-->
+			<!--	>-->
+			<!--		Save-->
+			<!--	</button>-->
+			<!--</div>-->
 		</div>
 	</div>
 </template>
@@ -44,8 +44,7 @@
 import {refreshCurrentPage} from "@/helpers/helpers"
 import {getEmptySettings} from "@/settings/settingConstants"
 import {copyTextToClipboard} from "@/helpers/clipboardHelper"
-import {PopupScopes} from "@/settings/settingConstants"
-import settingsProvider from "@/settings/settingsProvider"
+import settingsProvider from "@/settings/settings-manager"
 import {
 	getRequestInfo,
 	sendSettingsChanged
@@ -69,11 +68,6 @@ export default {
 			currentTab: "origin",
 			currentSettings: getEmptySettings(),
 			requestInfo: {}
-		}
-	},
-	computed: {
-		levels() {
-			return PopupScopes
 		}
 	},
 	mounted() {
@@ -130,22 +124,16 @@ export default {
 			//if settings arent set, use empty settings and allow saving it
 			this.currentSettings = loadedSettings || getEmptySettings()
 
-			console.debug(toRaw(this.currentSettings))
+			console.debug("Current settings", toRaw(this.currentSettings))
 		},
-		async deleteSetting() {
-			if (!confirm("Do you really want to delete this settings?"))
-				return
-
-			await settingsProvider.deleteSettings(this.currentTab)
-
-			await this.loadSettings()
-		},
-		pageRefresh() {
-			if (!confirm("Refresh page"))
-				return
-
-			refreshCurrentPage()
-		},
+		// async deleteSetting() {
+		// 	if (!confirm("Do you really want to delete this settings?"))
+		// 		return
+		//
+		// 	await settingsProvider.deleteSettings(this.currentTab)
+		//
+		// 	await this.loadSettings()
+		// },
 		async updateCurrentSettings(newSettings, notPartial = false) {
 			const settings = notPartial
 				&& newSettings
@@ -171,8 +159,6 @@ export default {
 			if (settings.locale) {
 				refreshCurrentPage()
 			}
-
-			// this.pageRefresh()
 		},
 		copySettings() {
 			copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))

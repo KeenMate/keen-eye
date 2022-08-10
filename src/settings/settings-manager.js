@@ -6,12 +6,14 @@ import {
 } from "@/helpers/urlHelper"
 import {parseTranformations} from "@/transformations/transformationHelper"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
-import {SyncStorageProvider} from "./storageProvider"
+import {StorageProvider} from "./storageProvider"
 import {CacheStorageProvider} from "./cacheStorageProvider"
 
-export class SettingsProvider {
+export class SettingsManager {
 	constructor(asyncSource, syncSource) {
-		if (!asyncSource) throw "you need to provide source to settings provider"
+		if (!asyncSource)
+			throw new Error("You need to provide source to settings provider")
+
 		this.asyncSource = asyncSource
 		this.syncSource = syncSource
 	}
@@ -170,7 +172,7 @@ export class SettingsProvider {
 	}
 }
 
-export default new SettingsProvider(
-	new SyncStorageProvider(),
+export default new SettingsManager(
+	new StorageProvider(),
 	new CacheStorageProvider()
 )

@@ -20,9 +20,9 @@ export async function getRequestInfo(tabId = null) {
 }
 
 export async function getSettings() {
-	let data = await sendMessagePromise({ type: settings });
+	const data = await sendMessagePromise({type: settings})
 	// eslint-disable-next-line no-debugger
-	if (data.settings) {
+	if (data && data.settings) {
 		parseTranformations(data.settings);
 	}
 	return data;
