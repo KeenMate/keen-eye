@@ -9,7 +9,7 @@
 				type="text"
 				name="headerName"
 				class="form-control"
-				@input="updateTrans"
+				@change="updateTrans({headerRule: $event.target.value})"
 			>
 		</div>
 
@@ -20,7 +20,7 @@
 				class="form-control"
 				type="text"
 				name="url"
-				@input="updateTrans"
+				@change="updateTrans({url: $event.target.value})"
 			>
 		</div>
 
@@ -33,7 +33,7 @@
 				type="text"
 				name="headerName"
 				class="form-control"
-				@input="updateLocaleReplaceSettings('cookieKey', $event.target.value)"
+				@change="updateLocaleReplaceSettings({cookieKey: $event.target.value})"
 			>
 		</div>
 		<div class="form-group">
@@ -43,7 +43,7 @@
 				type="text"
 				name="queryStringKey"
 				class="form-control"
-				@input="updateLocaleReplaceSettings('queryStringKey', $event.target.value)"
+				@change="updateLocaleReplaceSettings({queryStringKey: $event.target.value})"
 			>
 		</div>
 		<div class="form-group">
@@ -53,7 +53,7 @@
 				type="text"
 				name="urlRegex"
 				class="form-control"
-				@input="updateLocaleReplaceSettings('urlRegex', $event.target.value)"
+				@change="updateLocaleReplaceSettings({urlRegex: $event.target.value})"
 			>
 		</div>
 	</div>
@@ -110,17 +110,17 @@ export default {
 				this.url = ""
 			}
 		},
-		updateLocaleReplaceSettings(key, value) {
-			const newSettings = {
-				...(this.settings || {}),
+		updateLocaleReplaceSettings(partial) {
+			this.updateSettings({
 				localeReplace: {
 					...((this.settings || {}).localeReplace || {}),
-					[key]: value
+					...partial
 				}
-			}
-
-			this.$emit("change", newSettings)
-		}
+			})
+		},
+		updateSettings(partial) {
+			this.$emit("change", {...this.settings, ...partial})
+		},
 	}
 }
 </script>

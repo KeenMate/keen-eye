@@ -8,8 +8,8 @@
 				track-by="code"
 				label="name"
 				:custom-label="customLabel"
-				group-values="languages"
-				group-label="type"
+				group-values="locales"
+				group-label="category"
 				class="form-control form-control-sm"
 				:multiple="false"
 				@select="$emit('input', $event)"
@@ -80,14 +80,17 @@ export default {
 
 			try {
 				const content = await readTextFile(file)
-				const parsedContent = [
-					{
-						type: "Custom locales",
-						languages: JSON.parse(content)
-					}
-				]
+				const parsedContent = JSON.parse(content)
+				const locales = parsedContent[0]?.category
+					&& parsedContent
+					|| [
+						{
+							category: "Custom locales",
+							locales: parsedContent
+						}
+					]
 
-				this.$emit("set-custom-locales", parsedContent)
+				this.$emit("set-custom-locales", locales)
 			} catch (error) {
 				console.error("Could not read text file for locales import", error, file)
 				this.error = error

@@ -1,7 +1,7 @@
 export default [
 	{
-		type: "Most used",
-		languages: [
+		category: "Most used",
+		locales: [
 			{ code: "cmn", name: "Mandarin Chinese" },
 			{ code: "es", name: "Spanish" },
 			{ code: "en", name: "English" },
@@ -21,8 +21,8 @@ export default [
 		],
 	},
 	{
-		type: "Rest",
-		languages: [
+		category: "Rest",
+		locales: [
 			{ code: "zh-CN", name: "Chinese (China)" },
 			{ code: "zh-TW", name: "Chinese (Traditional, Taiwan)" },
 			{ code: "af", name: "Afrikaans" },

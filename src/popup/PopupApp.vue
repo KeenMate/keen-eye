@@ -156,9 +156,9 @@ export default {
 			})
 			sendSettingsChanged()
 
-			if (settings.locale) {
-				refreshCurrentPage()
-			}
+			// if (settings.locale) {
+			// 	refreshCurrentPage()
+			// }
 		},
 		copySettings() {
 			copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))

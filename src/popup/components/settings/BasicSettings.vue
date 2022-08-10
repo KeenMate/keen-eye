@@ -1,5 +1,7 @@
 <template>
 	<div class="basic-settings">
+		header rules {{settings.headerRules}}
+		headers {{pageHeaders}}
 		<div class="form-group" @keyup.esc.stop>
 			<label>Headers</label>
 			<multiselect
@@ -14,7 +16,7 @@
 				:multiple="true"
 				:close-on-select="false"
 				@tag="addHeaderRule"
-				@select="updateSettings({headerRules: $event})"
+				@input="updateSettings({headerRules: $event})"
 			/>
 		</div>
 
@@ -49,7 +51,7 @@
 
 <script>
 import Multiselect from "vue-multiselect"
-import LocaleInput from "@/popup/components/settings/LocaleInput"
+import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
 import LocaleStorage from "@/settings/locale-storage"
 
 export default {
