@@ -9,7 +9,7 @@ module.exports = {
 		// override/add rules settings here, such as:
 		// 'vue/no-unused-vars': 'error'
 		"vue/multi-word-component-names": "off",
-		"indent": ["error", "tab"],
+		"indent": ["error", "tab", {SwitchCase: 1}],
 		"vue/html-indent": ["error", "tab"]
 	}
 }

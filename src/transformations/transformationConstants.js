@@ -1,4 +1,8 @@
 export const types = {
 	url: "url",
-	basic: "base",
-};
+	basic: "base"
+}
+
+export function getEmptyTransformation() {
+
+}

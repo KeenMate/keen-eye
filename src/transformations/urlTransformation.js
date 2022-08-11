@@ -4,9 +4,9 @@ import {BaseTransformation} from "./baseTransformation"
 export class UrlTransformation extends BaseTransformation {
 
 	constructor(headerRule, url) {
-		super(headerRule)
+		super(headerRule || "")
 
-		this.url = url
+		this.url = url || ""
 		this.type = types.url
 	}
 

@@ -18,7 +18,6 @@ import ScopeItem from "@/popup/components/scopes/ScopeItem"
 
 export default {
 	name: "PopupScopesTabs",
-	emits: ["change-tab"],
 	components: {
 		ScopeItem,
 		Tabs
@@ -26,6 +25,7 @@ export default {
 	props: {
 		selectedTab: String
 	},
+	emits: ["change-tab"],
 	data() {
 		return {
 			PopupScopes

@@ -7,7 +7,10 @@
 			class="custom-file-input"
 			@change="$emit('change', $event.target.files[0])"
 		>
-		<label class="custom-file-label" for="custom-file">
+		<label
+			class="custom-file-label"
+			for="custom-file"
+		>
 			Select file
 		</label>
 	</div>
@@ -16,10 +19,10 @@
 <script>
 export default {
 	name: "FileInput",
-	emits: ["change"],
 	props: {
 		accept: String
 	},
+	emits: ["change"],
 	methods: {
 		clearInput() {
 			this.$refs.input.value = ""

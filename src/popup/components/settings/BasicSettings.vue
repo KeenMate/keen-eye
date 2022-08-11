@@ -1,8 +1,11 @@
 <template>
 	<div class="basic-settings">
-		header rules {{settings.headerRules}}
-		headers {{pageHeaders}}
-		<div class="form-group" @keyup.esc.stop>
+		header rules {{ settings.headerRules }}
+		headers {{ pageHeaders }}
+		<div
+			class="form-group"
+			@keyup.esc.stop
+		>
 			<label>Headers</label>
 			<multiselect
 				:value="settings.headerRules"
@@ -20,7 +23,10 @@
 			/>
 		</div>
 
-		<div class="form-group" @keyup.esc.stop>
+		<div
+			class="form-group"
+			@keyup.esc.stop
+		>
 			<label>Requests</label>
 			<multiselect
 				:value="settings.requestsRules"
@@ -41,7 +47,7 @@
 		<LocaleInput
 			:locale="locale"
 			:locales="locales"
-			@input="this.updateSettings({locale: $event})"
+			@input="updateSettings({locale: $event})"
 			@remove-locale="onRemoveLocale"
 			@set-custom-locales="onSetCustomLocales"
 			@remove-custom-locales="onRemoveCustomLocales"

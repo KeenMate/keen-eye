@@ -1,8 +1,8 @@
 import {matchWithStairs} from "@/helpers/stringHelpers"
 
 export class BaseTransformation {
-
 	constructor(headerRule) {
+		this.transformationId = Symbol()
 		this.type = "base"
 		this.headerRule = headerRule
 	}

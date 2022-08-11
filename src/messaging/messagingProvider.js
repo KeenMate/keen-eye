@@ -10,7 +10,7 @@ import {
 	sendToCS,
 	sendToSpecificCS,
 } from "@/messaging/scriptsComunicationHelper";
-import { parseTranformations } from "@/transformations/transformationHelper";
+import { parseTransformations } from "@/transformations/transformationHelper";
 
 export async function getRequestInfo(tabId = null) {
 	return await sendMessagePromise({
@@ -23,7 +23,7 @@ export async function getSettings() {
 	const data = await sendMessagePromise({type: settings})
 	// eslint-disable-next-line no-debugger
 	if (data && data.settings) {
-		parseTranformations(data.settings);
+		parseTransformations(data.settings);
 	}
 	return data;
 }

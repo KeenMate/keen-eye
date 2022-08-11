@@ -4,7 +4,7 @@ import {
 	getCurrentUrlParts,
 	getUrlParts
 } from "@/helpers/urlHelper"
-import {parseTranformations} from "@/transformations/transformationHelper"
+import {parseTransformations} from "@/transformations/transformationHelper"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
 import {StorageProvider} from "./storageProvider"
 import {CacheStorageProvider} from "./cacheStorageProvider"
@@ -26,7 +26,7 @@ export class SettingsManager {
 		// console.log(url, urlParts, storageKey);
 
 		const setting = await this.asyncSource.getItem(storageKey)
-		parseTranformations(setting)
+		parseTransformations(setting)
 
 		return setting
 	}
@@ -39,7 +39,7 @@ export class SettingsManager {
 		const storageKey = this.getStorageKeyForUrl(getUrlParts(url), level)
 
 		const settings = this.syncSource.getItem(storageKey)
-		parseTranformations(settings)
+		parseTransformations(settings)
 
 		return settings
 	}

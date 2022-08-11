@@ -1,7 +1,10 @@
 <template>
 	<div class="form-group">
 		<label>Locale</label>
-		<div class="input-group" @keyup.esc.stop>
+		<div
+			class="input-group"
+			@keyup.esc.stop
+		>
 			<multiselect
 				:value="locale"
 				:options="locales"
@@ -31,8 +34,8 @@
 		</label>
 		<div class="d-flex justify-content-between small-gaps">
 			<FileInput
-				ref="fileInput"
 				id="custom-locales-file"
+				ref="fileInput"
 				accept="application/json, text/plain"
 				@change="onLocaleFileSelected"
 			/>
@@ -54,23 +57,15 @@ import FileInput from "@/components/form/FileInput"
 
 export default {
 	name: "LocaleInput",
-	emits: ["input", "remove-locale", "set-custom-locales", "remove-custom-locales"],
 	components: {FileInput, Multiselect},
 	props: {
 		locale: Object,
 		locales: Array
 	},
+	emits: ["input", "remove-locale", "set-custom-locales", "remove-custom-locales"],
 	data() {
 		return {
 			error: null
-		}
-	},
-	watch: {
-		locales(val) {
-			console.log("LocaleInput: all locales changed", val)
-		},
-		locale(val) {
-			console.log("LocaleInput: locale changed", val)
 		}
 	},
 	methods: {
@@ -99,7 +94,6 @@ export default {
 			}
 		},
 		customLabel(object) {
-			console.log("LocaleInput: custom label", object)
 			return `[${object.code}] ${object.name}`
 		}
 	}

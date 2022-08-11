@@ -17,7 +17,7 @@
 			:class="overlayVisible ? 'btn-danger' : 'btn-success'"
 			@click="$emit('toggle-injection')"
 		>
-			{{overlayVisible ? "Hide" : "Show"}}
+			{{ overlayVisible ? "Hide" : "Show" }}
 		</button>
 		<button
 			class="btn-danger btn form-control-sm btn-sm"
@@ -44,11 +44,11 @@
 <script>
 export default {
 	name: "SettingsActions",
-	emits: ["reset-div", "delete", "toggle-injection", "refresh-settings"],
 	props: {
 		overlayPosition: Object,
 		overlayVisible: Boolean
 	},
+	emits: ["reset-div", "delete", "toggle-injection", "refresh-settings"],
 	methods: {
 		onDeleteSettings() {
 			if (!confirm("Do you really want to delete these settings?"))

@@ -1,5 +1,8 @@
 <template>
-	<div class="popup-app card" @keydown.esc.stop.prevent>
+	<div
+		class="popup-app card"
+		@keydown.esc.stop.prevent
+	>
 		<!-- Tabs navs -->
 		<PopupScopesTabs
 			:selected-tab="currentTab"
