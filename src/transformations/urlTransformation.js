@@ -1,8 +1,7 @@
-import {types} from "@/transformations/transformationConstants"
-import {BaseTransformation} from "./baseTransformation"
+import { types } from "@/transformations/transformationConstants"
+import { BaseTransformation } from "./baseTransformation"
 
 export class UrlTransformation extends BaseTransformation {
-
 	constructor(headerRule, url) {
 		super(headerRule || "")
 

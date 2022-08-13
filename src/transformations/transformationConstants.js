@@ -3,6 +3,4 @@ export const types = {
 	basic: "base"
 }
 
-export function getEmptyTransformation() {
-
-}
+export function getEmptyTransformation() {}

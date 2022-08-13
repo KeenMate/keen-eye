@@ -1,8 +1,12 @@
-import {clearStorage, getFromStorage, setToStorage} from "@/providers/chromeApiProvider"
+import {
+	clearStorage,
+	getFromStorage,
+	setToStorage
+} from "@/providers/chromeApiProvider"
 
 export class StorageProvider {
 	async setItem(key, value) {
-		return await setToStorage({[key]: value})
+		return await setToStorage({ [key]: value })
 	}
 
 	async getItem(key) {

@@ -1,8 +1,8 @@
 export const beforeHeadersOptions = [
 	"blocking",
 	"requestHeaders",
-	"extraHeaders",
-];
+	"extraHeaders"
+]
 
-export const beforeRequestOptions = ["blocking", "extraHeaders", "requestBody"];
-export const headerName = "accept-language";
+export const beforeRequestOptions = ["blocking", "extraHeaders", "requestBody"]
+export const headerName = "accept-language"

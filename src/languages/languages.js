@@ -17,8 +17,8 @@ export default [
 			{ code: "ko", name: "Korean" },
 			{ code: "fr", name: "French" },
 			{ code: "de", name: "German" },
-			{ code: "it", name: "Italian" },
-		],
+			{ code: "it", name: "Italian" }
+		]
 	},
 	{
 		category: "Rest",
@@ -734,7 +734,7 @@ export default [
 			{ code: "yue-Hant", name: "Cantonese (Traditional)" },
 			{
 				code: "yue-Hant-HK",
-				name: "Cantonese (Traditional, Hong Kong SAR China)",
+				name: "Cantonese (Traditional, Hong Kong SAR China)"
 			},
 			{ code: "zgh", name: "Standard Moroccan Tamazight" },
 			{ code: "zgh-MA", name: "Standard Moroccan Tamazight (Morocco)" },
@@ -747,12 +747,12 @@ export default [
 			{ code: "zh-Hant", name: "Chinese (Traditional)" },
 			{
 				code: "zh-Hant-HK",
-				name: "Chinese (Traditional, Hong Kong SAR China)",
+				name: "Chinese (Traditional, Hong Kong SAR China)"
 			},
 			{ code: "zh-Hant-MO", name: "Chinese (Traditional, Macau SAR China)" },
 			{ code: "zh-Hant-TW", name: "Chinese (Traditional, Taiwan)" },
 			{ code: "zu", name: "Zulu" },
-			{ code: "zu-ZA", name: "Zulu (South Africa)" },
-		],
-	},
-];
+			{ code: "zu-ZA", name: "Zulu (South Africa)" }
+		]
+	}
+]

@@ -4,12 +4,14 @@
  */
 export function readTextFile(file) {
 	if (!isTextFile(file))
-		return Promise.reject(new Error("Cannot read given file because it is not in text format"))
+		return Promise.reject(
+			new Error("Cannot read given file because it is not in text format")
+		)
 
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		const reader = new FileReader()
 
-		reader.onload = e => {
+		reader.onload = (e) => {
 			resolve(e.target.result)
 		}
 
@@ -18,6 +20,8 @@ export function readTextFile(file) {
 }
 
 function isTextFile(file) {
-	return file.type.startsWith("text/")
-		|| ["application/json"].find(x => x === file.type)
+	return (
+		file.type.startsWith("text/") ||
+		["application/json"].find((x) => x === file.type)
+	)
 }

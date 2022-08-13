@@ -37,12 +37,12 @@ export async function queryTabs(options) {
 }
 
 export async function getCurrentTab() {
-	let tabs = await queryTabs({active: true, currentWindow: true})
+	let tabs = await queryTabs({ active: true, currentWindow: true })
 	return tabs[0]
 }
 
 export function refreshTab(tab) {
-	chrome.tabs.update(tab.id, {url: tab.url})
+	chrome.tabs.update(tab.id, { url: tab.url })
 }
 
 export function onTabRemoved(handler) {

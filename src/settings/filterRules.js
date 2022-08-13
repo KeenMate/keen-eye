@@ -1,4 +1,4 @@
-import {matchWithStairs} from "@/helpers/stringHelpers"
+import { matchWithStairs } from "@/helpers/stringHelpers"
 
 export default class FilterRules {
 	constructor(filterRulesArray, saveFunction) {
@@ -74,7 +74,7 @@ export default class FilterRules {
 		if (this.all()) return data
 		if (!data) return []
 
-		return data.filter(({[propName]: key}) => {
+		return data.filter(({ [propName]: key }) => {
 			return this.filterOne(key)
 		})
 	}

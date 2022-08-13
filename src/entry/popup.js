@@ -1,4 +1,4 @@
-import {createApp} from "vue"
+import { createApp } from "vue"
 import "../assets/css/vue-multiselect-overrides.scss"
 import PopupApp from "@/popup/PopupApp.vue"
 

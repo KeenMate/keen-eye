@@ -27,7 +27,7 @@ export function getEmptySettings() {
 		headerRules: [],
 		requestsRules: [],
 		locale: null,
-		position: {x: 0, y: 0},
+		position: { x: 0, y: 0 },
 		transformations: [],
 		localeReplace: {
 			cookieKey: null
@@ -36,7 +36,7 @@ export function getEmptySettings() {
 }
 
 export function getPopupScope(code) {
-	return PopupScopes.find(x => x.code === code)
+	return PopupScopes.find((x) => x.code === code)
 }
 
 // export const Levels2 = {

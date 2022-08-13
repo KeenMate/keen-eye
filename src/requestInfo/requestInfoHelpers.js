@@ -5,5 +5,5 @@ export function sortHeaders(headers) {
 			: b.name.toLowerCase() > a.name.toLowerCase()
 				? -1
 				: 0
-	);
+	)
 }

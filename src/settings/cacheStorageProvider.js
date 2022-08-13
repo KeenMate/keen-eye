@@ -1,5 +1,5 @@
-import {onStorageChange} from "@/providers/chromeApiProvider"
-import {StorageProvider} from "./storageProvider"
+import { onStorageChange } from "@/providers/chromeApiProvider"
+import { StorageProvider } from "./storageProvider"
 
 export class CacheStorageProvider {
 	constructor() {
@@ -17,8 +17,7 @@ export class CacheStorageProvider {
 	}
 
 	getItem(key) {
-		if (!key)
-			throw new Error(`${key} is not valid key`)
+		if (!key) throw new Error(`${key} is not valid key`)
 
 		return this.cache[key]
 	}
