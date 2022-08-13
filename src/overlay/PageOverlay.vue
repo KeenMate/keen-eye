@@ -43,8 +43,8 @@
 						class="form-check-label"
 						for="useFilters"
 					>
-						Use filters</label
-					>
+						Use filters
+					</label>
 				</div>
 			</div>
 			<div class="col-3">
