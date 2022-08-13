@@ -1,7 +1,8 @@
 import {
 	getCurrentTab,
 	sendMessage,
-	sendToTab
+	sendToTab,
+	onMessage
 } from "@/providers/chromeApiProvider"
 
 export async function sendMessagePromise(message) {
@@ -32,4 +33,12 @@ export function sendToSpecificCS(tabId, type, data) {
 export async function sendToCS(type, data) {
 	let tab = await getCurrentTab()
 	sendToSpecificCS(tab.id, type, data)
+}
+
+export function onMessageReceived(type, handler) {
+	onMessage((message) => {
+		if (message && message.type == type) {
+			handler(message)
+		}
+	})
 }

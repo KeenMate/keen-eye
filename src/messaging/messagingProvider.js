@@ -1,7 +1,6 @@
 import {
 	backgroudScriptMessages as BgMessages,
-	settingsChanged,
-	newRequests
+	contentScriptMessages as CsMessages
 } from "@/messaging/messages"
 import {
 	sendMessageToBg,
@@ -40,9 +39,9 @@ export async function changeInject(level, inject) {
 }
 
 export function sendSettingsChanged() {
-	return sendToCS(settingsChanged)
+	return sendToCS(CsMessages.settingsChanged)
 }
 
 export function sendNewRequests(requests, tabId) {
-	sendToSpecificCS(tabId, newRequests, requests)
+	sendToSpecificCS(tabId, CsMessages.newRequests, requests)
 }

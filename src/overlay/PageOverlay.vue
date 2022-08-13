@@ -96,7 +96,7 @@ import { toRaw } from "@vue/reactivity"
 import { container } from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
-import { newRequests } from "@/messaging/messages"
+import { contentScriptMessages as messages } from "@/messaging/messages"
 import { containerName } from "@/overlay/overlayConstants"
 import {
 	changeInject,
@@ -111,6 +111,7 @@ import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue"
 import LocaleSelector from "./components/LocaleSelector.vue"
 
 import "../assets/css/vue-multiselect-overrides.scss"
+import { onMessageReceived } from "@/messaging/scriptsComunicationHelper"
 
 export default {
 	components: {
@@ -195,10 +196,8 @@ export default {
 			saveDivPosition(this.level, pos)
 		)
 
-		onMessage((message) => {
-			if (message?.type === newRequests) {
-				this.requestInfo.requests = message.data
-			}
+		onMessageReceived(messages.newRequests, (message) => {
+			this.requestInfo.requests = message.data
 		})
 
 		await this.loadLocales()

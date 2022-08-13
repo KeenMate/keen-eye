@@ -5,5 +5,9 @@ export const backgroudScriptMessages = {
 	setSettings: "set-settings"
 }
 
+export const contentScriptMessages = {
+	settingsChanged: "settings-changed",
+	newRequests: "new-requests"
+}
 export const settingsChanged = "settings-changed"
 export const newRequests = "new-requests"
