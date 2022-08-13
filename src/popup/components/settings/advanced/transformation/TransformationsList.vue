@@ -8,16 +8,24 @@
 				pill
 				@click="$emit('edit-transformation', transformation)"
 			>
-				{{transformation.headerRule}} |
-				<i class="las la-trash" @click.stop="$emit('delete-transformation', transformation)"></i>
+				{{ transformation.headerRule }} |
+				<i
+					class="las la-trash"
+					@click.stop="$emit('delete-transformation', transformation)"
+				/>
 			</Badge>
 
-			<Badge color="success" @click="$emit('new-transformation')">
+			<Badge
+				color="success"
+				@click="$emit('new-transformation')"
+			>
 				Add new
 			</Badge>
 		</template>
 		<p v-else>
-			<Badge pill>No header rules</Badge>
+			<Badge pill>
+				No header rules
+			</Badge>
 		</p>
 	</div>
 </template>
@@ -39,12 +47,12 @@ const BadgeColors = [
 export default {
 	name: "TransformationsList",
 	components: {Badge},
-	emits: ["edit-transformation", "new-transformation", "delete-transformation"],
 	props: {
 		transformations: Array,
 		currentTransformationId: Symbol,
 		isNew: Boolean
 	},
+	emits: ["edit-transformation", "new-transformation", "delete-transformation"],
 	methods: {
 		getBadgeColor(idx) {
 			const color = BadgeColors[idx % BadgeColors.length]

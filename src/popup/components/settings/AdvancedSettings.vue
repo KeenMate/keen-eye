@@ -6,10 +6,13 @@
 			@change="updateTrans"
 		/>
 
-		<hr>
+		<hr />
 
 		<h6>Custom language transformations</h6>
-		<p>Helps you transform additional values in query string, url path thanks to Regex or in sent cookie.</p>
+		<p>
+			Helps you transform additional values in query string, url path thanks to
+			Regex or in sent cookie.
+		</p>
 		<div class="form-group">
 			<label>Cookie Key</label>
 			<input
@@ -17,18 +20,23 @@
 				type="text"
 				name="headerName"
 				class="form-control"
-				@change="updateLocaleReplaceSettings({cookieKey: $event.target.value})"
-			>
+				@change="
+					updateLocaleReplaceSettings({ cookieKey: $event.target.value })
+				"
+			/>
 		</div>
 		<div class="form-group">
-			<label>Url Query string key (can be multiple separated with semicolon)</label>
+			<label>
+				Url Query string key (can be multiple separated with semicolon)</label>
 			<input
 				:value="settings.localeReplace?.queryStringKey"
 				type="text"
 				name="queryStringKey"
 				class="form-control"
-				@change="updateLocaleReplaceSettings({queryStringKey: $event.target.value})"
-			>
+				@change="
+					updateLocaleReplaceSettings({ queryStringKey: $event.target.value })
+				"
+			/>
 		</div>
 		<div class="form-group">
 			<label>Url regex</label>
@@ -37,8 +45,8 @@
 				type="text"
 				name="urlRegex"
 				class="form-control"
-				@change="updateLocaleReplaceSettings({urlRegex: $event.target.value})"
-			>
+				@change="updateLocaleReplaceSettings({ urlRegex: $event.target.value })"
+			/>
 		</div>
 	</div>
 </template>
@@ -48,7 +56,7 @@ import Transformations from "@/popup/components/settings/advanced/transformation
 
 export default {
 	name: "AdvancedSettings",
-	components: {Transformations},
+	components: { Transformations },
 	props: {
 		settings: {
 			type: Object,
@@ -59,11 +67,11 @@ export default {
 			required: true
 		}
 	},
-	emits: ["change"],
+	emits: ["update-settings"],
 	data() {
 		return {
 			headerRule: null,
-			url: null,
+			url: null
 		}
 	},
 	watch: {
@@ -76,7 +84,7 @@ export default {
 	},
 	methods: {
 		updateTrans(transformations) {
-			this.$emit("change", {
+			this.$emit("update-settings", {
 				...this.settings,
 				transformations
 			})
@@ -101,8 +109,8 @@ export default {
 			})
 		},
 		updateSettings(partial) {
-			this.$emit("change", {...this.settings, ...partial})
-		},
+			this.$emit("update-settings", { ...this.settings, ...partial })
+		}
 	}
 }
 </script>

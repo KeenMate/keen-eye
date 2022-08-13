@@ -6,7 +6,7 @@
 			v-bind="$attrs"
 			class="custom-file-input"
 			@change="$emit('change', $event.target.files[0])"
-		>
+		/>
 		<label
 			class="custom-file-label"
 			for="custom-file"
@@ -30,7 +30,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

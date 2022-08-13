@@ -1,14 +1,12 @@
 <template>
 	<div class="basic-settings">
-		header rules {{ settings.headerRules }}
-		headers {{ pageHeaders }}
 		<div
 			class="form-group"
 			@keyup.esc.stop
 		>
 			<label>Headers</label>
 			<multiselect
-				:value="settings.headerRules"
+				:model-value="settings.headerRules"
 				:options="pageHeaders"
 				tag-placeholder="Add"
 				class="form-control form-control-sm"
@@ -19,7 +17,7 @@
 				:multiple="true"
 				:close-on-select="false"
 				@tag="addHeaderRule"
-				@input="updateSettings({headerRules: $event})"
+				@update:model-value="updateSettings({ headerRules: $event })"
 			/>
 		</div>
 
@@ -29,7 +27,7 @@
 		>
 			<label>Requests</label>
 			<multiselect
-				:value="settings.requestsRules"
+				:model-value="settings.requestsRules"
 				:options="requests"
 				tag-placeholder="Add"
 				class="form-control form-control-sm"
@@ -40,14 +38,14 @@
 				:show-labels="false"
 				:close-on-select="false"
 				@tag="addRequestRule"
-				@select="updateSettings({requestsRules: $event})"
+				@update:model-value="updateSettings({ requestsRules: $event })"
 			/>
 		</div>
 
 		<LocaleInput
-			:locale="locale"
+			:locale="settings?.locale"
 			:locales="locales"
-			@input="updateSettings({locale: $event})"
+			@input="updateSettings({ locale: $event })"
 			@remove-locale="onRemoveLocale"
 			@set-custom-locales="onSetCustomLocales"
 			@remove-custom-locales="onRemoveCustomLocales"
@@ -62,7 +60,7 @@ import LocaleStorage from "@/settings/locale-storage"
 
 export default {
 	name: "BasicSettings",
-	components: {LocaleInput, Multiselect},
+	components: { LocaleInput, Multiselect },
 	props: {
 		settings: {
 			type: Object,
@@ -73,32 +71,25 @@ export default {
 			required: true
 		}
 	},
-	emits: ["change"],
+	emits: ["update-settings"],
 	data() {
 		return {
-			locale: this.settings?.locale,
 			locales: []
 		}
 	},
 	computed: {
 		pageHeaders() {
 			return (
-				this.requestInfo
-					?.response
-					?.responseHeaders
-					?.map(o => o.name)
-				?? []
+				this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
 			)
 		},
 		requests() {
-			if (!this.requestInfo?.requests)
-				return []
+			if (!this.requestInfo?.requests) return []
 
 			return Object.values(this.requestInfo.requests).map((req) => req.url)
 		}
 	},
 	async mounted() {
-		this.locale = this.settings?.locale
 		await this.loadLocales()
 	},
 	methods: {
@@ -108,23 +99,27 @@ export default {
 		},
 		async onSetCustomLocales(customLocales) {
 			LocaleStorage.saveCustomLocales(customLocales)
-
 			this.locales = customLocales
 		},
 		onRemoveLocale() {
-			if (!this.settings)
-				return
+			if (!this.settings) return
 
-			this.updateSettings({locale: null})
+			this.updateSettings({ locale: null })
 		},
 		addHeaderRule(val) {
-			this.updateSettings({headerRules: [...this.settings.headerRules, val]})
+			this.updateSettings({ headerRules: [...this.settings.headerRules, val] })
 		},
 		addRequestRule(val) {
-			this.updateSettings({requestsRules: [...this.settings.requestRules, val]})
+			this.updateSettings({
+				requestsRules: [...this.settings.requestRules, val]
+			})
 		},
 		updateSettings(partialSettings) {
-			this.$emit("change", {...(this.settings || {}), ...partialSettings})
+			console.log("update settings", partialSettings)
+			this.$emit("update-settings", {
+				...(this.settings || {}),
+				...partialSettings
+			})
 		},
 		async loadLocales() {
 			this.locales = await LocaleStorage.getLocales()

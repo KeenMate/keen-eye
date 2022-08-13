@@ -17,9 +17,9 @@
 					/>
 				</div>
 			</div>
-			<span class="overflox-auto">{{ request.url }} <br></span>
-			Took: {{ request.took.toFixed(2) }}ms <br>
-			Ttfb: {{ request.ttfb.toFixed(2) }}ms <br>
+			<span class="overflox-auto">{{ request.url }} <br /></span>
+			Took: {{ request.took.toFixed(2) }}ms <br />
+			Ttfb: {{ request.ttfb.toFixed(2) }}ms <br />
 			<header-renderer :headers="request.responseHeaders" />
 		</div>
 	</div>

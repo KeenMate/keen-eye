@@ -1,13 +1,13 @@
-import {getEmptySettings} from "@/settings/settingConstants"
+import { getEmptySettings } from "@/settings/settingConstants"
 import {
 	getCurrentTabUrl,
 	getCurrentUrlParts,
 	getUrlParts
 } from "@/helpers/urlHelper"
-import {parseTransformations} from "@/transformations/transformationHelper"
-import {sendSettingsChanged} from "@/messaging/messagingProvider"
-import {StorageProvider} from "./storageProvider"
-import {CacheStorageProvider} from "./cacheStorageProvider"
+import { parseTransformations } from "@/transformations/transformationHelper"
+import { sendSettingsChanged } from "@/messaging/messagingProvider"
+import { StorageProvider } from "./storageProvider"
+import { CacheStorageProvider } from "./cacheStorageProvider"
 
 export class SettingsManager {
 	constructor(asyncSource, syncSource) {
@@ -19,9 +19,9 @@ export class SettingsManager {
 	}
 
 	async getSettings(level, url) {
-		const storageKey = url
-			&& this.getStorageKeyForUrl(getUrlParts(url), level)
-			|| await this.getStorageKey(level)
+		const storageKey =
+			(url && this.getStorageKeyForUrl(getUrlParts(url), level)) ||
+			(await this.getStorageKey(level))
 
 		// console.log(url, urlParts, storageKey);
 
@@ -32,8 +32,7 @@ export class SettingsManager {
 	}
 
 	getSettingsSync(level, url) {
-		if (!this.syncSource)
-			return
+		if (!this.syncSource) return
 
 		//if url is not specified use current url
 		const storageKey = this.getStorageKeyForUrl(getUrlParts(url), level)
@@ -83,6 +82,8 @@ export class SettingsManager {
 		}
 		//#endregion
 
+		console.log("saving to storage ", storageKey, oldOriginInfo)
+
 		return this.asyncSource.setItem(storageKey, oldOriginInfo)
 	}
 
@@ -97,22 +98,22 @@ export class SettingsManager {
 		console.log("Getting most specific settings for url", url)
 
 		if ((settings = await this.getSettings("page", url))) {
-			return {settings, level: "page"}
+			return { settings, level: "page" }
 		}
 
 		if ((settings = await this.getSettings("origin", url))) {
-			return {settings, level: "origin"}
+			return { settings, level: "origin" }
 		}
 
 		if ((settings = await this.getSettings("domain", url))) {
-			return {settings, level: "domain"}
+			return { settings, level: "domain" }
 		}
 
 		if ((settings = await this.getSettings("global", url))) {
-			return {settings, level: "global"}
+			return { settings, level: "global" }
 		}
 
-		return {settings: {inject: false}, level: "global"}
+		return { settings: { inject: false }, level: "global" }
 	}
 
 	/**
@@ -127,31 +128,31 @@ export class SettingsManager {
 		url = new URL(url)
 
 		if ((settings = this.getSettingsSync("page", url))) {
-			return {settings, level: "page"}
+			return { settings, level: "page" }
 		}
 
 		if ((settings = this.getSettingsSync("origin", url))) {
-			return {settings, level: "origin"}
+			return { settings, level: "origin" }
 		}
 
 		if ((settings = this.getSettingsSync("domain", url))) {
-			return {settings, level: "domain"}
+			return { settings, level: "domain" }
 		}
 
 		if ((settings = this.getSettingsSync("global", url)) !== undefined) {
-			return {settings, level: "global"}
+			return { settings, level: "global" }
 		}
 
-		return {settings: {inject: false}, level: "global"}
+		return { settings: { inject: false }, level: "global" }
 	}
 
 	async toggleVisibility() {
 		let {
 			level,
-			settings: {inject}
+			settings: { inject }
 		} = await this.getMostSpecificSettings()
 
-		await this.setSettings(level, {inject: !inject})
+		await this.setSettings(level, { inject: !inject })
 
 		sendSettingsChanged()
 	}
@@ -163,11 +164,19 @@ export class SettingsManager {
 	}
 
 	getStorageKeyForUrl(urlParts, level) {
+		if (urlParts.page.startsWith("chrome")) {
+			throw new Error(`not allowed url: ${JSON.stringify(urlParts)}`)
+		}
+
 		const storageKey = urlParts[level]
 
-		if (!storageKey)
-			throw new Error(`Url part: [${level}] is not in url: ${JSON.stringify(urlParts)}`)
+		if (!storageKey) {
+			console.warn("incorect url part", level, urlParts)
 
+			throw new Error(
+				`Url part: ${level} is not in url: ${JSON.stringify(urlParts)}`
+			)
+		}
 		return storageKey
 	}
 }

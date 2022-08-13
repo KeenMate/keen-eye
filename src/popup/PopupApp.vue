@@ -28,35 +28,26 @@
 			<Settings
 				:current-settings="currentSettings"
 				:request-info="requestInfo"
-				@change="updateCurrentSettings($event, true)"
+				@update-settings="updateCurrentSettings($event, true)"
 			/>
-
-			<!--<div class="mb-2">-->
-			<!--	<button-->
-			<!--		class="btn btn-large btn-outline-success"-->
-			<!--		@click="saveSettings"-->
-			<!--	>-->
-			<!--		Save-->
-			<!--	</button>-->
-			<!--</div>-->
 		</div>
 	</div>
 </template>
 
 <script>
-import {refreshCurrentPage} from "@/helpers/helpers"
-import {getEmptySettings} from "@/settings/settingConstants"
-import {copyTextToClipboard} from "@/helpers/clipboardHelper"
+import { refreshCurrentPage } from "@/helpers/helpers"
+import { getEmptySettings } from "@/settings/settingConstants"
+import { copyTextToClipboard } from "@/helpers/clipboardHelper"
 import settingsProvider from "@/settings/settings-manager"
 import {
 	getRequestInfo,
 	sendSettingsChanged
 } from "@/messaging/messagingProvider"
-import {getCurrentTab} from "@/providers/chromeApiProvider"
+import { getCurrentTab } from "@/providers/chromeApiProvider"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
-import {toRaw} from "@vue/reactivity"
+import { toRaw } from "@vue/reactivity"
 
 export default {
 	name: "PopupApp",
@@ -80,7 +71,9 @@ export default {
 	},
 	methods: {
 		onResetDiv() {
-			this.updateCurrentSettings({position: {x: 0, y: 0}})
+			this.updateCurrentSettings({
+				position: { x: 0, y: 0 }
+			})
 		},
 		async onDeleteSettings() {
 			await this.deleteCurrentSettings()
@@ -107,22 +100,22 @@ export default {
 			return await settingsProvider.deleteSettings(this.currentTab)
 		},
 		async loadSettings() {
-			const {
-				settings: currentSettings,
-				level: selectedTab
-			} = await settingsProvider.getMostSpecificSettings()
+			const { settings: currentSettings, level: selectedTab } =
+				await settingsProvider.getMostSpecificSettings()
 
 			this.currentSettings = currentSettings
 			this.currentTab = selectedTab
 
 			const currentTab = await getCurrentTab()
-			this.requestInfo = await getRequestInfo(currentTab.id)
+			this.requestInfo = (await getRequestInfo(currentTab.id)) ?? null
 
 			await this.loadCurrentSettings()
 		},
 		async loadCurrentSettings() {
 			console.log("Loading current settings", this.currentTab)
 			const loadedSettings = await settingsProvider.getSettings(this.currentTab)
+
+			console.log("loaded settings", loadedSettings)
 
 			//if settings arent set, use empty settings and allow saving it
 			this.currentSettings = loadedSettings || getEmptySettings()
@@ -138,9 +131,12 @@ export default {
 		// 	await this.loadSettings()
 		// },
 		async updateCurrentSettings(newSettings, notPartial = false) {
-			const settings = notPartial
-				&& newSettings
-				|| {...this.currentSettings, ...newSettings}
+			const settings = (notPartial && newSettings) || {
+				...this.currentSettings,
+				...newSettings
+			}
+
+			console.log(newSettings)
 
 			this.currentSettings = settings
 
@@ -157,6 +153,7 @@ export default {
 				transformations: toRaw(settings.transformations),
 				localeReplace: toRaw(settings.localeReplace)
 			})
+
 			sendSettingsChanged()
 
 			// if (settings.locale) {
@@ -173,6 +170,6 @@ export default {
 <style lang="scss">
 .popup-app {
 	min-width: 500px;
-	min-height: 600px
+	min-height: 600px;
 }
 </style>

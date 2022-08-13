@@ -7,9 +7,9 @@
 					class="title user-select-none"
 					style="cursor: pointer"
 				>
-					{{pageName}}({{requestInfo?.response?.statusCode ?? "loading"}})
+					{{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
 				</h5>
-				<h6>{{time ? time + "ms" : "refresh"}}</h6>
+				<h6>{{ time ? time + "ms" : "refresh" }}</h6>
 			</div>
 			<div class="col-5">
 				<LocaleSelector
@@ -36,7 +36,7 @@
 						class="form-check-input"
 						type="checkbox"
 						role="switch"
-					>
+					/>
 					<label
 						class="form-check-label"
 						for="useFilters"
@@ -48,7 +48,7 @@
 					class="btn btn-sm"
 					:class="{
 						'btn-secondary': !changesToSave,
-						'btn-success': changesToSave,
+						'btn-success': changesToSave
 					}"
 					@click="saveSettings"
 				>
@@ -87,20 +87,20 @@
 </template>
 
 <script>
-import {toRaw} from "@vue/reactivity"
+import { toRaw } from "@vue/reactivity"
 // import { logEverything } from "@/helpers/urlHelper";
-import {container} from "jenesius-vue-modal"
+import { container } from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
-import {newRequests} from "@/messaging/messages"
-import {containerName} from "@/overlay/overlayConstants"
+import { newRequests } from "@/messaging/messages"
+import { containerName } from "@/overlay/overlayConstants"
 import {
 	changeInject,
 	getRequestInfo,
 	saveDivPosition,
 	setSettings
 } from "@/messaging/messagingProvider"
-import {onMessage} from "@/providers/chromeApiProvider"
+import { onMessage } from "@/providers/chromeApiProvider"
 
 import HeaderRendererVue from "@/overlay/components/HeaderRenderer.vue"
 import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue"
@@ -217,8 +217,7 @@ export default {
 			setSettings(this.level, {
 				locale: toRaw(locale)
 			}).then(() => {
-				if (locale)
-					location.reload()
+				if (locale) location.reload()
 			})
 		},
 		createFilterObjects(settings) {

@@ -10,12 +10,11 @@
 				{{ tab.title }}
 			</TabItem>
 		</Tabs>
-
 		<component
 			:is="currentSettingsComponent"
 			:settings="currentSettings"
 			:request-info="requestInfo"
-			@change="$emit('change', $event)"
+			@update-settings="$emit('update-settings', $event)"
 		/>
 	</div>
 </template>
@@ -25,16 +24,25 @@ import Tabs from "@/components/tab/Tabs"
 import TabItem from "@/components/tab/TabItem"
 import BasicSettings from "@/popup/components/settings/BasicSettings"
 import AdvancedSettings from "@/popup/components/settings/AdvancedSettings"
-import {markRaw} from "vue"
-import {toRaw} from "@vue/reactivity"
+import { markRaw } from "vue"
+import { toRaw } from "@vue/reactivity"
 
 export default {
 	name: "Settings",
-	components: {AdvancedSettings, BasicSettings, TabItem, Tabs},
-	props: {
-		currentSettings: Object,
-		requestInfo: [Object, null]
+	components: {
+		AdvancedSettings,
+		BasicSettings,
+		TabItem,
+		Tabs
 	},
+	props: {
+		currentSettings: { type: Object },
+		requestInfo: {
+			type: [Object, null],
+			default: null
+		}
+	},
+	emits: ["update-settings"],
 	data() {
 		return {
 			settingsTabs: [
@@ -54,9 +62,9 @@ export default {
 	},
 	computed: {
 		currentSettingsComponent() {
-			const component = this.settingsTabs
-				.find(x => x.code === this.currentSettingsTab)
-				.component
+			const component = this.settingsTabs.find(
+				(x) => x.code === this.currentSettingsTab
+			).component
 
 			return toRaw(component)
 		}
@@ -64,6 +72,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

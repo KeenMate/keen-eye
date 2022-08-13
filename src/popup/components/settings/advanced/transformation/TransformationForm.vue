@@ -10,7 +10,7 @@
 				v-model="transformation.headerRule"
 				type="text"
 				class="form-control"
-			>
+			/>
 		</div>
 
 		<div class="form-group">
@@ -19,7 +19,7 @@
 				v-model="transformation.url"
 				type="text"
 				class="form-control"
-			>
+			/>
 		</div>
 
 		<div class="d-flex justify-content-end">
@@ -50,11 +50,11 @@ import {UrlTransformation} from "@/transformations/urlTransformation"
 
 export default {
 	name: "TransformationForm",
-	emits: ["submit"],
 	props: {
 		value: UrlTransformation,
 		isNew: Boolean
 	},
+	emits: ["submit"],
 	data() {
 		return {
 			transformation: new UrlTransformation()

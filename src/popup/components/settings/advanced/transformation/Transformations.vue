@@ -31,18 +31,18 @@ import {UrlTransformation} from "@/transformations/urlTransformation"
 export default {
 	name: "Transformations",
 	components: {TransformationsList, TransformationForm},
-	emits: ["change"],
 	props: {
 		transformations: Array
+	},
+	emits: ["change"],
+	data() {
+		return {
+			transformationDetail: new UrlTransformation()
+		}
 	},
 	computed: {
 		transformationDetailIsNew() {
 			return !this.transformations?.some(x => x.transformationId === this.transformationDetail?.transformationId)
-		}
-	},
-	data() {
-		return {
-			transformationDetail: new UrlTransformation()
 		}
 	},
 	methods: {

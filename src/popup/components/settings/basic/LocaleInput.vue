@@ -6,7 +6,7 @@
 			@keyup.esc.stop
 		>
 			<multiselect
-				:value="locale"
+				:model-value="locale"
 				:options="locales"
 				track-by="code"
 				label="name"
@@ -15,7 +15,7 @@
 				group-label="category"
 				class="form-control form-control-sm"
 				:multiple="false"
-				@select="$emit('input', $event)"
+				@update:model-value="$emit('input', $event)"
 			/>
 			<div class="input-group-append">
 				<button
@@ -29,9 +29,7 @@
 	</div>
 
 	<div class="form-group">
-		<label for="custom-locales-file">
-			Custom locales
-		</label>
+		<label for="custom-locales-file"> Custom locales </label>
 		<div class="d-flex justify-content-between small-gaps">
 			<FileInput
 				id="custom-locales-file"
@@ -52,17 +50,22 @@
 
 <script>
 import Multiselect from "vue-multiselect"
-import {readTextFile} from "@/helpers/file-helpers"
+import { readTextFile } from "@/helpers/file-helpers"
 import FileInput from "@/components/form/FileInput"
 
 export default {
 	name: "LocaleInput",
-	components: {FileInput, Multiselect},
+	components: { FileInput, Multiselect },
 	props: {
 		locale: Object,
 		locales: Array
 	},
-	emits: ["input", "remove-locale", "set-custom-locales", "remove-custom-locales"],
+	emits: [
+		"input",
+		"remove-locale",
+		"set-custom-locales",
+		"remove-custom-locales"
+	],
 	data() {
 		return {
 			error: null
@@ -70,24 +73,25 @@ export default {
 	},
 	methods: {
 		async onLocaleFileSelected(file) {
-			if (file.size > 102400)
-				return
+			if (file.size > 102400) return
 
 			try {
 				const content = await readTextFile(file)
 				const parsedContent = JSON.parse(content)
-				const locales = parsedContent[0]?.category
-					&& parsedContent
-					|| [
-						{
-							category: "Custom locales",
-							locales: parsedContent
-						}
-					]
+				const locales = (parsedContent[0]?.category && parsedContent) || [
+					{
+						category: "Custom locales",
+						locales: parsedContent
+					}
+				]
 
 				this.$emit("set-custom-locales", locales)
 			} catch (error) {
-				console.error("Could not read text file for locales import", error, file)
+				console.error(
+					"Could not read text file for locales import",
+					error,
+					file
+				)
 				this.error = error
 			} finally {
 				this.$refs.fileInput.clearInput()
@@ -102,6 +106,6 @@ export default {
 
 <style lang="scss" scoped>
 .small-gaps {
-	gap: .5rem
+	gap: 0.5rem;
 }
 </style>
