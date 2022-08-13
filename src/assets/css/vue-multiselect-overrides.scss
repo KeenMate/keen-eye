@@ -23,19 +23,27 @@
 		}
 	}
 
+	.multiselect__input {
+		font-size: 1em;
+
+		.multiselect__single {
+			font-size: 1em;
+		}
+	}
+
 	.multiselect__tags {
 		flex: 1;
 		min-height: auto;
 		border: none;
 		height: calc(2rem + 2px);
 		padding: 0.2rem 0 2rem 0.5rem;
-		
+
 		.multiselect__input {
 			font-size: 1em;
 			padding-left: 0 !important;
 		}
 	}
-	
+
 	.multiselect__content-wrapper {
 		.multiselect__option {
 			display: flex;

@@ -1,5 +1,5 @@
-import {parseRegex} from "@/helpers/regexHelper"
-import {updateQueryStringParameter} from "@/helpers/urlHelper"
+import { parseRegex } from "@/helpers/regexHelper"
+import { updateQueryStringParameter } from "@/helpers/urlHelper"
 import {
 	onBeforeSendHeaders,
 	onBeforeRequest,
@@ -15,7 +15,7 @@ export class LanguageChanger {
 	constructor(settingsProvider, filter) {
 		this.settingsProvider = settingsProvider
 
-		this.filter = filter ?? {urls: ["<all_urls>"]}
+		this.filter = filter ?? { urls: ["<all_urls>"] }
 
 		this.redirects = {}
 
@@ -25,13 +25,13 @@ export class LanguageChanger {
 	init() {
 		onBeforeRequest(
 			(detail) => this.handleBeforeRequest(detail),
-			{...this.filter, types: ["main_frame"]},
+			{ ...this.filter, types: ["main_frame"] },
 			beforeRequestOptions
 		)
 
 		onBeforeSendHeaders(
 			(detail) => this.handleBeforeHeadersSend(detail),
-			{...this.filter},
+			{ ...this.filter },
 			beforeHeadersOptions
 		)
 
@@ -85,8 +85,9 @@ export class LanguageChanger {
 	}
 
 	shouldChangeProperty(settings, property) {
-		return this.shouldReplaceLocale(settings)
-			&& !!settings.localeReplace[property]
+		return (
+			this.shouldReplaceLocale(settings) && !!settings.localeReplace[property]
+		)
 	}
 
 	shouldChangeCookies(settings) {
@@ -124,7 +125,7 @@ export class LanguageChanger {
 	}
 
 	changeHeader(settings, details) {
-		const {locale} = settings
+		const { locale } = settings
 
 		let headerThere = false
 
@@ -146,10 +147,10 @@ export class LanguageChanger {
 
 		//need to add header if it is not present there alerady
 		if (!headerThere) {
-			details.requestHeaders.push({name: headerName, value: locale})
+			details.requestHeaders.push({ name: headerName, value: locale })
 		}
 
-		return {requestHeaders: details.requestHeaders ?? []}
+		return { requestHeaders: details.requestHeaders ?? [] }
 	}
 
 	changeQueryString(url, settings) {
@@ -164,7 +165,7 @@ export class LanguageChanger {
 		if (settingsValue.indexOf(";") > -1) {
 			let keys = settingsValue.split(";")
 
-			keys.forEach(key => {
+			keys.forEach((key) => {
 				let locale = settings.locale
 				updatedUrl = updateQueryStringParameter(updatedUrl, key, locale.code)
 			})
@@ -205,6 +206,6 @@ export class LanguageChanger {
 			return
 		}
 
-		return {redirectUrl: url}
+		return { redirectUrl: url }
 	}
 }

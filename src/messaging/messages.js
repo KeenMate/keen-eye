@@ -1,7 +1,9 @@
-export const requestInfo = "get-response";
-export const settings = "get-settings";
-export const savePosition = "save-position";
-export const saveSettings = "save-settings";
+export const backgroudScriptMessages = {
+	getRequestInfo: "get-response",
+	getSettings: "get-settings",
+	getLocales: "get-locales",
+	setSettings: "set-settings"
+}
 
-export const settingsChanged = "settings-changed";
-export const newRequests = "new-requests";
+export const settingsChanged = "settings-changed"
+export const newRequests = "new-requests"

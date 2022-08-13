@@ -14,7 +14,9 @@
 			<div class="col-5">
 				<LocaleSelector
 					:locale="settings?.locale"
-					@change="saveLocale"
+					:locales="locales"
+					@input="saveLocale"
+					@remove-locale="onRemoveLocale"
 				/>
 			</div>
 
@@ -40,7 +42,9 @@
 					<label
 						class="form-check-label"
 						for="useFilters"
-					>Use filters</label>
+					>
+						Use filters</label
+					>
 				</div>
 			</div>
 			<div class="col-3">
@@ -98,13 +102,15 @@ import {
 	changeInject,
 	getRequestInfo,
 	saveDivPosition,
-	setSettings
+	setSettings,
+	getLocales
 } from "@/messaging/messagingProvider"
 import { onMessage } from "@/providers/chromeApiProvider"
-
 import HeaderRendererVue from "@/overlay/components/HeaderRenderer.vue"
 import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue"
 import LocaleSelector from "./components/LocaleSelector.vue"
+
+import "../assets/css/vue-multiselect-overrides.scss"
 
 export default {
 	components: {
@@ -123,7 +129,8 @@ export default {
 			useFilters: true,
 			headersFilterRules: null,
 			requestsFilterRules: null,
-			changesToSave: false
+			changesToSave: false,
+			locales: []
 		}
 	},
 	computed: {
@@ -181,6 +188,7 @@ export default {
 
 	async mounted() {
 		await this.loadRequestInfo()
+
 		this.createFilterObjects(this.settings)
 
 		AddDrag(this.$refs.dragg, containerName, this.settings.position, (pos) =>
@@ -192,6 +200,8 @@ export default {
 				this.requestInfo.requests = message.data
 			}
 		})
+
+		await this.loadLocales()
 	},
 	methods: {
 		async loadRequestInfo() {
@@ -227,6 +237,14 @@ export default {
 				() => (this.changesToSave = true)
 			)
 			this.requestsFilterRules = new FilterRules(settings.requestsRules)
+		},
+		async loadLocales() {
+			let locales = await getLocales()
+			console.log(locales)
+			this.locales = locales
+		},
+		onRemoveLocale() {
+			saveLocale(null)
 		}
 	}
 }

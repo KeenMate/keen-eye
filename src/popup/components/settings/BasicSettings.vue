@@ -57,6 +57,7 @@
 import Multiselect from "vue-multiselect"
 import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
 import LocaleStorage from "@/settings/locale-storage"
+import { sendSettingsChanged } from "@/messaging/messagingProvider"
 
 export default {
 	name: "BasicSettings",
@@ -96,11 +97,16 @@ export default {
 		async onRemoveCustomLocales() {
 			LocaleStorage.clearCustomLocales()
 			await this.loadLocales()
+
+			await sendSettingsChanged()
 		},
 		async onSetCustomLocales(customLocales) {
 			LocaleStorage.saveCustomLocales(customLocales)
 			this.locales = customLocales
+
+			await sendSettingsChanged()
 		},
+
 		onRemoveLocale() {
 			if (!this.settings) return
 

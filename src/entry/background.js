@@ -1,60 +1,60 @@
-import { settings, requestInfo, saveSettings } from "@/messaging/messages";
-import headersHandler from "@/requestInfo/requestsHandler";
-import { LanguageChanger } from "@/languages/languageChanger";
-import settingsProvider from "@/settings/settings-manager";
-import { sendSettingsChanged } from "@/messaging/messagingProvider";
-import { sendReply } from "@/messaging/scriptsComunicationHelper";
-import { onCommand, onMessage } from "@/providers/chromeApiProvider";
-import { RequestInfo } from "@/requestInfo/requestInfo";
-
-("use strict");
+import { backgroudScriptMessages as messages } from "@/messaging/messages"
+import headersHandler from "@/requestInfo/requestsHandler"
+import { LanguageChanger } from "@/languages/languageChanger"
+import settingsProvider from "@/settings/settings-manager"
+import { sendSettingsChanged } from "@/messaging/messagingProvider"
+import { sendReply } from "@/messaging/scriptsComunicationHelper"
+import { onCommand, onMessage } from "@/providers/chromeApiProvider"
+import { RequestInfo } from "@/requestInfo/requestInfo"
+import localeProvider from "@/settings/locale-storage"
+;("use strict")
 //setup providers
-var requestInfoStore = new RequestInfo();
+var requestInfoStore = new RequestInfo()
 
-headersHandler(requestInfoStore);
+headersHandler(requestInfoStore)
 
-new LanguageChanger(settingsProvider);
+new LanguageChanger(settingsProvider)
 
 onMessage(function (request, sender, sendResponse) {
-	console.log(request);
+	console.log(request)
 	//handle messsage based on type
 	switch (request?.type) {
-		case requestInfo:
+		case messages.getRequestInfo:
 			{
-				const { tabId } = request.data;
+				const { tabId } = request.data
 				sendReply(
 					true,
 					requestInfoStore.getInfoForTab(tabId ?? sender.tab.id),
 					sendResponse
-				);
+				)
 			}
-			break;
+			break
 
-		case settings:
+		case messages.getSettings:
 			settingsProvider.getMostSpecificSettings(sender.url).then((settings) => {
 				if (settings) {
-					sendReply(true, settings, sendResponse);
+					sendReply(true, settings, sendResponse)
 				} else {
-					sendReply(false, {}, sendResponse);
+					sendReply(false, {}, sendResponse)
 				}
-			});
-			break;
-		case saveSettings: {
-			console.log("saving settings");
+			})
+			break
+		case messages.setSettings: {
+			console.log("saving settings")
 
-			const { settings, level } = request.data;
+			const { settings, level } = request.data
 
 			settingsProvider
 				.setSettings(level, settings)
 				.then(() => {
 					if (
 						settings.headerRules !== undefined ||
-            settings.requestsRules !== undefined ||
-            settings.inject !== undefined
+						settings.requestsRules !== undefined ||
+						settings.inject !== undefined
 					) {
-						sendSettingsChanged();
+						sendSettingsChanged()
 					}
-					sendReply(true, undefined, sendResponse);
+					sendReply(true, undefined, sendResponse)
 				})
 				.catch((e) =>
 					sendReply(
@@ -62,18 +62,27 @@ onMessage(function (request, sender, sendResponse) {
 						{ reason: "error setting data", error: e },
 						sendResponse
 					)
-				);
-			return true;
+				)
+			return true
 		}
+
+		case messages.getLocales: {
+			localeProvider
+				.getLocales()
+				.then((locales) => sendReply(true, locales, sendResponse))
+
+			return true
+		}
+
 		default:
-			sendReply(false, {}, sendResponse);
-			break;
+			sendReply(false, {}, sendResponse)
+			break
 	}
-	return true;
-});
+	return true
+})
 
 onCommand((command) => {
 	if (command === "toggle-page-overlay") {
-		settingsProvider.toggleVisibility();
+		settingsProvider.toggleVisibility()
 	}
-});
+})

@@ -58,7 +58,7 @@ export default {
 	components: { FileInput, Multiselect },
 	props: {
 		locale: Object,
-		locales: Array
+		locales: { type: Array, default: () => [] }
 	},
 	emits: [
 		"input",
