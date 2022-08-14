@@ -113,11 +113,19 @@ export default {
 			this.updateSettings({ locale: null })
 		},
 		addHeaderRule(val) {
-			this.updateSettings({ headerRules: [...this.settings.headerRules, val] })
+			let oldRules = Array.isArray(this.settings.headerRules)
+				? this.settings.headerRules
+				: []
+
+			this.updateSettings({ headerRules: [...oldRules, val] })
 		},
 		addRequestRule(val) {
+			let oldRules = Array.isArray(this.settings.requestRules)
+				? this.settings.requestRules
+				: []
+
 			this.updateSettings({
-				requestsRules: [...this.settings.requestRules, val]
+				requestsRules: [...oldRules, val]
 			})
 		},
 		updateSettings(partialSettings) {

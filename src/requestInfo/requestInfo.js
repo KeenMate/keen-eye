@@ -1,10 +1,20 @@
 import { sendNewRequests } from "@/messaging/messagingProvider"
 import { sortHeaders } from "./requestInfoHelpers"
 
+import { throttle } from "lodash"
+import { sendNewRequestsMaxWait } from "@/overlay/overlayConstants"
+
 export class RequestInfo {
 	constructor() {
 		this.requestInfo = {}
+
+		// only send request max 1 per second to prevent performance issues
+		this.throttledSend = throttle(this.sendMessage, sendNewRequestsMaxWait)
 	}
+	sendMessage(tabId) {
+		sendNewRequests(this.requestInfo[tabId].requests, tabId)
+	}
+
 	ensureNotUndef(details) {
 		//ensure object for mainframe
 		this.requestInfo[details.tabId] = this.requestInfo[details.tabId] ?? {}
@@ -22,7 +32,7 @@ export class RequestInfo {
 
 		func()
 
-		sendNewRequests(this.requestInfo[details.tabId].requests, details.tabId)
+		this.throttledSend(details.tabId)
 	}
 
 	getInfoForTab(tabId) {
