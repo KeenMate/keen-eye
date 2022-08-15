@@ -9,10 +9,23 @@ export class RequestInfo {
 		this.requestInfo = {}
 
 		// only send request max 1 per second to prevent performance issues
-		this.throttledSend = throttle(this.sendMessage, sendNewRequestsMaxWait)
+		this.throttle = throttle(this.sendMessage, sendNewRequestsMaxWait)
+		this.tabsToMessage = new Set()
 	}
-	sendMessage(tabId) {
-		sendNewRequests(this.requestInfo[tabId].requests, tabId)
+	throttledSend(tabId) {
+		this.tabsToMessage.add(tabId)
+
+		this.throttle()
+	}
+
+	sendMessage() {
+		console.log(this.tabsToMessage)
+
+		this.tabsToMessage.forEach((tabId) => {
+			sendNewRequests(this.requestInfo[tabId].requests, tabId)
+		})
+
+		this.tabsToMessage.clear()
 	}
 
 	ensureNotUndef(details) {
