@@ -1,5 +1,21 @@
 <template>
 	<div class="btn-group">
+		<!--<button-->
+		<!--	class="btn-success btn form-control-sm btn-sm"-->
+		<!--	@click="saveSettings"-->
+		<!--&gt;-->
+		<!--	Save-->
+		<!--</button>-->
+
+		<HiddenFileInput @import="$emit('import-settings', $event)">
+			<i class="las la-file-import" />
+		</HiddenFileInput>
+		<button
+			class="btn-info btn form-control-sm btn-sm"
+			@click="$emit('start-download')"
+		>
+			<i class="las la-cloud-download-alt" />
+		</button>
 		<button
 			:class="[...buttonClasses, 'btn-info']"
 			title="Refreshes settings"
@@ -40,8 +56,11 @@
 </template>
 
 <script>
+import HiddenFileInput from "../HiddenFileInput.vue"
+
 export default {
 	name: "SettingsActions",
+	components: { HiddenFileInput },
 	props: {
 		overlayVisible: Boolean
 	},
@@ -50,7 +69,8 @@ export default {
 		"delete",
 		"toggle-injection",
 		"refresh-settings",
-		"start-download"
+		"start-download",
+		"import-settings"
 	],
 	data() {
 		return {

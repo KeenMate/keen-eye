@@ -39,13 +39,12 @@ function render(settings, level) {
 	document.body.appendChild(div)
 
 	//create shadow root
-	div.attachShadow({mode: "open"})
-	const appRoot = document.createElement("div")
+	div.attachShadow({ mode: "open" })
+	const appRoot = document.createElement("html")
 	div.shadowRoot.appendChild(appRoot)
 	addScriptsAndStyles(div)
 
-	app
-	Root.classList.add("bootstrap-body")
+	appRoot.classList.add("bootstrap-body")
 	createVueApp(appRoot, {
 		settings: settings,
 		level: level

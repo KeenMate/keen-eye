@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="popup-app"
+		class="popup-app card"
 		@keydown.esc.stop.prevent
 	>
 		<!-- Tabs navs -->
@@ -19,6 +19,7 @@
 					@refresh-settings="onRefreshSettings"
 					@reset-div="onResetDiv"
 					@start-download="startDownload"
+					@import-settings="importSettings"
 				/>
 			</div>
 
@@ -45,6 +46,7 @@ import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
 import {toRaw} from "@vue/reactivity"
 import {downloadJSON} from "@/helpers/file-helpers"
+import {parseTransformations} from "@/transformations/transformationHelper"
 
 export default {
 	name: "PopupApp",
@@ -161,7 +163,16 @@ export default {
 		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
 		// },
 		startDownload() {
-			downloadJSON(this.currentSettings, `KEEN-EYE-${this.currentTab}`)
+			downloadJSON(this.currentSettings, `(KEEN-EYE)-${this.currentTab}`)
+		},
+		async importSettings(settings) {
+			parseTransformations(settings)
+
+			console.log("parsed imported transformations", settings)
+
+			await this.saveSettings(settings)
+
+			this.currentSettings = settings
 		}
 	}
 }
