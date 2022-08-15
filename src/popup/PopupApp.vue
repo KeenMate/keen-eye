@@ -153,7 +153,7 @@ export default {
 				localeReplace: toRaw(settings.localeReplace)
 			})
 
-			sendSettingsChanged()
+			await sendSettingsChanged()
 
 			// if (settings.locale) {
 			// 	refreshCurrentPage()
@@ -161,7 +161,7 @@ export default {
 		},
 		// copySettings() {
 		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
-		// },
+		//},
 		startDownload() {
 			downloadJSON(this.currentSettings, `(KEEN-EYE)-${this.currentTab}`)
 		},

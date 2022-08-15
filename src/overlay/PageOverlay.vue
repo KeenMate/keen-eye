@@ -7,9 +7,9 @@
 					class="title user-select-none"
 					style="cursor: pointer"
 				>
-					{{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
+					{{pageName}}({{requestInfo?.response?.statusCode ?? "loading"}})
 				</h5>
-				<h6>{{ time ? time + "ms" : "refresh" }}</h6>
+				<h6>{{time ? time + "ms" : "refresh"}}</h6>
 			</div>
 			<div class="col-5">
 				<LocaleSelector
@@ -92,7 +92,7 @@
 
 <script>
 import {toRaw} from "@vue/reactivity"
-// import { logEverything} from "@/helpers/urlHelper";
+// import {logEverything} from "@/helpers/urlHelper";
 import {container} from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"

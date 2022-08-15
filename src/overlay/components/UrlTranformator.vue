@@ -2,7 +2,7 @@
 	<a
 		:href="link"
 		target="_blank"
-	>{{ headerValue }}</a>
+	>{{headerValue}}</a>
 </template>
 
 <script>

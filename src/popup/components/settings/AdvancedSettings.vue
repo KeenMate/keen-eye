@@ -21,7 +21,7 @@
 				name="headerName"
 				class="form-control"
 				@change="
-					updateLocaleReplaceSettings({ cookieKey: $event.target.value})
+					updateLocaleReplaceSettings({cookieKey: $event.target.value})
 				"
 			/>
 		</div>
@@ -34,7 +34,7 @@
 				name="queryStringKey"
 				class="form-control"
 				@change="
-					updateLocaleReplaceSettings({ queryStringKey: $event.target.value})
+					updateLocaleReplaceSettings({queryStringKey: $event.target.value})
 				"
 			/>
 		</div>
@@ -45,7 +45,7 @@
 				type="text"
 				name="urlRegex"
 				class="form-control"
-				@change="updateLocaleReplaceSettings({ urlRegex: $event.target.value})"
+				@change="updateLocaleReplaceSettings({urlRegex: $event.target.value})"
 			/>
 		</div>
 	</div>

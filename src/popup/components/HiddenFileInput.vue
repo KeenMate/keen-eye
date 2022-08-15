@@ -1,6 +1,6 @@
 <template>
 	<button
-		class="btn-info btn form-control-sm btn-sm"
+		class="btn btn-info"
 		@click="openFileDialog"
 	>
 		<slot />

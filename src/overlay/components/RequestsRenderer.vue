@@ -25,25 +25,25 @@
 						more
 					</td>
 					<td :class="`text-${getColor(request.statusCode)}`">
-						{{ request.statusCode ?? "..." }}
+						{{request.statusCode ?? "..."}}
 					</td>
 					<td>
-						{{ request.method }}
+						{{request.method}}
 					</td>
 					<td class="limited-width">
 						<Popper :content="request.url">
-							<b>{{ getPath(request.url) }}</b>
+							<b>{{getPath(request.url)}}</b>
 						</Popper>
 					</td>
 					<td>
-						{{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "..." }}
+						{{request.ttfb ? request.ttfb.toFixed(2) + "ms" : "..."}}
 					</td>
 					<td>
-						{{ request.took ? request.took.toFixed(2) + "ms" : "..." }}
+						{{request.took ? request.took.toFixed(2) + "ms" : "..."}}
 					</td>
 
 					<td>
-						{{ getOrigin(request.url) }}
+						{{getOrigin(request.url)}}
 					</td>
 				</tr>
 			</tbody>

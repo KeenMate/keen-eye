@@ -17,7 +17,7 @@
 				:multiple="true"
 				:close-on-select="false"
 				@tag="addHeaderRule"
-				@update:model-value="updateSettings({ headerRules: $event})"
+				@update:model-value="updateSettings({headerRules: $event})"
 			/>
 		</div>
 
@@ -38,15 +38,15 @@
 				:show-labels="false"
 				:close-on-select="false"
 				@tag="addRequestRule"
-				@update:model-value="updateSettings({ requestsRules: $event})"
+				@update:model-value="updateSettings({requestsRules: $event})"
 			/>
 		</div>
 
 		<LocaleInput
 			:locale="settings?.locale"
-			:locales="locales"
+			:locales="settings?.customLocales"
 			:is-custom="isCustomLocales"
-			@input="updateSettings({ locale: $event})"
+			@input="updateSettings({locale: $event})"
 			@remove-locale="onRemoveLocale"
 			@set-custom-locales="onSetCustomLocales"
 			@remove-custom-locales="onRemoveCustomLocales"
@@ -77,7 +77,6 @@ export default {
 	emits: ["update-settings"],
 	data() {
 		return {
-			locales: [],
 			isCustomLocales: false
 		}
 	},
@@ -100,16 +99,11 @@ export default {
 		async onRemoveCustomLocales() {
 			LocaleStorage.clearCustomLocales()
 			await this.loadLocales()
-
-			await sendSettingsChanged()
 		},
 		async onSetCustomLocales(customLocales) {
-			LocaleStorage.saveCustomLocales(customLocales)
+			this.updateSettings({customLocales: customLocales})
 			this.locales = customLocales
-
-			await sendSettingsChanged()
 		},
-
 		onRemoveLocale() {
 			if (!this.settings) return
 
@@ -132,7 +126,7 @@ export default {
 			})
 		},
 		updateSettings(partialSettings) {
-			console.log("update settings", partialSettings)
+			// console.log("update settings", partialSettings)
 			this.$emit("update-settings", {
 				...(this.settings || {}),
 				...partialSettings

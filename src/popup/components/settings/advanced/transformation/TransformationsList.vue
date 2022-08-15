@@ -8,7 +8,7 @@
 				pill
 				@click="$emit('edit-transformation', transformation)"
 			>
-				{{ transformation.headerRule }} |
+				{{transformation.headerRule}} |
 				<i
 					class="las la-trash"
 					@click.stop="$emit('delete-transformation', transformation)"

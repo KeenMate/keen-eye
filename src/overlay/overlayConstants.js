@@ -13,7 +13,7 @@ export const resetCss = `
 .complete-reset:active,
 .complete-reset:visited,
 .complete-reset:link {
-  all: initial;
+	all: initial;
 }
 `
 
@@ -73,14 +73,14 @@ user-select: text;
 --bs-body-color-rgb: 33, 37, 41;
 --bs-body-bg-rgb: 255, 255, 255;
 --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto,
-  "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	"Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif,
+	"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
-  "Liberation Mono", "Courier New", monospace;
+	"Liberation Mono", "Courier New", monospace;
 --bs-gradient: linear-gradient(
-  180deg,
-  rgba(255, 255, 255, 0.15),
-  rgba(255, 255, 255, 0)
+	180deg,
+	rgba(255, 255, 255, 0.15),
+	rgba(255, 255, 255, 0)
 );
 --bs-body-font-family: var(--bs-font-sans-serif);
 --bs-body-font-size: 1rem;
@@ -104,6 +104,6 @@ user-select: text;
 --bs-code-color: #d63384;
 --bs-highlight-bg: #fff3cd;}
 td {
-  white-space: nowrap;
+	white-space: nowrap;
 }
 `

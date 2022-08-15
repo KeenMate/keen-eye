@@ -7,11 +7,15 @@
 		<!--	Save-->
 		<!--</button>-->
 
-		<HiddenFileInput @import="$emit('import-settings', $event)">
+		<HiddenFileInput
+			title="Imports settings from file"
+			@import="$emit('import-settings', $event)"
+		>
 			<i class="las la-file-import" />
 		</HiddenFileInput>
 		<button
-			class="btn-info btn form-control-sm btn-sm"
+			:class="[...buttonClasses, 'btn-info']"
+			title="Exports current settings"
 			@click="$emit('start-download')"
 		>
 			<i class="las la-cloud-download-alt" />

@@ -7,7 +7,7 @@
 				:is-active="currentSettingsTab === tab.code"
 				@click="currentSettingsTab = tab.code"
 			>
-				{{ tab.title }}
+				{{tab.title}}
 			</TabItem>
 		</Tabs>
 

@@ -1,48 +1,48 @@
 {
-  "manifest_version": 2,
-  "name": "keen-eye",
-  "description": "header explorer",
-  "version": "0.0.1",
-  "background": {
-    "scripts": ["/background.js"],
-    "persistent": true
- },
-  "browser_action": {
-    "default_popup": "popup.html"
- },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["/content.js"],
-      "run_at": "document_end"
-   }
-  ],
-  "permissions": [
-    "webRequest",
-    "webRequestBlocking",
-    "*://*/*",
-    "tabs",
-    "activeTab",
-    "storage",
-    "webRequest",
-    "webRequestBlocking",
-    "<all_urls>"
-  ],
-  "options_page": "options.html",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "web_accessible_resources": [
-    "reset-script.css",
-    "css/options.css",
-    "css/content.css",
-    "/css/content.css",
+	"manifest_version": 2,
+	"name": "keen-eye",
+	"description": "header explorer",
+	"version": "0.0.1",
+	"background": {
+		"scripts": ["/background.js"],
+		"persistent": true
+},
+	"browser_action": {
+		"default_popup": "popup.html"
+},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["/content.js"],
+			"run_at": "document_end"
+	}
+	],
+	"permissions": [
+		"webRequest",
+		"webRequestBlocking",
+		"*://*/*",
+		"tabs",
+		"activeTab",
+		"storage",
+		"webRequest",
+		"webRequestBlocking",
+		"<all_urls>"
+	],
+	"options_page": "options.html",
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"web_accessible_resources": [
+		"reset-script.css",
+		"css/options.css",
+		"css/content.css",
+		"/css/content.css",
 		"overrides.css",
-    "*.css",
-    "css/*.css"
-  ],
-  "commands": {
-    "toggle-page-overlay": {
-      "suggested_key": { "default": "Ctrl+Shift+K"},
-      "description": "Toggle page overlay"
-   }
- }
+		"*.css",
+		"css/*.css"
+	],
+	"commands": {
+		"toggle-page-overlay": {
+			"suggested_key": {"default": "Ctrl+Shift+K"},
+			"description": "Toggle page overlay"
+	}
+}
 }
