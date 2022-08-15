@@ -20,7 +20,7 @@ export class RequestInfo {
 		this.throttle()
 	}
 
-	sendMessage() {
+	async sendMessage() {
 		this.tabsToMessage.forEach((tabId) => {
 			sendNewRequests(this.requestInfo[tabId].requests, tabId)
 		})

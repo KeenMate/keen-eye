@@ -6,6 +6,10 @@
 		<!--&gt;-->
 		<!--	Save-->
 		<!--</button>-->
+
+		<HiddenFileInput @import="$emit('import-settings', $event)">
+			import
+		</HiddenFileInput>
 		<button
 			class="btn-info btn form-control-sm btn-sm"
 			@click="$emit('start-download')"
@@ -48,8 +52,11 @@
 </template>
 
 <script>
+import HiddenFileInput from "../HiddenFileInput.vue"
+
 export default {
 	name: "SettingsActions",
+	components: { HiddenFileInput },
 	props: {
 		overlayPosition: Object,
 		overlayVisible: Boolean
@@ -59,7 +66,8 @@ export default {
 		"delete",
 		"toggle-injection",
 		"refresh-settings",
-		"start-download"
+		"start-download",
+		"import-settings"
 	],
 	methods: {
 		onDeleteSettings() {
