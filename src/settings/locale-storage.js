@@ -1,5 +1,4 @@
 import StorageProvider from "@/settings/storageProvider"
-import languages from "@/languages/languages"
 
 const customLocalesKey = "CustomLocales"
 
@@ -13,9 +12,7 @@ export class LocaleStorage {
 	}
 
 	async getLocales() {
-		const customLanguages = await this.storage.getItem(customLocalesKey)
-
-		return customLanguages || languages
+		return await this.storage.getItem(customLocalesKey)
 	}
 
 	clearCustomLocales() {

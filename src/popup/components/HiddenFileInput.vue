@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import { readTextFile } from "@/helpers/file-helpers"
-import { getEmptySettings } from "@/settings/settingConstants"
+import {readTextFile} from "@/helpers/file-helpers"
+import {getEmptySettings} from "@/settings/settingConstants"
 
 export default {
 	emits: ["import"],
@@ -28,7 +28,7 @@ export default {
 				const content = await readTextFile(file)
 				const parsedContent = JSON.parse(content)
 
-				const validSettings = { ...getEmptySettings(), ...parsedContent }
+				const validSettings = {...getEmptySettings(), ...parsedContent}
 
 				this.$emit("import", validSettings)
 			} catch (error) {

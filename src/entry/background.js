@@ -7,7 +7,9 @@ import {sendReply} from "@/messaging/scriptsComunicationHelper"
 import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
 import localeProvider from "@/settings/locale-storage"
-;("use strict")
+import languages from "@/languages/languages"
+
+("use strict")
 //setup providers
 var requestInfoStore = new RequestInfo()
 
@@ -68,7 +70,7 @@ onMessage(function (request, sender, sendResponse) {
 		case messages.getLocales: {
 			localeProvider
 				.getLocales()
-				.then((locales) => sendReply(true, locales, sendResponse))
+				.then((locales) => sendReply(true, locales || languages, sendResponse))
 
 			return true
 		}

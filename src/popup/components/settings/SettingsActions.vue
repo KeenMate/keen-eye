@@ -28,8 +28,14 @@
 			title="Toggles visibility of page overlay"
 			@click="$emit('toggle-injection')"
 		>
-			<i v-if="overlayVisible" class="las la-eye-slash" />
-			<i v-else class="las la-eye" />
+			<i
+				v-if="overlayVisible"
+				class="las la-eye-slash"
+			/>
+			<i
+				v-else
+				class="las la-eye"
+			/>
 		</button>
 		<button
 			:class="[...buttonClasses, 'btn-danger']"
@@ -60,7 +66,7 @@ import HiddenFileInput from "../HiddenFileInput.vue"
 
 export default {
 	name: "SettingsActions",
-	components: { HiddenFileInput },
+	components: {HiddenFileInput},
 	props: {
 		overlayVisible: Boolean
 	},

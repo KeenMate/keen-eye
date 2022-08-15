@@ -45,6 +45,7 @@
 		<LocaleInput
 			:locale="settings?.locale"
 			:locales="locales"
+			:is-custom="isCustomLocales"
 			@input="updateSettings({ locale: $event})"
 			@remove-locale="onRemoveLocale"
 			@set-custom-locales="onSetCustomLocales"
@@ -58,6 +59,7 @@ import Multiselect from "vue-multiselect"
 import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
 import LocaleStorage from "@/settings/locale-storage"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
+import languages from "@/languages/languages"
 
 export default {
 	name: "BasicSettings",
@@ -75,7 +77,8 @@ export default {
 	emits: ["update-settings"],
 	data() {
 		return {
-			locales: []
+			locales: [],
+			isCustomLocales: false
 		}
 	},
 	computed: {
@@ -136,7 +139,10 @@ export default {
 			})
 		},
 		async loadLocales() {
-			this.locales = await LocaleStorage.getLocales()
+			const locales = await LocaleStorage.getLocales()
+
+			this.locales = locales || languages
+			this.isCustomLocales = !!locales
 		}
 	}
 }

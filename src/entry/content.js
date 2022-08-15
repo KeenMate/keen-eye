@@ -39,7 +39,7 @@ function render(settings, level) {
 	document.body.appendChild(div)
 
 	//create shadow root
-	div.attachShadow({ mode: "open" })
+	div.attachShadow({mode: "open"})
 	const appRoot = document.createElement("html")
 	div.shadowRoot.appendChild(appRoot)
 	addScriptsAndStyles(div)
