@@ -26,9 +26,9 @@
 </template>
 <script>
 import HeaderRenderer from "./HeaderRenderer.vue";
-import { closeModal } from "jenesius-vue-modal";
+import {closeModal} from "jenesius-vue-modal";
 export default {
-	components: { HeaderRenderer },
+	components: {HeaderRenderer},
 	props: {
 		request: Object,
 	},

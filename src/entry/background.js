@@ -1,11 +1,11 @@
-import { backgroudScriptMessages as messages } from "@/messaging/messages"
-import { RequestsHandler } from "@/requestInfo/requestsHandler"
-import { LanguageChanger } from "@/languages/languageChanger"
+import {backgroudScriptMessages as messages} from "@/messaging/messages"
+import {RequestsHandler} from "@/requestInfo/requestsHandler"
+import {LanguageChanger} from "@/languages/languageChanger"
 import settingsProvider from "@/settings/settings-manager"
-import { sendSettingsChanged } from "@/messaging/messagingProvider"
-import { sendReply } from "@/messaging/scriptsComunicationHelper"
-import { onCommand, onMessage } from "@/providers/chromeApiProvider"
-import { RequestInfo } from "@/requestInfo/requestInfo"
+import {sendSettingsChanged} from "@/messaging/messagingProvider"
+import {sendReply} from "@/messaging/scriptsComunicationHelper"
+import {onCommand, onMessage} from "@/providers/chromeApiProvider"
+import {RequestInfo} from "@/requestInfo/requestInfo"
 import localeProvider from "@/settings/locale-storage"
 ;("use strict")
 //setup providers
@@ -21,7 +21,7 @@ onMessage(function (request, sender, sendResponse) {
 	switch (request?.type) {
 		case messages.getRequestInfo:
 			{
-				const { tabId } = request.data
+				const {tabId} = request.data
 
 				let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
 
@@ -41,7 +41,7 @@ onMessage(function (request, sender, sendResponse) {
 		case messages.setSettings: {
 			console.log("saving settings")
 
-			const { settings, level } = request.data
+			const {settings, level} = request.data
 
 			settingsProvider
 				.setSettings(level, settings)
@@ -58,7 +58,7 @@ onMessage(function (request, sender, sendResponse) {
 				.catch((e) =>
 					sendReply(
 						false,
-						{ reason: "error setting data", error: e },
+						{reason: "error setting data", error: e},
 						sendResponse
 					)
 				)

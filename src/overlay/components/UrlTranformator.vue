@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { UrlTransformation } from "@/transformations/urlTransformation";
+import {UrlTransformation} from "@/transformations/urlTransformation";
 
 export default {
 	name: "UrlTransformator",

@@ -1,8 +1,8 @@
-import { throttle } from "lodash"
+import {throttle} from "lodash"
 
-import { sendNewRequests } from "@/messaging/messagingProvider"
-import { sortHeaders } from "./requestInfoHelpers"
-import { sendNewRequestsMaxWait } from "@/overlay/overlayConstants"
+import {sendNewRequests} from "@/messaging/messagingProvider"
+import {sortHeaders} from "./requestInfoHelpers"
+import {sendNewRequestsMaxWait} from "@/overlay/overlayConstants"
 
 export class RequestInfo {
 	constructor() {
@@ -55,7 +55,7 @@ export class RequestInfo {
 
 	//mainframe
 	mainFrameSend(details) {
-		this.requestInfo[details.tabId] = { request: details, requests: {} }
+		this.requestInfo[details.tabId] = {request: details, requests: {}}
 	}
 	mainFrameReceived(details) {
 		this.ensureNotUndef(details)

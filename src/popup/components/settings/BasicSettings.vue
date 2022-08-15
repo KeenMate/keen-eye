@@ -17,7 +17,7 @@
 				:multiple="true"
 				:close-on-select="false"
 				@tag="addHeaderRule"
-				@update:model-value="updateSettings({ headerRules: $event })"
+				@update:model-value="updateSettings({ headerRules: $event})"
 			/>
 		</div>
 
@@ -38,14 +38,14 @@
 				:show-labels="false"
 				:close-on-select="false"
 				@tag="addRequestRule"
-				@update:model-value="updateSettings({ requestsRules: $event })"
+				@update:model-value="updateSettings({ requestsRules: $event})"
 			/>
 		</div>
 
 		<LocaleInput
 			:locale="settings?.locale"
 			:locales="locales"
-			@input="updateSettings({ locale: $event })"
+			@input="updateSettings({ locale: $event})"
 			@remove-locale="onRemoveLocale"
 			@set-custom-locales="onSetCustomLocales"
 			@remove-custom-locales="onRemoveCustomLocales"
@@ -57,11 +57,11 @@
 import Multiselect from "vue-multiselect"
 import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
 import LocaleStorage from "@/settings/locale-storage"
-import { sendSettingsChanged } from "@/messaging/messagingProvider"
+import {sendSettingsChanged} from "@/messaging/messagingProvider"
 
 export default {
 	name: "BasicSettings",
-	components: { LocaleInput, Multiselect },
+	components: {LocaleInput, Multiselect},
 	props: {
 		settings: {
 			type: Object,
@@ -110,14 +110,14 @@ export default {
 		onRemoveLocale() {
 			if (!this.settings) return
 
-			this.updateSettings({ locale: null })
+			this.updateSettings({locale: null})
 		},
 		addHeaderRule(val) {
 			let oldRules = Array.isArray(this.settings.headerRules)
 				? this.settings.headerRules
 				: []
 
-			this.updateSettings({ headerRules: [...oldRules, val] })
+			this.updateSettings({headerRules: [...oldRules, val]})
 		},
 		addRequestRule(val) {
 			let oldRules = Array.isArray(this.settings.requestRules)

@@ -1,5 +1,5 @@
 <template>
-	<Tabs class="mb-3">
+	<Tabs>
 		<ScopeItem
 			v-for="scope in PopupScopes"
 			:key="scope.code"

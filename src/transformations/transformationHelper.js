@@ -1,6 +1,6 @@
-import { types } from "@/transformations/transformationConstants"
-import { BaseTransformation } from "@/transformations/baseTransformation"
-import { UrlTransformation } from "@/transformations/urlTransformation"
+import {types} from "@/transformations/transformationConstants"
+import {BaseTransformation} from "@/transformations/baseTransformation"
+import {UrlTransformation} from "@/transformations/urlTransformation"
 
 export function parseTransformation(transformation) {
 	switch (transformation?.type) {

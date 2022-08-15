@@ -21,7 +21,7 @@
 				name="headerName"
 				class="form-control"
 				@change="
-					updateLocaleReplaceSettings({ cookieKey: $event.target.value })
+					updateLocaleReplaceSettings({ cookieKey: $event.target.value})
 				"
 			/>
 		</div>
@@ -34,7 +34,7 @@
 				name="queryStringKey"
 				class="form-control"
 				@change="
-					updateLocaleReplaceSettings({ queryStringKey: $event.target.value })
+					updateLocaleReplaceSettings({ queryStringKey: $event.target.value})
 				"
 			/>
 		</div>
@@ -45,7 +45,7 @@
 				type="text"
 				name="urlRegex"
 				class="form-control"
-				@change="updateLocaleReplaceSettings({ urlRegex: $event.target.value })"
+				@change="updateLocaleReplaceSettings({ urlRegex: $event.target.value})"
 			/>
 		</div>
 	</div>
@@ -56,7 +56,7 @@ import Transformations from "@/popup/components/settings/advanced/transformation
 
 export default {
 	name: "AdvancedSettings",
-	components: { Transformations },
+	components: {Transformations},
 	props: {
 		settings: {
 			type: Object,
@@ -109,8 +109,15 @@ export default {
 			})
 		},
 		updateSettings(partial) {
-			this.$emit("update-settings", { ...this.settings, ...partial })
+			this.$emit("update-settings", {...this.settings, ...partial})
 		}
 	}
 }
 </script>
+
+<!--<style lang="scss">-->
+<!--.advanced-settings {-->
+<!--	height: 100%;-->
+<!--	overflow: auto;-->
+<!--}-->
+<!--</style>-->

@@ -1,4 +1,4 @@
-import { createApp } from "vue"
+import {createApp} from "vue"
 import App from "@/options/options.vue"
 
-createApp(App).mount("#app")
+createApp(App).mount(document.body)

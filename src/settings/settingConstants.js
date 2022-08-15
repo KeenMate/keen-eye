@@ -27,7 +27,7 @@ export function getEmptySettings() {
 		headerRules: [],
 		requestsRules: [],
 		locale: null,
-		position: { x: 0, y: 0 },
+		position: {x: 0, y: 0},
 		transformations: [],
 		localeReplace: {
 			cookieKey: null
@@ -44,11 +44,11 @@ export function getPopupScope(code) {
 // 	origin: "origin",
 // 	domain: "domain",
 // 	global: "global"
-// }
+//}
 //
 // export const colors = {
 // 	[Levels.global]: "LightBlue",
 // 	[Levels.domain]: "LightGreen",
 // 	[Levels.origin]: "LightCoral",
 // 	[Levels.page]: "LightYellow"
-// }
+//}

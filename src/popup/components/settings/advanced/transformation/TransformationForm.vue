@@ -27,12 +27,8 @@
 				type="submit"
 				class="btn btn-success btn-sm"
 			>
-				<template v-if="isNew">
-					Add
-				</template>
-				<template v-else>
-					Save
-				</template>
+				<i v-if="isNew" class="las la-plus-square" />
+				<i v-else class="las la-save" />
 			</button>
 		</div>
 

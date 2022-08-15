@@ -22,14 +22,19 @@
 					class="btn btn-danger"
 					@click="$emit('remove-locale')"
 				>
-					Remove
+					<i class="las la-trash" />
 				</button>
 			</div>
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label for="custom-locales-file"> Custom locales </label>
+		<label for="custom-locales-file">
+			Custom locales
+			<template v-if="isCustom">
+				(Uploaded {{locales?.length}})
+			</template>
+		</label>
 		<div class="d-flex justify-content-between small-gaps">
 			<FileInput
 				id="custom-locales-file"
@@ -38,11 +43,12 @@
 				@change="onLocaleFileSelected"
 			/>
 			<button
+				v-if="isCustom"
 				class="btn btn-danger"
 				title="Removes custom locales to see default ones"
 				@click="$emit('remove-custom-locales')"
 			>
-				Remove
+				<i class="las la-trash" />
 			</button>
 		</div>
 	</div>
@@ -50,15 +56,16 @@
 
 <script>
 import Multiselect from "vue-multiselect"
-import { readTextFile } from "@/helpers/file-helpers"
+import {readTextFile} from "@/helpers/file-helpers"
 import FileInput from "@/components/form/FileInput"
 
 export default {
 	name: "LocaleInput",
-	components: { FileInput, Multiselect },
+	components: {FileInput, Multiselect},
 	props: {
 		locale: Object,
-		locales: { type: Array, default: () => [] }
+		locales: {type: Array, default: () => []},
+		isCustom: Boolean
 	},
 	emits: [
 		"input",

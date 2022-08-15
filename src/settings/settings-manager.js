@@ -1,13 +1,13 @@
-import { getEmptySettings } from "@/settings/settingConstants"
+import {getEmptySettings} from "@/settings/settingConstants"
 import {
 	getCurrentTabUrl,
 	getCurrentUrlParts,
 	getUrlParts
 } from "@/helpers/urlHelper"
-import { parseTransformations } from "@/transformations/transformationHelper"
-import { sendSettingsChanged } from "@/messaging/messagingProvider"
-import { StorageProvider } from "./storageProvider"
-import { CacheStorageProvider } from "./cacheStorageProvider"
+import {parseTransformations} from "@/transformations/transformationHelper"
+import {sendSettingsChanged} from "@/messaging/messagingProvider"
+import {StorageProvider} from "./storageProvider"
+import {CacheStorageProvider} from "./cacheStorageProvider"
 
 export class SettingsManager {
 	constructor(asyncSource, syncSource) {
@@ -98,22 +98,22 @@ export class SettingsManager {
 		console.log("Getting most specific settings for url", url)
 
 		if ((settings = await this.getSettings("page", url))) {
-			return { settings, level: "page" }
+			return {settings, level: "page"}
 		}
 
 		if ((settings = await this.getSettings("origin", url))) {
-			return { settings, level: "origin" }
+			return {settings, level: "origin"}
 		}
 
 		if ((settings = await this.getSettings("domain", url))) {
-			return { settings, level: "domain" }
+			return {settings, level: "domain"}
 		}
 
 		if ((settings = await this.getSettings("global", url))) {
-			return { settings, level: "global" }
+			return {settings, level: "global"}
 		}
 
-		return { settings: { inject: false }, level: "global" }
+		return {settings: {inject: false}, level: "global"}
 	}
 
 	/**
@@ -128,31 +128,31 @@ export class SettingsManager {
 		url = new URL(url)
 
 		if ((settings = this.getSettingsSync("page", url))) {
-			return { settings, level: "page" }
+			return {settings, level: "page"}
 		}
 
 		if ((settings = this.getSettingsSync("origin", url))) {
-			return { settings, level: "origin" }
+			return {settings, level: "origin"}
 		}
 
 		if ((settings = this.getSettingsSync("domain", url))) {
-			return { settings, level: "domain" }
+			return {settings, level: "domain"}
 		}
 
 		if ((settings = this.getSettingsSync("global", url)) !== undefined) {
-			return { settings, level: "global" }
+			return {settings, level: "global"}
 		}
 
-		return { settings: { inject: false }, level: "global" }
+		return {settings: {inject: false}, level: "global"}
 	}
 
 	async toggleVisibility() {
 		let {
 			level,
-			settings: { inject }
+			settings: {inject}
 		} = await this.getMostSpecificSettings()
 
-		await this.setSettings(level, { inject: !inject })
+		await this.setSettings(level, {inject: !inject})
 
 		sendSettingsChanged()
 	}

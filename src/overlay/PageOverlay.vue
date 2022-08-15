@@ -91,13 +91,13 @@
 </template>
 
 <script>
-import { toRaw } from "@vue/reactivity"
-// import { logEverything } from "@/helpers/urlHelper";
-import { container } from "jenesius-vue-modal"
+import {toRaw} from "@vue/reactivity"
+// import { logEverything} from "@/helpers/urlHelper";
+import {container} from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
-import { contentScriptMessages as messages } from "@/messaging/messages"
-import { containerName } from "@/overlay/overlayConstants"
+import {contentScriptMessages as messages} from "@/messaging/messages"
+import {containerName} from "@/overlay/overlayConstants"
 import {
 	changeInject,
 	getRequestInfo,
@@ -110,7 +110,7 @@ import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue"
 import LocaleSelector from "./components/LocaleSelector.vue"
 
 import "../assets/css/vue-multiselect-overrides.scss"
-import { onMessageReceived } from "@/messaging/scriptsComunicationHelper"
+import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 
 export default {
 	components: {

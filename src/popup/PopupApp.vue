@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="popup-app card"
+		class="popup-app"
 		@keydown.esc.stop.prevent
 	>
 		<!-- Tabs navs -->
@@ -9,26 +9,23 @@
 			@change-tab="changeTab"
 		/>
 		<!-- Tabs navs -->
-		<div class="mx-2 mb-2">
-			<div class="row justify-content-between">
-				<div class="col-auto">
-					<h3>Settings</h3>
-				</div>
-				<div class="col-auto">
-					<SettingsActions
-						:current-settings="currentSettings"
-						@delete="onDeleteSettings"
-						@toggle-injection="toggleInjection"
-						@refresh-settings="onRefreshSettings"
-						@reset-div="onResetDiv"
-						@start-download="startDownload"
-					/>
-				</div>
+		<div class="popup-content">
+			<div class="container d-flex justify-content-between">
+				<h3>Settings</h3>
+				<SettingsActions
+					:current-settings="currentSettings"
+					@delete="onDeleteSettings"
+					@toggle-injection="toggleInjection"
+					@refresh-settings="onRefreshSettings"
+					@reset-div="onResetDiv"
+					@start-download="startDownload"
+				/>
 			</div>
 
 			<Settings
 				:current-settings="currentSettings"
 				:request-info="requestInfo"
+				class="expand-height"
 				@update-settings="updateCurrentSettings($event, true)"
 			/>
 		</div>
@@ -36,20 +33,18 @@
 </template>
 
 <script>
-import { refreshCurrentPage } from "@/helpers/helpers"
-import { getEmptySettings } from "@/settings/settingConstants"
-import { copyTextToClipboard } from "@/helpers/clipboardHelper"
+import {getEmptySettings} from "@/settings/settingConstants"
 import settingsProvider from "@/settings/settings-manager"
 import {
 	getRequestInfo,
 	sendSettingsChanged
 } from "@/messaging/messagingProvider"
-import { getCurrentTab } from "@/providers/chromeApiProvider"
+import {getCurrentTab} from "@/providers/chromeApiProvider"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
-import { toRaw } from "@vue/reactivity"
-import { downloadJSON } from "@/helpers/file-helpers"
+import {toRaw} from "@vue/reactivity"
+import {downloadJSON} from "@/helpers/file-helpers"
 
 export default {
 	name: "PopupApp",
@@ -74,7 +69,7 @@ export default {
 	methods: {
 		onResetDiv() {
 			this.updateCurrentSettings({
-				position: { x: 0, y: 0 }
+				position: {x: 0, y: 0}
 			})
 		},
 		async onDeleteSettings() {
@@ -102,7 +97,7 @@ export default {
 			return await settingsProvider.deleteSettings(this.currentTab)
 		},
 		async loadSettings() {
-			const { settings: currentSettings, level: selectedTab } =
+			const {settings: currentSettings, level: selectedTab} =
 				await settingsProvider.getMostSpecificSettings()
 
 			this.currentSettings = currentSettings
@@ -131,7 +126,7 @@ export default {
 		// 	await settingsProvider.deleteSettings(this.currentTab)
 		//
 		// 	await this.loadSettings()
-		// },
+		//},
 		async updateCurrentSettings(newSettings, notPartial = false) {
 			const settings = (notPartial && newSettings) || {
 				...this.currentSettings,
@@ -160,21 +155,36 @@ export default {
 
 			// if (settings.locale) {
 			// 	refreshCurrentPage()
-			// }
+			//}
 		},
-		copySettings() {
-			copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
-		},
+		// copySettings() {
+		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
+		// },
 		startDownload() {
-			downloadJSON(this.currentSettings, `(KEEN-EYE)-${this.currentTab}`)
+			downloadJSON(this.currentSettings, `KEEN-EYE-${this.currentTab}`)
 		}
 	}
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .popup-app {
-	min-width: 500px;
-	min-height: 600px;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.popup-content {
+		flex: 1;
+
+		display: flex;
+		flex-direction: column;
+
+		margin-top: 1em;
+		//overflow: auto;
+
+		.expand-height {
+			flex: 1
+		}
+	}
 }
 </style>

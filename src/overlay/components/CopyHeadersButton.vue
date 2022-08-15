@@ -7,7 +7,7 @@
 	</button>
 </template>
 <script>
-import { copyTextToClipboard } from "@/helpers/clipboardHelper";
+import {copyTextToClipboard} from "@/helpers/clipboardHelper";
 
 export default {
 	props: {

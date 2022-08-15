@@ -8,8 +8,11 @@ module.exports = {
 	rules: {
 		// override/add rules settings here, such as:
 		// 'vue/no-unused-vars': 'error'
+		"object-curly-spacing": ["error", "never"],
+		"array-bracket-spacing": ["error", "never"],
+		"computed-property-spacing": ["error", "never"],
 		"vue/multi-word-component-names": "off",
-		indent: ["error", "tab", { SwitchCase: 1 }],
+		indent: ["error", "tab", {SwitchCase: 1}],
 		"vue/html-indent": ["error", "tab"],
 		"vue/html-self-closing": [
 			"error",

@@ -1,5 +1,5 @@
 <template>
-	<!-- {{ requests }} -->
+	<!-- {{requests}} -->
 	<div>
 		<table class="table table-striped table-sm">
 			<thead class="table-dark">
@@ -51,42 +51,43 @@
 	</div>
 </template>
 <script>
-import { copyTextToClipboard } from "@/helpers/clipboardHelper";
-import { getStatusCodeColor } from "@/helpers/helpers";
-import { openModal } from "jenesius-vue-modal";
-import RequestInfoModalVue from "./RequestInfoModal.vue";
+import {copyTextToClipboard} from "@/helpers/clipboardHelper"
+import {getStatusCodeColor} from "@/helpers/helpers"
+import {openModal} from "jenesius-vue-modal"
+import RequestInfoModalVue from "./RequestInfoModal.vue"
+
 export default {
 	props: {
-		requests: Object,
+		requests: Object
 	},
 	data() {
 		return {
 			showModal: false,
 			modalRequest: {},
-			modalTitle: "Modal Title",
-		};
+			modalTitle: "Modal Title"
+		}
 	},
 	methods: {
 		copy(name, value) {
-			copyTextToClipboard(`${name}: ${value}`);
+			copyTextToClipboard(`${name}: ${value}`)
 		},
 		getPath(urlString) {
-			return new URL(urlString).pathname;
+			return new URL(urlString).pathname
 		},
 		getOrigin(urlString) {
-			return new URL(urlString).host;
+			return new URL(urlString).host
 		},
 		getName(urlString) {
-			return (new URL(urlString).pathname ?? "").split("/").pop();
+			return (new URL(urlString).pathname ?? "").split("/").pop()
 		},
 		getColor(status) {
-			return getStatusCodeColor(status);
+			return getStatusCodeColor(status)
 		},
 		openRequestModal(request) {
 			if (request.took) {
-				openModal(RequestInfoModalVue, { request });
+				openModal(RequestInfoModalVue, {request})
 			}
-		},
-	},
-};
+		}
+	}
+}
 </script>

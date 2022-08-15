@@ -7,7 +7,7 @@ import {
 	RemoveOnSendHeadersRemove,
 	onTabRemoved
 } from "../providers/chromeApiProvider"
-import { fetchFilters, mainFrameFilters, extra } from "./requestInfoConstants"
+import {fetchFilters, mainFrameFilters, extra} from "./requestInfoConstants"
 
 export class RequestsHandler {
 	constructor(requestInfoStore) {

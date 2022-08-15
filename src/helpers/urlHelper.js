@@ -1,5 +1,5 @@
-import { getCurrentTab } from "@/providers/chromeApiProvider"
-import { parse } from "tldts"
+import {getCurrentTab} from "@/providers/chromeApiProvider"
+import {parse} from "tldts"
 
 /**
  * gets domain from URL object based on tldts

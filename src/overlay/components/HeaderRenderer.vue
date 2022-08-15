@@ -20,7 +20,7 @@
 					class="autowidth"
 				>
 					<span
-						:class="{ 'text-warning': starSelected }"
+						:class="{'text-warning': starSelected}"
 						@click="toggleAll"
 					>EYE</span>
 				</th>
@@ -40,7 +40,7 @@
 					class="autowidth"
 				>
 					<span
-						:class="{ 'text-warning': headersFilterRules.exists(header.name) }"
+						:class="{'text-warning': headersFilterRules.exists(header.name)}"
 						@click="toggleRule(header.name)"
 					>eye</span>
 				</td>

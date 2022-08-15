@@ -1,5 +1,5 @@
-import { onStorageChange } from "@/providers/chromeApiProvider"
-import { StorageProvider } from "./storageProvider"
+import {onStorageChange} from "@/providers/chromeApiProvider"
+import {StorageProvider} from "./storageProvider"
 
 export class CacheStorageProvider {
 	constructor() {

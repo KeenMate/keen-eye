@@ -34,10 +34,10 @@ import Multiselect from "vue-multiselect"
 
 export default {
 	name: "LocaleInput",
-	components: { Multiselect },
+	components: {Multiselect},
 	props: {
 		locale: Object,
-		locales: { type: Array, default: () => [] }
+		locales: {type: Array, default: () => []}
 	},
 	emits: ["input", "remove-locale"],
 	data() {

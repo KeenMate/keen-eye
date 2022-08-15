@@ -7,10 +7,10 @@ import {
 	sendToCS,
 	sendToSpecificCS
 } from "@/messaging/scriptsComunicationHelper"
-import { parseTransformations } from "@/transformations/transformationHelper"
+import {parseTransformations} from "@/transformations/transformationHelper"
 
 export async function getRequestInfo(tabId = null) {
-	return await sendMessageToBg(BgMessages.getRequestInfo, { tabId: tabId })
+	return await sendMessageToBg(BgMessages.getRequestInfo, {tabId: tabId})
 }
 
 export async function getSettings() {
@@ -24,7 +24,7 @@ export async function getSettings() {
 
 export async function setSettings(level, settings) {
 	console.log("save settings", settings)
-	return await sendMessageToBg(BgMessages.setSettings, { level, settings })
+	return await sendMessageToBg(BgMessages.setSettings, {level, settings})
 }
 
 export function getLocales() {
@@ -32,10 +32,10 @@ export function getLocales() {
 }
 
 export async function saveDivPosition(level, position) {
-	return setSettings(level, { position })
+	return setSettings(level, {position})
 }
 export async function changeInject(level, inject) {
-	return setSettings(level, { inject })
+	return setSettings(level, {inject})
 }
 
 export function sendSettingsChanged() {

@@ -19,15 +19,15 @@ export async function sendMessagePromise(message) {
 }
 
 export function sendMessageToBg(type, data) {
-	return sendMessagePromise({ type, data })
+	return sendMessagePromise({type, data})
 }
 
 export function sendReply(succeded, data, sendResponse) {
-	sendResponse({ ok: succeded, data: data })
+	sendResponse({ok: succeded, data: data})
 }
 
 export function sendToSpecificCS(tabId, type, data) {
-	sendToTab(tabId, { type, data })
+	sendToTab(tabId, {type, data})
 }
 
 export async function sendToCS(type, data) {

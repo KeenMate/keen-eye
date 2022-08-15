@@ -1,6 +1,6 @@
-import { createApp } from "vue"
+import {createApp} from "vue"
 import PageOverlay from "@/overlay/PageOverlay.vue"
-import { contentScriptMessages } from "@/messaging/messages"
+import {contentScriptMessages} from "@/messaging/messages"
 import Popper from "vue3-popper"
 import {
 	bootstrapBody,
@@ -8,9 +8,9 @@ import {
 	containerStyle,
 	resetCss
 } from "@/overlay/overlayConstants"
-import { getSettings } from "@/messaging/messagingProvider"
-import { getResourceUrl } from "@/providers/chromeApiProvider"
-import { onMessageReceived } from "@/messaging/scriptsComunicationHelper"
+import {getSettings} from "@/messaging/messagingProvider"
+import {getResourceUrl} from "@/providers/chromeApiProvider"
+import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 
 onMessageReceived(contentScriptMessages.settingsChanged, () => loadAndRender())
 
@@ -39,12 +39,13 @@ function render(settings, level) {
 	document.body.appendChild(div)
 
 	//create shadow root
-	div.attachShadow({ mode: "open" })
+	div.attachShadow({mode: "open"})
 	const appRoot = document.createElement("div")
 	div.shadowRoot.appendChild(appRoot)
 	addScriptsAndStyles(div)
 
-	appRoot.classList.add("bootstrap-body")
+	app
+	Root.classList.add("bootstrap-body")
 	createVueApp(appRoot, {
 		settings: settings,
 		level: level

@@ -1,4 +1,4 @@
-import { matchWithStairs } from "@/helpers/stringHelpers"
+import {matchWithStairs} from "@/helpers/stringHelpers"
 
 export class BaseTransformation {
 	constructor(headerRule) {

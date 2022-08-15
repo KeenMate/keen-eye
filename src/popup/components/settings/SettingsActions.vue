@@ -1,48 +1,40 @@
 <template>
 	<div class="btn-group">
-		<!--<button-->
-		<!--	class="btn-success btn form-control-sm btn-sm"-->
-		<!--	@click="saveSettings"-->
-		<!--&gt;-->
-		<!--	Save-->
-		<!--</button>-->
 		<button
-			class="btn-info btn form-control-sm btn-sm"
-			@click="$emit('start-download')"
-		>
-			download
-		</button>
-		<button
-			class="btn-info btn form-control-sm btn-sm"
+			:class="[...buttonClasses, 'btn-info']"
+			title="Refreshes settings"
 			@click="$emit('refresh-settings')"
 		>
-			Refresh
+			<i class="las la-sync" />
 		</button>
 		<button
-			class="btn-primary btn form-control-sm btn-sm"
-			:class="overlayVisible ? 'btn-danger' : 'btn-success'"
+			:class="[...buttonClasses, 'btn-primary', overlayVisible ? 'btn-danger' : 'btn-success']"
+			title="Toggles visibility of page overlay"
 			@click="$emit('toggle-injection')"
 		>
-			{{ overlayVisible ? "Hide" : "Show" }}
+			<i v-if="overlayVisible" class="las la-eye-slash" />
+			<i v-else class="las la-eye" />
 		</button>
 		<button
-			class="btn-danger btn form-control-sm btn-sm"
+			:class="[...buttonClasses, 'btn-danger']"
+			title="Delete custom settings"
 			@click="onDeleteSettings"
 		>
-			Delete
+			<i class="las la-trash" />
 		</button>
-		<!--<button-->
-		<!--	class="btn-muted btn form-control-sm btn-sm"-->
-		<!--	@click="copySettings"-->
-		<!--&gt;-->
-		<!--	D-->
-		<!--</button>-->
 		<button
-			class="btn-warning btn form-control-sm btn-sm"
-			:title="overlayPosition"
+			:class="[...buttonClasses, 'btn-warning']"
+			title="Resets overlay's position to default (top-left corner)"
 			@click="$emit('reset-div')"
 		>
-			Reset overlay position
+			<i class="las la-redo-alt" />
+		</button>
+		<button
+			:class="[...buttonClasses, 'btn-info']"
+			title="Downloads settings in JSON format"
+			@click="$emit('start-download')"
+		>
+			<i class="las la-download" />
 		</button>
 	</div>
 </template>
@@ -51,7 +43,6 @@
 export default {
 	name: "SettingsActions",
 	props: {
-		overlayPosition: Object,
 		overlayVisible: Boolean
 	},
 	emits: [
@@ -61,6 +52,11 @@ export default {
 		"refresh-settings",
 		"start-download"
 	],
+	data() {
+		return {
+			buttonClasses: ["btn"]
+		}
+	},
 	methods: {
 		onDeleteSettings() {
 			if (!confirm("Do you really want to delete these settings?")) return

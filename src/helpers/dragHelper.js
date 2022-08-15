@@ -71,5 +71,5 @@ function stopMoving(divid, savePosFunc) {
 		divid.style.left.substring(0, divid.style.left.length - 2)
 	)
 	let top = parseInt(divid.style.top.substring(0, divid.style.top.length - 2))
-	savePosFunc({ x: left, y: top })
+	savePosFunc({x: left, y: top})
 }

@@ -6,7 +6,7 @@ import {
 
 export class StorageProvider {
 	async setItem(key, value) {
-		return await setToStorage({ [key]: value })
+		return await setToStorage({[key]: value})
 	}
 
 	async getItem(key) {
