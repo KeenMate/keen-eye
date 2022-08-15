@@ -1,21 +1,19 @@
 import {backgroudScriptMessages as messages} from "@/messaging/messages"
-import {RequestsHandler} from "@/requestInfo/requestsHandler"
 import {LanguageChanger} from "@/languages/languageChanger"
-import settingsProvider from "@/settings/settings-manager"
+import SettingsManager from "@/settings/settings-manager"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
 import {sendReply} from "@/messaging/scriptsComunicationHelper"
 import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
-import localeProvider from "@/settings/locale-storage"
 import languages from "@/languages/languages"
 
 ("use strict")
 //setup providers
 var requestInfoStore = new RequestInfo()
 
-var requestHandler = new RequestsHandler(requestInfoStore)
+// var requestHandler = new RequestsHandler(requestInfoStore)
 
-new LanguageChanger(settingsProvider)
+new LanguageChanger(SettingsManager)
 
 onMessage(function (request, sender, sendResponse) {
 	console.log(request)
@@ -32,7 +30,7 @@ onMessage(function (request, sender, sendResponse) {
 			break
 
 		case messages.getSettings:
-			settingsProvider.getMostSpecificSettings(sender.url).then((settings) => {
+			SettingsManager.getMostSpecificSettings(sender.url).then((settings) => {
 				if (settings) {
 					sendReply(true, settings, sendResponse)
 				} else {
@@ -45,7 +43,7 @@ onMessage(function (request, sender, sendResponse) {
 
 			const {settings, level} = request.data
 
-			settingsProvider
+			SettingsManager
 				.setSettings(level, settings)
 				.then(() => {
 					if (
@@ -67,13 +65,15 @@ onMessage(function (request, sender, sendResponse) {
 			return true
 		}
 
-		case messages.getLocales: {
-			localeProvider
-				.getLocales()
-				.then((locales) => sendReply(true, locales || languages, sendResponse))
-
-			return true
-		}
+		case messages.getLocales:
+			SettingsManager.getMostSpecificSettings(sender.url).then((settings) => {
+				if (settings) {
+					sendReply(true, settings.customLocales || languages, sendResponse)
+				} else {
+					sendReply(false, {}, sendResponse)
+				}
+			})
+			break
 
 		default:
 			sendReply(false, {}, sendResponse)
@@ -84,6 +84,6 @@ onMessage(function (request, sender, sendResponse) {
 
 onCommand((command) => {
 	if (command === "toggle-page-overlay") {
-		settingsProvider.toggleVisibility()
+		SettingsManager.toggleVisibility()
 	}
 })

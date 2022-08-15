@@ -163,7 +163,7 @@ export default {
 		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
 		//},
 		startDownload() {
-			downloadJSON(this.currentSettings, `(KEEN-EYE)-${this.currentTab}`)
+			downloadJSON(this.currentSettings, `KEEN-EYE-${this.currentTab}`)
 		},
 		async importSettings(settings) {
 			parseTransformations(settings)

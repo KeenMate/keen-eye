@@ -44,8 +44,8 @@
 
 		<LocaleInput
 			:locale="settings?.locale"
-			:locales="settings?.customLocales"
-			:is-custom="isCustomLocales"
+			:locales="settings?.customLocales || languages"
+			:is-custom="!!settings?.customLocales"
 			@input="updateSettings({locale: $event})"
 			@remove-locale="onRemoveLocale"
 			@set-custom-locales="onSetCustomLocales"
@@ -57,8 +57,6 @@
 <script>
 import Multiselect from "vue-multiselect"
 import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
-import LocaleStorage from "@/settings/locale-storage"
-import {sendSettingsChanged} from "@/messaging/messagingProvider"
 import languages from "@/languages/languages"
 
 export default {
@@ -77,7 +75,7 @@ export default {
 	emits: ["update-settings"],
 	data() {
 		return {
-			isCustomLocales: false
+			languages
 		}
 	},
 	computed: {
@@ -92,17 +90,12 @@ export default {
 			return Object.values(this.requestInfo.requests).map((req) => req.url)
 		}
 	},
-	async mounted() {
-		await this.loadLocales()
-	},
 	methods: {
 		async onRemoveCustomLocales() {
-			LocaleStorage.clearCustomLocales()
-			await this.loadLocales()
+			this.updateSettings({customLocales: null})
 		},
 		async onSetCustomLocales(customLocales) {
 			this.updateSettings({customLocales: customLocales})
-			this.locales = customLocales
 		},
 		onRemoveLocale() {
 			if (!this.settings) return
@@ -131,12 +124,6 @@ export default {
 				...(this.settings || {}),
 				...partialSettings
 			})
-		},
-		async loadLocales() {
-			const locales = await LocaleStorage.getLocales()
-
-			this.locales = locales || languages
-			this.isCustomLocales = !!locales
 		}
 	}
 }
