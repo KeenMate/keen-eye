@@ -53,21 +53,36 @@ export function onTabRemoved(handler) {
 export function onBeforeRequest(handler, filter, extra) {
 	chrome.webRequest.onBeforeRequest.addListener(handler, filter, extra)
 }
+export function RemoveOnBeforeRequest(handler) {
+	chrome.webRequest.onBeforeRequest.removeListener(handler)
+}
 
 export function onBeforeSendHeaders(handler, filter, extra) {
 	chrome.webRequest.onBeforeSendHeaders.addListener(handler, filter, extra)
+}
+export function RemoveOnBeforeSendHeaders(handler) {
+	chrome.webRequest.onBeforeSendHeaders.removeListener(handler)
 }
 
 export function onSendHeaders(handler, filter, extra) {
 	chrome.webRequest.onSendHeaders.addListener(handler, filter, extra)
 }
+export function RemoveOnSendHeadersRemove(handler) {
+	chrome.webRequest.onSendHeaders.removeListener(handler)
+}
 
 export function onHeadersReceived(handler, filter, extra) {
 	chrome.webRequest.onHeadersReceived.addListener(handler, filter, extra)
 }
+export function RemoveOnHeadersReceivedRemove(handler) {
+	chrome.webRequest.onHeadersReceived.removeListener(handler)
+}
 
 export function onCompleted(handler, filter, extra) {
 	chrome.webRequest.onCompleted.addListener(handler, filter, extra)
+}
+export function RemoveOnCompletedRemove(handler) {
+	chrome.webRequest.onCompleted.removeListener(handler)
 }
 
 //* STORAGE

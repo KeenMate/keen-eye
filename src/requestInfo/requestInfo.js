@@ -1,7 +1,7 @@
+import { throttle } from "lodash"
+
 import { sendNewRequests } from "@/messaging/messagingProvider"
 import { sortHeaders } from "./requestInfoHelpers"
-
-import { throttle } from "lodash"
 import { sendNewRequestsMaxWait } from "@/overlay/overlayConstants"
 
 export class RequestInfo {
@@ -10,8 +10,10 @@ export class RequestInfo {
 
 		// only send request max 1 per second to prevent performance issues
 		this.throttle = throttle(this.sendMessage, sendNewRequestsMaxWait)
+
 		this.tabsToMessage = new Set()
 	}
+
 	throttledSend(tabId) {
 		this.tabsToMessage.add(tabId)
 
@@ -19,8 +21,6 @@ export class RequestInfo {
 	}
 
 	sendMessage() {
-		console.log(this.tabsToMessage)
-
 		this.tabsToMessage.forEach((tabId) => {
 			sendNewRequests(this.requestInfo[tabId].requests, tabId)
 		})
@@ -39,6 +39,7 @@ export class RequestInfo {
 
 	requestEnsureAndSend(details, func) {
 		this.ensureNotUndef(details)
+
 		//ensure obejct for this specific request
 		this.requestInfo[details.tabId].requests[details.requestId] =
 			this.requestInfo[details.tabId].requests[details.requestId] ?? {}
@@ -52,6 +53,7 @@ export class RequestInfo {
 		return this.requestInfo[tabId]
 	}
 
+	//mainframe
 	mainFrameSend(details) {
 		this.requestInfo[details.tabId] = { request: details, requests: {} }
 	}
@@ -65,6 +67,7 @@ export class RequestInfo {
 		)
 	}
 
+	//xhtml requests
 	requestSend(details) {
 		this.requestEnsureAndSend(details, () => {
 			this.requestInfo[details.tabId].requests[details.requestId] = {
@@ -91,7 +94,6 @@ export class RequestInfo {
 			this.requestInfo[details.tabId].requests[details.requestId] = newInfo
 		})
 	}
-
 	requestComplete(details) {
 		this.requestEnsureAndSend(details, () => {
 			let startTimestamp =

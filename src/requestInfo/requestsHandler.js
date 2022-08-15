@@ -1,50 +1,86 @@
 import {
 	onCompleted,
+	RemoveOnCompletedRemove,
 	onHeadersReceived,
+	RemoveOnHeadersReceivedRemove,
 	onSendHeaders,
+	RemoveOnSendHeadersRemove,
 	onTabRemoved
 } from "../providers/chromeApiProvider"
 import { fetchFilters, mainFrameFilters, extra } from "./requestInfoConstants"
 
-export default function (requestInfoStore) {
-	onSendHeaders(
-		function (details) {
-			requestInfoStore.mainFrameSend(details)
-		},
-		mainFrameFilters,
-		extra.requestHeaders
-	)
-	onHeadersReceived(
-		function (details) {
-			requestInfoStore.mainFrameReceived(details)
-		},
-		mainFrameFilters,
-		extra.responseHeaders
-	)
+export class RequestsHandler {
+	constructor(requestInfoStore) {
+		this.requestInfoStore = requestInfoStore
 
-	onSendHeaders(
-		function (details) {
-			requestInfoStore.requestSend(details)
-		},
-		fetchFilters,
-		extra.requestHeaders
-	)
-	onHeadersReceived(
-		function (details) {
-			requestInfoStore.requestHeadersReceived(details)
-		},
-		fetchFilters,
-		extra.responseHeaders
-	)
-	onCompleted(
-		function (details) {
-			requestInfoStore.requestComplete(details)
-		},
-		fetchFilters,
-		extra.responseHeaders
-	)
+		console.log(this.requestInfoStore)
 
-	onTabRemoved(function (details) {
-		requestInfoStore.removeForTab(details)
-	})
+		this.handlers = this.createHandlerFunctions()
+
+		this.addHandlers()
+	}
+
+	addHandlers() {
+		onTabRemoved(this.tabForTabHandler)
+
+		this.addMainframeHandlers()
+
+		this.addRequestHandlers()
+	}
+
+	addMainframeHandlers() {
+		onSendHeaders(
+			this.handlers.mainframeSendHandler,
+			mainFrameFilters,
+			extra.requestHeaders
+		)
+
+		onHeadersReceived(
+			this.handlers.mainFrameReceivedHandler,
+			mainFrameFilters,
+			extra.responseHeaders
+		)
+	}
+
+	addRequestHandlers() {
+		onSendHeaders(
+			this.handlers.requestSendHandler,
+			fetchFilters,
+			extra.requestHeaders
+		)
+
+		onHeadersReceived(
+			this.handlers.requestReceivedHandler,
+			fetchFilters,
+			extra.responseHeaders
+		)
+
+		onCompleted(
+			this.handlers.requestCompleteHandler,
+			fetchFilters,
+			extra.responseHeaders
+		)
+	}
+
+	removeRequestHandlers() {
+		RemoveOnSendHeadersRemove(this.handlers.requestSendHandler)
+		RemoveOnHeadersReceivedRemove(this.handlers.requestReceivedHandler)
+		RemoveOnCompletedRemove(this.handlers.requestCompleteHandler)
+	}
+
+	createHandlerFunctions() {
+		return {
+			mainframeSendHandler: (details) =>
+				this.requestInfoStore.mainFrameSend(details),
+			mainFrameReceivedHandler: (details) =>
+				this.requestInfoStore.mainFrameReceived(details),
+			requestSendHandler: (details) =>
+				this.requestInfoStore.requestSend(details),
+			requestReceivedHandler: (details) =>
+				this.requestInfoStore.requestHeadersReceived(details),
+			requestCompleteHandler: (details) =>
+				this.requestInfoStore.requestComplete(details),
+			tabForTabHandler: (details) => this.requestInfoStore.removeForTab(details)
+		}
+	}
 }

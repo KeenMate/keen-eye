@@ -1,21 +1,23 @@
 # keen-eye
 
-
+ULTIMATE extension for quickly inspecting requests without even opening devtools
 
 ## Project setup
-```
-yarn install
+
+``` bash
+./setup
 ```
 
 ### Compiles and hot-reloads for development
+
+``` bash
+./run
 ```
-yarn build-watch
-```
+
+use [extenison reloader](https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid?hl=en) for development
 
 ### Lints and fixes files
-```
+
+``` bash
 yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

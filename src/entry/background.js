@@ -1,5 +1,5 @@
 import { backgroudScriptMessages as messages } from "@/messaging/messages"
-import headersHandler from "@/requestInfo/requestsHandler"
+import { RequestsHandler } from "@/requestInfo/requestsHandler"
 import { LanguageChanger } from "@/languages/languageChanger"
 import settingsProvider from "@/settings/settings-manager"
 import { sendSettingsChanged } from "@/messaging/messagingProvider"
@@ -11,7 +11,7 @@ import localeProvider from "@/settings/locale-storage"
 //setup providers
 var requestInfoStore = new RequestInfo()
 
-headersHandler(requestInfoStore)
+var requestHandler = new RequestsHandler(requestInfoStore)
 
 new LanguageChanger(settingsProvider)
 
@@ -22,11 +22,10 @@ onMessage(function (request, sender, sendResponse) {
 		case messages.getRequestInfo:
 			{
 				const { tabId } = request.data
-				sendReply(
-					true,
-					requestInfoStore.getInfoForTab(tabId ?? sender.tab.id),
-					sendResponse
-				)
+
+				let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
+
+				sendReply(true, requestInfo, sendResponse)
 			}
 			break
 

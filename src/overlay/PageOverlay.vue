@@ -105,7 +105,6 @@ import {
 	setSettings,
 	getLocales
 } from "@/messaging/messagingProvider"
-import { onMessage } from "@/providers/chromeApiProvider"
 import HeaderRendererVue from "@/overlay/components/HeaderRenderer.vue"
 import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue"
 import LocaleSelector from "./components/LocaleSelector.vue"
@@ -205,9 +204,14 @@ export default {
 	methods: {
 		async loadRequestInfo() {
 			let requestInfo = await getRequestInfo()
+
+			//if requestInfo isnt awailble, try again later
+			if (requestInfo === undefined) {
+				setTimeout(loadRequestInfo, 1000)
+			}
+
 			this.requestInfo = requestInfo
 			console.log("requestInfo", requestInfo)
-			// logEverything(requestInfo?.response?.url);
 		},
 		async closeOverlay() {
 			let response = await changeInject(this.level, false)
