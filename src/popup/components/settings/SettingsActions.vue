@@ -8,6 +8,12 @@
 		<!--</button>-->
 		<button
 			class="btn-info btn form-control-sm btn-sm"
+			@click="$emit('start-download')"
+		>
+			download
+		</button>
+		<button
+			class="btn-info btn form-control-sm btn-sm"
 			@click="$emit('refresh-settings')"
 		>
 			Refresh
@@ -48,11 +54,16 @@ export default {
 		overlayPosition: Object,
 		overlayVisible: Boolean
 	},
-	emits: ["reset-div", "delete", "toggle-injection", "refresh-settings"],
+	emits: [
+		"reset-div",
+		"delete",
+		"toggle-injection",
+		"refresh-settings",
+		"start-download"
+	],
 	methods: {
 		onDeleteSettings() {
-			if (!confirm("Do you really want to delete these settings?"))
-				return
+			if (!confirm("Do you really want to delete these settings?")) return
 
 			this.$emit("delete")
 		}
@@ -60,6 +71,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

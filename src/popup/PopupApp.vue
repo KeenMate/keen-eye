@@ -21,6 +21,7 @@
 						@toggle-injection="toggleInjection"
 						@refresh-settings="onRefreshSettings"
 						@reset-div="onResetDiv"
+						@start-download="startDownload"
 					/>
 				</div>
 			</div>
@@ -48,6 +49,7 @@ import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
 import { toRaw } from "@vue/reactivity"
+import { downloadJSON } from "@/helpers/file-helpers"
 
 export default {
 	name: "PopupApp",
@@ -162,6 +164,9 @@ export default {
 		},
 		copySettings() {
 			copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
+		},
+		startDownload() {
+			downloadJSON(this.currentSettings, `(KEEN-EYE)-${this.currentTab}`)
 		}
 	}
 }
