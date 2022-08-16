@@ -4,7 +4,7 @@
 		@submit.stop.prevent="onSubmit"
 		@change.stop.prevent
 	>
-		<div class="form-group">
+		<div class="mb-3">
 			<label>Header Rule</label>
 			<input
 				v-model="transformation.headerRule"
@@ -13,7 +13,7 @@
 			/>
 		</div>
 
-		<div class="form-group">
+		<div class="mb-3">
 			<label>Url</label>
 			<input
 				v-model="transformation.url"

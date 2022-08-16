@@ -1,12 +1,12 @@
 <template>
 	<div class="settings">
-		<div class="container d-flex justify-content-between">
-			<h3>Settings</h3>
+		<div class="d-flex justify-content-between align-items-center px-3 mb-4">
+			<h3 class="mb-0">Settings</h3>
 
 			<SettingsActions
 				:current-settings="currentSettings"
 				@delete="$emit('delete', $event)"
-				@toggle-injection="$emit('update-settings', {...currentSettings, inject: !currentSettings?.inject})"
+				@toggle-overlay="$emit('update-settings', {...currentSettings, inject: !currentSettings?.inject})"
 				@refresh-settings="$emit('refresh-settings', $event)"
 				@reset-div="$emit('reset-div', $event)"
 				@start-download="$emit('start-download', $event)"
@@ -25,13 +25,16 @@
 			</TabItem>
 		</Tabs>
 
-		<div class="container settings-content">
-			<component
-				:is="currentSettingsComponent"
-				:settings="currentSettings"
-				:request-info="requestInfo"
-				@update-settings="$emit('update-settings', $event)"
-			/>
+		<div class="settings-content px-3">
+			<div>
+				<component
+					:is="currentSettingsComponent"
+					:settings="currentSettings"
+					:request-info="requestInfo"
+					class="py-4"
+					@update-settings="$emit('update-settings', $event)"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -101,7 +104,7 @@ export default {
 .settings {
 	display: flex;
 	flex-direction: column;
-	gap: 1em;
+	//gap: 1em;
 
 	.settings-content {
 		flex: 1;

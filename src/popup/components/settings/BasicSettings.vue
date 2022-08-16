@@ -1,7 +1,7 @@
 <template>
 	<div class="basic-settings">
 		<div
-			class="form-group"
+			class="mb-3"
 			@keyup.esc.stop
 		>
 			<label>Headers</label>
@@ -22,7 +22,7 @@
 		</div>
 
 		<div
-			class="form-group"
+			class="mb-3"
 			@keyup.esc.stop
 		>
 			<label>Requests</label>

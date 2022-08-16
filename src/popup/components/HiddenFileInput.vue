@@ -4,13 +4,14 @@
 		@click="openFileDialog"
 	>
 		<slot />
+
+		<input
+			ref="fileInput"
+			type="file"
+			style="display: none"
+			@change="fileSelected($event.target.files[0])"
+		/>
 	</button>
-	<input
-		ref="fileInput"
-		type="file"
-		style="display: none"
-		@change="fileSelected($event.target.files[0])"
-	/>
 </template>
 
 <script>

@@ -13,7 +13,7 @@
 			Helps you transform additional values in query string, url path thanks to
 			Regex or in sent cookie.
 		</p>
-		<div class="form-group">
+		<div class="mb-3">
 			<label>Cookie Key</label>
 			<input
 				:value="settings.localeReplace?.cookieKey || ''"
@@ -25,7 +25,7 @@
 				"
 			/>
 		</div>
-		<div class="form-group">
+		<div class="mb-3">
 			<label>
 				Url Query string key (can be multiple separated with semicolon)</label>
 			<input
@@ -38,7 +38,7 @@
 				"
 			/>
 		</div>
-		<div class="form-group">
+		<div class="mb-3">
 			<label>Url regex</label>
 			<input
 				:value="settings.localeReplace?.urlRegex"

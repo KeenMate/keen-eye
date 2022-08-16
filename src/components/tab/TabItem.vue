@@ -6,7 +6,6 @@
 		<a
 			class="nav-link"
 			:class="linkClasses"
-			@click="$emit('click', $event)"
 		>
 			<slot />
 		</a>

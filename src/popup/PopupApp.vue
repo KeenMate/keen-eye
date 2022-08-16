@@ -3,10 +3,22 @@
 		class="popup-app card"
 		@keydown.esc.stop.prevent
 	>
-		<PopupScopesTabs
-			:current-scope-code="currentScopeCode"
-			@change-tab="changeScope"
-		/>
+		<div class="top-nav d-flex justify-content-between pt-3">
+			<div>
+				<PopupScopesTabs
+					:current-scope-code="currentScopeCode"
+					class="px-3"
+					@change-tab="changeScope"
+				/>
+			</div>
+
+			<div class="px-3">
+				<SwitchInput
+					:model-value="overlayRecording"
+					@update:model-value="onUpdateOverlayRecording"
+				/>
+			</div>
+		</div>
 
 		<div class="popup-content">
 			<Settings
@@ -35,10 +47,12 @@ import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import Settings from "@/popup/components/settings/Settings"
 import {downloadJSON} from "@/helpers/file-helpers"
 import {parseTransformations} from "@/transformations/transformationHelper"
+import SwitchInput from "@/components/form/SwitchInput"
 
 export default {
 	name: "PopupApp",
 	components: {
+		SwitchInput,
 		Settings,
 		PopupScopesTabs
 	},
@@ -47,6 +61,7 @@ export default {
 			allowedOrigins: [],
 			currentScopeCode: "origin",
 			currentSettings: getEmptySettings(),
+			overlayRecording: false,
 			requestInfo: {}
 		}
 	},
@@ -56,6 +71,9 @@ export default {
 		}, 25)
 	},
 	methods: {
+		onUpdateOverlayRecording() {
+
+		},
 		onResetDiv() {
 			this.updateCurrentSettings({
 				position: {x: 0, y: 0}
