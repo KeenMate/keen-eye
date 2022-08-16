@@ -8,6 +8,7 @@
 			>
 				<i class="las la-download" />
 			</button>
+			i
 			<HiddenFileInput
 				title="Imports settings from file"
 				@import="$emit('import-settings', $event)"
