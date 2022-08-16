@@ -32,10 +32,10 @@ function isTextFile(file) {
 
 //https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
 export function downloadJSON(exportObj, exportName) {
-	var dataStr =
+	const dataStr =
 		"data:text/json;charset=utf-8," +
 		encodeURIComponent(JSON.stringify(exportObj))
-	var downloadAnchorNode = document.createElement("a")
+	const downloadAnchorNode = document.createElement("a")
 	downloadAnchorNode.setAttribute("href", dataStr)
 	downloadAnchorNode.setAttribute("download", exportName + ".json")
 	document.body.appendChild(downloadAnchorNode) // required for firefox

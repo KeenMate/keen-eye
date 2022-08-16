@@ -1,5 +1,19 @@
 <template>
 	<div class="settings">
+		<div class="container d-flex justify-content-between">
+			<h3>Settings</h3>
+
+			<SettingsActions
+				:current-settings="currentSettings"
+				@delete="$emit('delete', $event)"
+				@toggle-injection="$emit('update-settings', {...currentSettings, inject: !currentSettings?.inject})"
+				@refresh-settings="$emit('refresh-settings', $event)"
+				@reset-div="$emit('reset-div', $event)"
+				@start-download="$emit('start-download', $event)"
+				@import-settings="$emit('import-settings', $event)"
+			/>
+		</div>
+
 		<Tabs class="px-3">
 			<TabItem
 				v-for="tab in settingsTabs"
@@ -23,16 +37,18 @@
 </template>
 
 <script>
+import {markRaw} from "vue"
+import {toRaw} from "@vue/reactivity"
 import Tabs from "@/components/tab/Tabs"
 import TabItem from "@/components/tab/TabItem"
 import BasicSettings from "@/popup/components/settings/BasicSettings"
 import AdvancedSettings from "@/popup/components/settings/AdvancedSettings"
-import {markRaw} from "vue"
-import {toRaw} from "@vue/reactivity"
+import SettingsActions from "@/popup/components/settings/SettingsActions"
 
 export default {
 	name: "Settings",
 	components: {
+		SettingsActions,
 		AdvancedSettings,
 		BasicSettings,
 		TabItem,
@@ -45,7 +61,13 @@ export default {
 			default: null
 		}
 	},
-	emits: ["update-settings"],
+	emits: [
+		"update-settings",
+		"refresh-settings",
+		"reset-div",
+		"start-download",
+		"import-settings"
+	],
 	data() {
 		return {
 			settingsTabs: [

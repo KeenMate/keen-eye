@@ -32,7 +32,7 @@
 		<label for="custom-locales-file">
 			Custom locales
 			<template v-if="isCustom">
-				(Uploaded {{locales?.length}})
+				(Uploaded {{localesCount}})
 			</template>
 		</label>
 		<div class="d-flex justify-content-between small-gaps">
@@ -73,6 +73,19 @@ export default {
 		"set-custom-locales",
 		"remove-custom-locales"
 	],
+	computed: {
+		localesCount() {
+			if (!this.locales)
+				return 0
+
+			if (this.locales[0]?.category)
+				return this.locales.reduce((acc, locale) => {
+					return acc + locale.locales.length
+				}, 0)
+			else
+				return this.locales.length
+		}
+	},
 	data() {
 		return {
 			error: null

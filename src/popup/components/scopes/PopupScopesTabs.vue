@@ -3,7 +3,7 @@
 		<ScopeItem
 			v-for="scope in PopupScopes"
 			:key="scope.code"
-			:is-current="selectedTab === scope.code"
+			:is-current="currentScopeCode === scope.code"
 			@click="$emit('change-tab', scope)"
 		>
 			{{scope.title}}
@@ -23,7 +23,7 @@ export default {
 		Tabs
 	},
 	props: {
-		selectedTab: String
+		currentScopeCode: String
 	},
 	emits: ["change-tab"],
 	data() {
