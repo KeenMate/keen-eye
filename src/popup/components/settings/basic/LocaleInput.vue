@@ -71,6 +71,11 @@ export default {
 		"set-custom-locales",
 		"remove-custom-locales"
 	],
+	data() {
+		return {
+			error: null
+		}
+	},
 	computed: {
 		localesCount() {
 			if (!this.locales)
@@ -82,11 +87,6 @@ export default {
 				}, 0)
 			else
 				return this.locales.length
-		}
-	},
-	data() {
-		return {
-			error: null
 		}
 	},
 	methods: {

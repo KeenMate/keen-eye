@@ -1,7 +1,9 @@
 <template>
 	<div class="settings">
 		<div class="d-flex justify-content-between align-items-center px-3 mb-4">
-			<h3 class="mb-0">Settings</h3>
+			<h3 class="mb-0">
+				Settings
+			</h3>
 
 			<SettingsActions
 				:current-settings="currentSettings"
