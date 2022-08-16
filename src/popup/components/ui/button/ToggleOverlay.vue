@@ -21,10 +21,10 @@ import ToggleButton from "@/components/ui/button/ToggleButton"
 export default {
 	name: "ToggleOverlay",
 	components: {ToggleButton},
-	emits: ["toggle"],
 	props: {
 		overlayVisible: Boolean
 	},
+	emits: ["toggle"],
 	computed: {
 		tooltip() {
 			return `${this.overlayVisible && "Hides" || "Shows"} keen-eye page overlay`

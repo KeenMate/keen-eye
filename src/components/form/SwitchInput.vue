@@ -20,11 +20,11 @@
 <script>
 export default {
 	name: "SwitchInput",
-	emits: ["update:model-value"],
 	props: {
 		id: String,
 		modelValue: Boolean
-	}
+	},
+	emits: ["update:model-value"]
 }
 </script>
 

@@ -49,7 +49,7 @@
 					</span>
 				</td>
 				<td class="autowidth">
-					<b>{{ header.name }}</b>
+					<b>{{header.name}}</b>
 				</td>
 				<td class="limited-width">
 					<TransformationRenderer
@@ -60,7 +60,7 @@
 					/>
 					<template v-else>
 						<Popper :content="header.value">
-							{{ header.value }}
+							{{header.value}}
 						</Popper>
 					</template>
 				</td>

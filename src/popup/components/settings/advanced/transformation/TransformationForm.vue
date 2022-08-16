@@ -27,8 +27,14 @@
 				type="submit"
 				class="btn btn-success btn-sm"
 			>
-				<i v-if="isNew" class="las la-plus-square" />
-				<i v-else class="las la-save" />
+				<i
+					v-if="isNew"
+					class="las la-plus-square"
+				/>
+				<i
+					v-else
+					class="las la-save"
+				/>
 			</button>
 		</div>
 
