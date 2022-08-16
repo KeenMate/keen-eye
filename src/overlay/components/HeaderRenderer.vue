@@ -22,7 +22,9 @@
 					<span
 						:class="{'text-warning': starSelected}"
 						@click="toggleAll"
-					>EYE</span>
+					>
+						<i class="lar la-eye" />
+					</span>
 				</th>
 				<th>Name</th>
 				<th>Value</th>
@@ -31,7 +33,7 @@
 		</thead>
 		<tbody class="table-group-divider">
 			<tr
-				v-for="(header, index) in headers"
+				v-for="(header, index) in orderedHeaders"
 				:key="index"
 				class="autowidth-table"
 			>
@@ -42,10 +44,12 @@
 					<span
 						:class="{'text-warning': headersFilterRules.exists(header.name)}"
 						@click="toggleRule(header.name)"
-					>eye</span>
+					>
+						<i class="lar la-eye" />
+					</span>
 				</td>
 				<td class="autowidth">
-					<b>{{header.name}}</b>
+					<b>{{ header.name }}</b>
 				</td>
 				<td class="limited-width">
 					<TransformationRenderer
@@ -56,7 +60,7 @@
 					/>
 					<template v-else>
 						<Popper :content="header.value">
-							{{header.value}}
+							{{ header.value }}
 						</Popper>
 					</template>
 				</td>
@@ -77,6 +81,7 @@ import FilterRules from "@/settings/filterRules"
 import TransformationRenderer from "./TransformationRenderer.vue"
 import {escapeHtml} from "@/helpers/stringHelpers"
 import CopyHeadersButtonVue from "@/overlay/components/CopyHeadersButton.vue"
+import {sortHeaders} from "@/requestInfo/requestInfoHelpers"
 
 export default {
 	name: "HeaderRenderer",
@@ -92,6 +97,9 @@ export default {
 		transformations: Array
 	},
 	computed: {
+		orderedHeaders() {
+			return sortHeaders(this.headers ?? [])
+		},
 		starSelected() {
 			return this.headersFilterRules?.exists("*") != undefined
 		}
@@ -108,7 +116,7 @@ export default {
 			this.headersFilterRules.toggle(rule)
 		},
 		getTransformation(name) {
-			return this.transformations?.find((trans) => trans.match(name))
+			return this.transformations?.find(trans => trans.match(name))
 		},
 		escape(val) {
 			return escapeHtml(val)

@@ -13,8 +13,6 @@ export class RequestsHandler {
 	constructor(requestInfoStore) {
 		this.requestInfoStore = requestInfoStore
 
-		console.log(this.requestInfoStore)
-
 		this.handlers = this.createHandlerFunctions()
 
 		this.addHandlers()
@@ -70,17 +68,16 @@ export class RequestsHandler {
 
 	createHandlerFunctions() {
 		return {
-			mainframeSendHandler: (details) =>
+			mainframeSendHandler: details =>
 				this.requestInfoStore.mainFrameSend(details),
-			mainFrameReceivedHandler: (details) =>
+			mainFrameReceivedHandler: details =>
 				this.requestInfoStore.mainFrameReceived(details),
-			requestSendHandler: (details) =>
-				this.requestInfoStore.requestSend(details),
-			requestReceivedHandler: (details) =>
+			requestSendHandler: details => this.requestInfoStore.requestSend(details),
+			requestReceivedHandler: details =>
 				this.requestInfoStore.requestHeadersReceived(details),
-			requestCompleteHandler: (details) =>
+			requestCompleteHandler: details =>
 				this.requestInfoStore.requestComplete(details),
-			tabForTabHandler: (details) => this.requestInfoStore.removeForTab(details)
+			tabForTabHandler: details => this.requestInfoStore.removeForTab(details)
 		}
 	}
 }

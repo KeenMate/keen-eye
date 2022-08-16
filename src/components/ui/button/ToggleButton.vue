@@ -1,18 +1,12 @@
 <template>
-	<button
-		:class="buttonClasses"
-		@click="$emit('click', $event)"
-	>
+	<button :class="buttonClasses">
 		<template v-if="state">
 			<slot name="on" />
 		</template>
 		<template v-else>
-			<slot
-				name="off"
-			/>
+			<slot name="off" />
 		</template>
 	</button>
-
 </template>
 
 <script>
@@ -25,17 +19,10 @@ export default {
 	},
 	computed: {
 		buttonClasses() {
-			return [
-				"btn",
-				this.state
-					? this.onColor
-					: this.offColor
-			]
+			return ["btn", this.state ? this.onColor : this.offColor]
 		}
 	}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

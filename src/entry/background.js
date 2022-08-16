@@ -6,17 +6,17 @@ import {sendReply} from "@/messaging/scriptsComunicationHelper"
 import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
 import languages from "@/languages/languages"
-
-("use strict")
+import {RequestsHandler} from "@/requestInfo/requestsHandler"
+;("use strict")
 //setup providers
 var requestInfoStore = new RequestInfo()
 
-// var requestHandler = new RequestsHandler(requestInfoStore)
+var requestHandler = new RequestsHandler(requestInfoStore)
 
 new LanguageChanger(SettingsManager)
 
 onMessage(function (request, sender, sendResponse) {
-	console.log(request)
+	console.debug("bg got message", request, sender)
 	//handle messsage based on type
 	switch (request?.type) {
 		case messages.getRequestInfo:
@@ -25,12 +25,15 @@ onMessage(function (request, sender, sendResponse) {
 
 				let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
 
+				console.log("sending request info ", {requestInfo, sender})
+
 				sendReply(true, requestInfo, sendResponse)
 			}
 			break
 
 		case messages.getSettings:
-			SettingsManager.getMostSpecificSettings(sender.url).then((settings) => {
+			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
+				console.log("sending settings", {settings, sender})
 				if (settings) {
 					sendReply(true, settings, sendResponse)
 				} else {
@@ -39,12 +42,11 @@ onMessage(function (request, sender, sendResponse) {
 			})
 			break
 		case messages.setSettings: {
-			console.log("saving settings")
-
 			const {settings, level} = request.data
 
-			SettingsManager
-				.setSettings(level, settings)
+			console.log("saving settings: ", {settings, level})
+
+			SettingsManager.setSettings(level, settings)
 				.then(() => {
 					if (
 						settings.headerRules !== undefined ||
@@ -55,7 +57,7 @@ onMessage(function (request, sender, sendResponse) {
 					}
 					sendReply(true, undefined, sendResponse)
 				})
-				.catch((e) =>
+				.catch(e =>
 					sendReply(
 						false,
 						{reason: "error setting data", error: e},
@@ -66,7 +68,13 @@ onMessage(function (request, sender, sendResponse) {
 		}
 
 		case messages.getLocales:
-			SettingsManager.getMostSpecificSettings(sender.url).then((settings) => {
+			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
+				console.log("sending most specific settings", {
+					url: sender.url,
+					settings,
+					sender
+				})
+
 				if (settings) {
 					sendReply(true, settings.customLocales || languages, sendResponse)
 				} else {
@@ -82,7 +90,7 @@ onMessage(function (request, sender, sendResponse) {
 	return true
 })
 
-onCommand((command) => {
+onCommand(command => {
 	if (command === "toggle-page-overlay") {
 		SettingsManager.toggleVisibility()
 	}

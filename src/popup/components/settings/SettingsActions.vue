@@ -18,7 +18,7 @@
 
 		<div class="btn-group">
 			<ToggleButton
-				:state="overlayVisible"
+				:state="currentSettings?.inject"
 				on-color="btn-danger"
 				off-color="btn-success"
 				:class="buttonClasses"
@@ -73,7 +73,7 @@ export default {
 	name: "SettingsActions",
 	components: {ToggleButton, HiddenFileInput},
 	props: {
-		overlayVisible: Boolean
+		currentSettings: Boolean
 	},
 	emits: [
 		"reset-div",
@@ -100,6 +100,6 @@ export default {
 
 <style lang="scss" scoped>
 .settings-actions {
-	gap: .5em;
+	gap: 0.5em;
 }
 </style>

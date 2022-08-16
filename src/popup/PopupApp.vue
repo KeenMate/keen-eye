@@ -84,11 +84,13 @@ export default {
 			this.loadCurrentSettings()
 		},
 		async toggleInjection() {
+			console.log("new inject:", !this.currentSettings.inject)
 			this.currentSettings.inject = !this.currentSettings.inject
 
 			await settingsProvider.setSettings(this.currentTab, {
 				inject: this.currentSettings.inject
 			})
+
 			sendSettingsChanged()
 		},
 		changeTab(scope) {
@@ -194,7 +196,7 @@ export default {
 		//overflow: auto;
 
 		.expand-height {
-			flex: 1
+			flex: 1;
 		}
 	}
 }

@@ -7,17 +7,11 @@
 					class="title user-select-none"
 					style="cursor: pointer"
 				>
-					{{pageName}}({{requestInfo?.response?.statusCode ?? "loading"}})
+					{{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
 				</h5>
-				<h6>{{time ? time + "ms" : "refresh"}}</h6>
 			</div>
 			<div class="col-5">
-				<LocaleSelector
-					:locale="settings?.locale"
-					:locales="locales"
-					@input="saveLocale"
-					@remove-locale="onRemoveLocale"
-				/>
+				<h6>{{ time ? time + "ms" : "refresh" }}</h6>
 			</div>
 
 			<div class="col-1">
@@ -29,37 +23,46 @@
 				/>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-3">
-				<div class="form-check form-switch">
-					<input
-						id="useFilters"
-						v-model="useFilters"
-						class="form-check-input"
-						type="checkbox"
-						role="switch"
-					/>
-					<label
-						class="form-check-label"
-						for="useFilters"
-					>
-						Use filters
-					</label>
-				</div>
-			</div>
-			<div class="col-3">
-				<button
-					class="btn btn-sm"
-					:class="{
-						'btn-secondary': !changesToSave,
-						'btn-success': changesToSave
-					}"
-					@click="saveSettings"
+		<div
+			class="d-flex"
+			style="gap: 3px"
+		>
+			<div class="form-check form-switch">
+				<label
+					class="form-check-label"
+					for="useFilters"
 				>
-					Save settings
-				</button>
+					<i
+						class="las la-filter"
+						style="font-size: 20px"
+					/>
+				</label>
+				<input
+					id="useFilters"
+					v-model="useFilters"
+					class="form-check-input"
+					type="checkbox"
+					role="switch"
+				/>
 			</div>
-			<div class="col-3" />
+
+			<button
+				class="btn btn-sm"
+				style="margin-left: auto"
+				:class="{
+					'btn-secondary': !changesToSave,
+					'btn-success': changesToSave
+				}"
+				@click="saveSettings"
+			>
+				<i class="las la-save" />
+			</button>
+			<LocaleSelector
+				:locale="settings?.locale"
+				:locales="locales"
+				@input="saveLocale"
+				@remove-locale="onRemoveLocale"
+			/>
 		</div>
 		<div>
 			<div style="max-height: 35vh; overflow-y: auto; overflow-x: hidden">
@@ -75,7 +78,7 @@
 			<template v-if="requestsRulesSet || !useFilters">
 				<div class="row">
 					<div class="col-6">
-						<h4>Requests</h4>
+						<h6>Requests</h6>
 					</div>
 				</div>
 				<div style="max-height: 35vh; overflow-y: auto">
@@ -191,11 +194,11 @@ export default {
 
 		this.createFilterObjects(this.settings)
 
-		AddDrag(this.$refs.dragg, containerName, this.settings.position, (pos) =>
+		AddDrag(this.$refs.dragg, containerName, this.settings.position, pos =>
 			saveDivPosition(this.level, pos)
 		)
 
-		onMessageReceived(messages.newRequests, (message) => {
+		onMessageReceived(messages.newRequests, message => {
 			this.requestInfo.requests = message.data
 		})
 
@@ -204,11 +207,6 @@ export default {
 	methods: {
 		async loadRequestInfo() {
 			let requestInfo = await getRequestInfo()
-
-			//if requestInfo isnt awailble, try again later
-			if (requestInfo === undefined) {
-				setTimeout(loadRequestInfo, 1000)
-			}
 
 			this.requestInfo = requestInfo
 			console.log("requestInfo", requestInfo)
