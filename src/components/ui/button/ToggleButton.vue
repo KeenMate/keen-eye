@@ -1,8 +1,5 @@
 <template>
-	<button
-		:class="buttonClasses"
-		@click="$emit('click', $event)"
-	>
+	<button :class="buttonClasses">
 		<template v-if="state">
 			<slot name="on" />
 		</template>
@@ -12,7 +9,6 @@
 			/>
 		</template>
 	</button>
-
 </template>
 
 <script>
