@@ -3,48 +3,36 @@
 		class="popup-app card"
 		@keydown.esc.stop.prevent
 	>
-		<!-- Tabs navs -->
 		<PopupScopesTabs
-			:selected-tab="currentTab"
-			@change-tab="changeTab"
+			:current-scope-code="currentScopeCode"
+			@change-tab="changeScope"
 		/>
-		<!-- Tabs navs -->
-		<div class="popup-content">
-			<div class="container d-flex justify-content-between">
-				<h3>Settings</h3>
-				<SettingsActions
-					:current-settings="currentSettings"
-					@delete="onDeleteSettings"
-					@toggle-injection="toggleInjection"
-					@refresh-settings="onRefreshSettings"
-					@reset-div="onResetDiv"
-					@start-download="startDownload"
-					@import-settings="importSettings"
-				/>
-			</div>
 
+		<div class="popup-content">
 			<Settings
 				:current-settings="currentSettings"
 				:request-info="requestInfo"
 				class="expand-height"
 				@update-settings="updateCurrentSettings($event, true)"
+				@delete="onDeleteSettings"
+				@refresh-settings="onRefreshSettings"
+				@reset-div="onResetDiv"
+				@start-download="startDownload"
+				@import-settings="importSettings"
 			/>
+			<!--@toggle-injection="toggleInjection"-->
 		</div>
 	</div>
 </template>
 
 <script>
+import {toRaw, isProxy} from "vue"
 import {getEmptySettings} from "@/settings/settingConstants"
 import settingsProvider from "@/settings/settings-manager"
-import {
-	getRequestInfo,
-	sendSettingsChanged
-} from "@/messaging/messagingProvider"
+import {getRequestInfo, sendSettingsChanged} from "@/messaging/messagingProvider"
 import {getCurrentTab} from "@/providers/chromeApiProvider"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
-import SettingsActions from "@/popup/components/settings/SettingsActions"
 import Settings from "@/popup/components/settings/Settings"
-import {toRaw} from "@vue/reactivity"
 import {downloadJSON} from "@/helpers/file-helpers"
 import {parseTransformations} from "@/transformations/transformationHelper"
 
@@ -52,13 +40,12 @@ export default {
 	name: "PopupApp",
 	components: {
 		Settings,
-		SettingsActions,
 		PopupScopesTabs
 	},
 	data() {
 		return {
 			allowedOrigins: [],
-			currentTab: "origin",
+			currentScopeCode: "origin",
 			currentSettings: getEmptySettings(),
 			requestInfo: {}
 		}
@@ -87,25 +74,25 @@ export default {
 			console.log("new inject:", !this.currentSettings.inject)
 			this.currentSettings.inject = !this.currentSettings.inject
 
-			await settingsProvider.setSettings(this.currentTab, {
+			await settingsProvider.setSettings(this.currentScopeCode, {
 				inject: this.currentSettings.inject
 			})
 
 			sendSettingsChanged()
 		},
-		changeTab(scope) {
-			this.currentTab = scope.code
+		changeScope(scope) {
+			this.currentScopeCode = scope.code
 			this.loadCurrentSettings()
 		},
 		async deleteCurrentSettings() {
-			return await settingsProvider.deleteSettings(this.currentTab)
+			return await settingsProvider.deleteSettings(this.currentScopeCode)
 		},
 		async loadSettings() {
-			const {settings: currentSettings, level: selectedTab} =
+			const {settings: currentSettings, level: currentScopeCode} =
 				await settingsProvider.getMostSpecificSettings()
 
 			this.currentSettings = currentSettings
-			this.currentTab = selectedTab
+			this.currentScopeCode = currentScopeCode
 
 			const currentTab = await getCurrentTab()
 			this.requestInfo = (await getRequestInfo(currentTab.id)) ?? null
@@ -113,8 +100,8 @@ export default {
 			await this.loadCurrentSettings()
 		},
 		async loadCurrentSettings() {
-			console.log("Loading current settings", this.currentTab)
-			const loadedSettings = await settingsProvider.getSettings(this.currentTab)
+			console.log("Loading current settings", this.currentScopeCode)
+			const loadedSettings = await settingsProvider.getSettings(this.currentScopeCode)
 
 			console.log("loaded settings", loadedSettings)
 
@@ -132,28 +119,29 @@ export default {
 		// 	await this.loadSettings()
 		//},
 		async updateCurrentSettings(newSettings, notPartial = false) {
-			const settings = (notPartial && newSettings) || {
-				...this.currentSettings,
-				...newSettings
-			}
+			const settings = notPartial
+				? newSettings
+				: {
+					...this.currentSettings,
+					...newSettings
+				}
 
-			console.log(newSettings)
+			// console.log(newSettings)
 
 			this.currentSettings = settings
 
 			await this.saveSettings(settings)
 		},
 		async saveSettings(settings) {
-			// * use toraw for all nonsimple types
-			await settingsProvider.setSettings(this.currentTab, {
-				inject: settings.inject,
-				headerRules: toRaw(settings.headerRules),
-				position: settings.position,
-				requestsRules: toRaw(settings.requestsRules),
-				locale: toRaw(settings.locale),
-				transformations: toRaw(settings.transformations),
-				localeReplace: toRaw(settings.localeReplace)
-			})
+			const settingsToSave = Object.keys(settings)
+				.reduce((acc, key) => {
+					acc[key] = isProxy(settings[key])
+						? toRaw(settings[key])
+						: settings[key]
+					return acc
+				}, {})
+
+			await settingsProvider.setSettings(this.currentScopeCode, settingsToSave)
 
 			await sendSettingsChanged()
 
@@ -165,7 +153,7 @@ export default {
 		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
 		//},
 		startDownload() {
-			downloadJSON(this.currentSettings, `KEEN-EYE-${this.currentTab}`)
+			downloadJSON(this.currentSettings, `KEEN-EYE-${this.currentScopeCode}`)
 		},
 		async importSettings(settings) {
 			parseTransformations(settings)
