@@ -1,13 +1,13 @@
 <template>
 	<div
 		class="form-group flex-nowrap"
-		style="min-width: 40%"
+		style="min-width: 55%"
 	>
 		<div
 			class="input-group"
 			@keyup.esc.stop
 		>
-			<div class="form-control form-control-sm">
+			<div class="form-control form-control-sm p-0">
 				<multiselect
 					class="multiselect-sm"
 					:model-value="locale"

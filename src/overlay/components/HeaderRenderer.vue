@@ -12,7 +12,7 @@
 			</CopyHeadersButtonVue>
 		</div>
 	</div>
-	<table class="table table-striped table-sm">
+	<table class="table table-striped table-sm table-condensed tab">
 		<thead class="table-dark">
 			<tr>
 				<th

@@ -57,7 +57,7 @@ function render(settings, level) {
 	document.body.appendChild(div)
 	//create shadow root
 	div.attachShadow({mode: "open"})
-	const appRoot = document.createElement("html")
+	const appRoot = document.createElement("div")
 	div.shadowRoot.appendChild(appRoot)
 	addScriptsAndStyles(div)
 
@@ -78,36 +78,21 @@ function createVueApp(appRoot, props) {
 }
 
 function addScriptsAndStyles(div) {
-	addScript(
-		div.shadowRoot,
-		"https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-	)
-	addStyle(
-		div.shadowRoot,
-		"https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-	)
-	addStyle(
-		div.shadowRoot,
-		"https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css"
-	)
+	addScript(div.shadowRoot, getResourceUrl("/external/bootstrap.bundle.min.js"))
 
-	//this is intentional
-	addStyle(
-		document.body,
-		"https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css",
-		removeName
-	)
-	addStyle(
-		div.shadowRoot,
-		"https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css"
-	)
 	addStyleContent(document.body, resetCss, removeName)
 	addStyleContent(div.shadowRoot, resetCss)
 	addStyleContent(div.shadowRoot, bootstrapBody)
 
 	addStyle(div.shadowRoot, getResourceUrl("css/content.css"))
 	addStyle(div.shadowRoot, getResourceUrl("modal.css"))
-	addStyle(div.shadowRoot, getResourceUrl("popper.css"))
+
+	addStyle(div.shadowRoot, getResourceUrl("external/popper.css"))
+	addStyle(div.shadowRoot, getResourceUrl("external/line-awesome.min.css"))
+	addStyle(document.body, getResourceUrl("external/line-awesome.min.css"))
+	addStyle(div.shadowRoot, getResourceUrl("external/bootstrap.min.css"))
+	addStyle(div.shadowRoot, getResourceUrl("external/vue-multiselect.min.css"))
+
 	addStyle(div.shadowRoot, getResourceUrl("overrides.css"))
 }
 

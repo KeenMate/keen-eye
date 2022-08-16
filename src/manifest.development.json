@@ -6,16 +6,16 @@
 	"background": {
 		"scripts": ["/background.js"],
 		"persistent": true
-},
+	},
 	"browser_action": {
 		"default_popup": "popup.html"
-},
+	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
 			"js": ["/content.js"],
 			"run_at": "document_end"
-	}
+		}
 	],
 	"permissions": [
 		"webRequest",
@@ -38,12 +38,17 @@
 		"/css/content.css",
 		"overrides.css",
 		"*.css",
-		"css/*.css"
+		"css/*.css",
+		"*.js",
+		"extermal/*.js",
+		"*.ttf",
+		"*.woff",
+		"*.woff2"
 	],
 	"commands": {
 		"toggle-page-overlay": {
 			"suggested_key": {"default": "Ctrl+Shift+K"},
 			"description": "Toggle page overlay"
+		}
 	}
-}
 }

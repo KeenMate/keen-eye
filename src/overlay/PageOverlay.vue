@@ -1,20 +1,24 @@
 <template>
-	<div class="m-1 position-relative pt-2 pb-2">
-		<div class="row">
-			<div class="col-6">
+	<div class="m-1 position-relative">
+		<div class="d-flex align-items-center">
+			<div>
 				<h5
 					ref="dragg"
 					class="title user-select-none"
-					style="cursor: pointer"
+					style="cursor: grab"
 				>
-					{{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
+					{{ pageName ?? "refresh page" }}
+					<template v-if="requestInfo?.response?.statusCode && time">
+						(<b>{{ requestInfo?.response?.statusCode }}</b> in
+						{{ time ? time + "ms" : "refresh" }})
+					</template>
 				</h5>
 			</div>
-			<div class="col-5">
-				<h6>{{ time ? time + "ms" : "refresh" }}</h6>
-			</div>
 
-			<div class="col-1">
+			<div
+				style="margin-left: auto"
+				class="align-self-start"
+			>
 				<button
 					type="button"
 					class="btn-close"
@@ -64,7 +68,7 @@
 				@remove-locale="onRemoveLocale"
 			/>
 		</div>
-		<div>
+		<div class="mt-1">
 			<div style="max-height: 35vh; overflow-y: auto; overflow-x: hidden">
 				<HeaderRendererVue
 					v-if="headersFilterRules"
