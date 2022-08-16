@@ -7,11 +7,11 @@
 					class="title user-select-none"
 					style="cursor: pointer"
 				>
-					{{ pageName }}({{ requestInfo?.response?.statusCode ?? "loading" }})
+					{{pageName}}({{requestInfo?.response?.statusCode ?? "loading"}})
 				</h5>
 			</div>
 			<div class="col-5">
-				<h6>{{ time ? time + "ms" : "refresh" }}</h6>
+				<h6>{{time ? time + "ms" : "refresh"}}</h6>
 			</div>
 
 			<div class="col-1">
@@ -27,24 +27,31 @@
 			class="d-flex"
 			style="gap: 3px"
 		>
-			<div class="form-check form-switch">
-				<label
-					class="form-check-label"
-					for="useFilters"
-				>
-					<i
-						class="las la-filter"
-						style="font-size: 20px"
-					/>
-				</label>
-				<input
-					id="useFilters"
-					v-model="useFilters"
-					class="form-check-input"
-					type="checkbox"
-					role="switch"
+			<SwitchInput v-model="useFilters">
+				<i
+					class="las la-filter"
+					style="font-size: 20px"
 				/>
-			</div>
+			</SwitchInput>
+
+			<!--<div class="form-check form-switch">-->
+			<!--	<label-->
+			<!--		class="form-check-label"-->
+			<!--		for="useFilters"-->
+			<!--	>-->
+			<!--		<i-->
+			<!--			class="las la-filter"-->
+			<!--			style="font-size: 20px"-->
+			<!--		/>-->
+			<!--	</label>-->
+			<!--	<input-->
+			<!--		id="useFilters"-->
+			<!--		v-model="useFilters"-->
+			<!--		class="form-check-input"-->
+			<!--		type="checkbox"-->
+			<!--		role="switch"-->
+			<!--	/>-->
+			<!--</div>-->
 
 			<button
 				class="btn btn-sm"
@@ -114,9 +121,11 @@ import LocaleSelector from "./components/LocaleSelector.vue"
 
 import "../assets/css/vue-multiselect-overrides.scss"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
+import SwitchInput from "@/components/form/SwitchInput"
 
 export default {
 	components: {
+		SwitchInput,
 		HeaderRendererVue,
 		RequestsRendererVue,
 		WidgetContainerModal: container,

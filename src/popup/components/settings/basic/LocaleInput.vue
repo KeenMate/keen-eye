@@ -1,5 +1,5 @@
 <template>
-	<div class="form-group">
+	<div class="mb-3">
 		<label>Locale</label>
 		<div
 			class="input-group"
@@ -17,18 +17,16 @@
 				:multiple="false"
 				@update:model-value="$emit('input', $event)"
 			/>
-			<div class="input-group-append">
-				<button
-					class="btn btn-danger"
-					@click="$emit('remove-locale')"
-				>
-					<i class="las la-trash" />
-				</button>
-			</div>
+			<button
+				class="btn btn-danger"
+				@click="$emit('remove-locale')"
+			>
+				<i class="las la-trash" />
+			</button>
 		</div>
 	</div>
 
-	<div class="form-group">
+	<div class="mb-3">
 		<label for="custom-locales-file">
 			Custom locales
 			<template v-if="isCustom">

@@ -1,12 +1,6 @@
 <template>
 	<div class="settings-actions d-flex justify-content-between">
 		<div class="btn-group">
-			<HiddenFileInput
-				title="Imports settings from file"
-				@import="$emit('import-settings', $event)"
-			>
-				<i class="las la-file-import" />
-			</HiddenFileInput>
 			<button
 				:class="[...buttonClasses, 'btn-info']"
 				title="Exports current settings"
@@ -14,24 +8,19 @@
 			>
 				<i class="las la-download" />
 			</button>
+			<HiddenFileInput
+				title="Imports settings from file"
+				@import="$emit('import-settings', $event)"
+			>
+				<i class="las la-upload" />
+			</HiddenFileInput>
 		</div>
 
 		<div class="btn-group">
-			<ToggleButton
-				:state="currentSettings?.inject"
-				on-color="btn-danger"
-				off-color="btn-success"
-				:class="buttonClasses"
-				title="Toggles visibility of page overlay"
-				@click="$emit('toggle-injection')"
-			>
-				<template #on>
-					<i class="las la-eye-slash" />
-				</template>
-				<template #off>
-					<i class="las la-eye" />
-				</template>
-			</ToggleButton>
+			<ToggleOverlay
+				:overlay-visible="currentSettings?.inject"
+				@toggle="$emit('toggle-overlay')"
+			/>
 			<button
 				:class="[...buttonClasses, 'btn-info']"
 				title="Refreshes settings"
@@ -67,25 +56,26 @@
 
 <script>
 import HiddenFileInput from "../HiddenFileInput.vue"
-import ToggleButton from "@/components/ui/button/ToggleButton"
+import ToggleOverlay from "@/popup/components/ui/button/ToggleOverlay"
+
 
 export default {
 	name: "SettingsActions",
-	components: {ToggleButton, HiddenFileInput},
+	components: {ToggleOverlay, HiddenFileInput},
 	props: {
 		currentSettings: Boolean
 	},
 	emits: [
 		"reset-div",
 		"delete",
-		"toggle-injection",
 		"refresh-settings",
+		"toggle-overlay",
 		"start-download",
 		"import-settings"
 	],
 	data() {
 		return {
-			buttonClasses: ["btn"]
+			buttonClasses: ["btn btn-icon"]
 		}
 	},
 	methods: {

@@ -25,8 +25,8 @@ export default {
 		badgeClasses() {
 			return [
 				"badge",
-				this.pill && "badge-pill",
-				this.color && `badge-${this.color}` || "badge-light"
+				this.pill && "rounded-pill",
+				this.color && `text-bg-${this.color}` || "text-bg-light"
 			]
 		}
 	}

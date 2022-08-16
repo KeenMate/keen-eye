@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="form-group flex-nowrap"
+		class="mb-3 flex-nowrap"
 		style="min-width: 40%"
 	>
 		<div

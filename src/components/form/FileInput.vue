@@ -1,19 +1,11 @@
 <template>
-	<div class="custom-file">
-		<input
-			ref="input"
-			type="file"
-			v-bind="$attrs"
-			class="custom-file-input"
-			@change="$emit('change', $event.target.files[0])"
-		/>
-		<label
-			class="custom-file-label"
-			for="custom-file"
-		>
-			Select file
-		</label>
-	</div>
+	<input
+		ref="input"
+		type="file"
+		v-bind="$attrs"
+		class="form-control"
+		@change="$emit('change', $event.target.files[0])"
+	/>
 </template>
 
 <script>
