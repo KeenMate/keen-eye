@@ -110,12 +110,12 @@ export default {
 
 	.settings-content {
 		flex: 1;
-		overflow: auto;
+		//overflow: auto;
 		//max-height: 35em;
 
-		& > div {
-			height: 0;
-		}
+		//& > div {
+		//	height: 0;
+		//}
 	}
 }
 </style>

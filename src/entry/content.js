@@ -1,6 +1,6 @@
 import {createApp} from "vue"
 import PageOverlay from "@/overlay/PageOverlay.vue"
-import {contentScriptMessages} from "@/messaging/messages"
+import {ContentScriptMessages} from "@/messaging/messages"
 import Popper from "vue3-popper"
 import {
 	bootstrapBody,
@@ -13,7 +13,7 @@ import {getSettings} from "@/messaging/messagingProvider"
 import {getResourceUrl} from "@/providers/chromeApiProvider"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 
-onMessageReceived(contentScriptMessages.settingsChanged, () => loadAndRender())
+onMessageReceived(ContentScriptMessages.settingsChanged, () => loadAndRender())
 
 function loadAndRender() {
 	getSettings().then(response => {

@@ -8,7 +8,7 @@
 	display: flex;
 	align-items: center;
 	padding: 0 !important;
-	//width: calc(100% - 2px) !important;
+	font-size: 12px;
 
 	.multiselect__select {
 		display: flex;
@@ -38,19 +38,24 @@
 
 	.multiselect__tags {
 		flex: 1;
-		min-height: auto;
 		border: none;
-		height: 2em;
+		min-height: 2em;
+		overflow-x: hidden;
 		padding: .2em;
 
 		.multiselect__input {
 			font-size: 1em;
 			padding-left: 0 !important;
 		}
+
+		.multiselect__placeholder {
+			margin-bottom: 0;
+		}
 		
 		.multiselect__tags-wrap {
 			display: inline-flex;
 			gap: .5em;
+			flex-wrap: wrap;
 			
 			.multiselect__tag {
 				display: flex;
@@ -61,6 +66,12 @@
 				
 				& > span {
 					flex: 1;
+					
+					&:first-child {
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						overflow: hidden;
+					}
 				}
 				
 				.multiselect__tag-icon {
@@ -79,6 +90,9 @@
 	}
 
 	.multiselect__content-wrapper {
+		z-index: 100;
+		top: 100%;
+		
 		.multiselect__option {
 			display: flex;
 			justify-content: space-between;

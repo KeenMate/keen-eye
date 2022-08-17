@@ -8,7 +8,6 @@
 			>
 				<i class="las la-download" />
 			</button>
-			i
 			<HiddenFileInput
 				title="Imports settings from file"
 				@import="$emit('import-settings', $event)"
@@ -64,7 +63,7 @@ export default {
 	name: "SettingsActions",
 	components: {ToggleOverlay, HiddenFileInput},
 	props: {
-		currentSettings: Boolean
+		currentSettings: Object
 	},
 	emits: [
 		"reset-div",

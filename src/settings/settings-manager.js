@@ -8,6 +8,7 @@ import {parseTransformations} from "@/transformations/transformationHelper"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
 import {StorageProvider} from "./storageProvider"
 import {CacheStorageProvider} from "./cacheStorageProvider"
+import {OverlayRecordingKey} from "@/constants/storage-keys"
 
 export class SettingsManager {
 	constructor(asyncSource, syncSource) {
@@ -16,6 +17,17 @@ export class SettingsManager {
 
 		this.asyncSource = asyncSource
 		this.syncSource = syncSource
+	}
+
+	async setOverlayRecordingAsync(overlayRecording) {
+		await this.asyncSource.setItem(OverlayRecordingKey, overlayRecording)
+
+		// THE settings are not changed in reality
+		// await sendSettingsChanged()
+	}
+
+	async getOverlayRecordingAsync() {
+		return await this.asyncSource.getItem(OverlayRecordingKey)
 	}
 
 	async getSettings(level, url) {
@@ -84,7 +96,8 @@ export class SettingsManager {
 
 		console.log("saving to storage ", storageKey, oldOriginInfo)
 
-		return this.asyncSource.setItem(storageKey, oldOriginInfo)
+		await this.asyncSource.setItem(storageKey, oldOriginInfo)
+		await sendSettingsChanged()
 	}
 
 	async getMostSpecificSettings(url) {

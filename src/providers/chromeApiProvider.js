@@ -67,27 +67,26 @@ export function RemoveOnBeforeSendHeaders(handler) {
 export function onSendHeaders(handler, filter, extra) {
 	chrome.webRequest.onSendHeaders.addListener(handler, filter, extra)
 }
-export function RemoveOnSendHeadersRemove(handler) {
+export function RemoveOnSendHeaders(handler) {
 	chrome.webRequest.onSendHeaders.removeListener(handler)
 }
 
 export function onHeadersReceived(handler, filter, extra) {
 	chrome.webRequest.onHeadersReceived.addListener(handler, filter, extra)
 }
-export function RemoveOnHeadersReceivedRemove(handler) {
+export function RemoveOnHeadersReceived(handler) {
 	chrome.webRequest.onHeadersReceived.removeListener(handler)
 }
 
 export function onCompleted(handler, filter, extra) {
 	chrome.webRequest.onCompleted.addListener(handler, filter, extra)
 }
-export function RemoveOnCompletedRemove(handler) {
+export function RemoveOnCompleted(handler) {
 	chrome.webRequest.onCompleted.removeListener(handler)
 }
 
 //* STORAGE
 export function setToStorage(items) {
-	console.log(items)
 	return new Promise((resolve, reject) => {
 		chrome.storage.sync.set(items, () => {
 			if (chrome.runtime.lastError) {

@@ -1,4 +1,4 @@
-import {backgroudScriptMessages as messages} from "@/messaging/messages"
+import {BackgroundScriptMessages as Messages} from "@/messaging/messages"
 import {LanguageChanger} from "@/languages/languageChanger"
 import SettingsManager from "@/settings/settings-manager"
 import {sendSettingsChanged} from "@/messaging/messagingProvider"
@@ -7,31 +7,40 @@ import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
 import languages from "@/languages/languages"
 import {RequestsHandler} from "@/requestInfo/requestsHandler"
-;("use strict")
-//setup providers
-var requestInfoStore = new RequestInfo()
 
-var requestHandler = new RequestsHandler(requestInfoStore)
+
+("use strict")
+//setup providers
+const requestInfoStore = new RequestInfo()
+
+const requestHandler = new RequestsHandler(requestInfoStore)
 
 new LanguageChanger(SettingsManager)
 
 onMessage(function (request, sender, sendResponse) {
 	console.debug("bg got message", request, sender)
-	//handle messsage based on type
+	// Handle message based on type
 	switch (request?.type) {
-		case messages.getRequestInfo:
-			{
-				const {tabId} = request.data
-
-				let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
-
-				console.log("sending request info ", {requestInfo, sender})
-
-				sendReply(true, requestInfo, sendResponse)
-			}
+		case Messages.overlayRecordingUpdated: {
+			if (request.data)
+				requestHandler.addListeners()
+			else
+				requestHandler.removeListeners()
+		}
 			break
 
-		case messages.getSettings:
+		case Messages.getRequestInfo: {
+			const {tabId} = request.data
+
+			let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
+
+			console.log("sending request info ", {requestInfo, sender})
+
+			sendReply(true, requestInfo, sendResponse)
+		}
+			break
+
+		case Messages.getSettings:
 			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
 				console.log("sending settings", {settings, sender})
 				if (settings) {
@@ -41,7 +50,7 @@ onMessage(function (request, sender, sendResponse) {
 				}
 			})
 			break
-		case messages.setSettings: {
+		case Messages.setSettings: {
 			const {settings, level} = request.data
 
 			console.log("saving settings: ", {settings, level})
@@ -67,7 +76,7 @@ onMessage(function (request, sender, sendResponse) {
 			return true
 		}
 
-		case messages.getLocales:
+		case Messages.getLocales:
 			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
 				console.log("sending most specific settings", {
 					url: sender.url,

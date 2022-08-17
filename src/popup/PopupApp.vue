@@ -15,6 +15,9 @@
 			<div class="px-3">
 				<SwitchInput
 					:model-value="overlayRecording"
+					title="Toggles recording of requests for KEEN-EYE"
+					on-color="success"
+					off-color="danger"
 					@update:model-value="onUpdateOverlayRecording"
 				/>
 			</div>
@@ -40,8 +43,8 @@
 <script>
 import {toRaw, isProxy} from "vue"
 import {getEmptySettings} from "@/settings/settingConstants"
-import settingsProvider from "@/settings/settings-manager"
-import {getRequestInfo, sendSettingsChanged} from "@/messaging/messagingProvider"
+import SettingsManager from "@/settings/settings-manager"
+import {getRequestInfo} from "@/messaging/messagingProvider"
 import {getCurrentTab} from "@/providers/chromeApiProvider"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import Settings from "@/popup/components/settings/Settings"
@@ -68,11 +71,13 @@ export default {
 	mounted() {
 		setTimeout(async () => {
 			await this.loadSettings()
+			await this.loadOverlayRecording()
 		}, 25)
 	},
 	methods: {
-		onUpdateOverlayRecording() {
-
+		async onUpdateOverlayRecording(overlayRecording) {
+			await SettingsManager.setOverlayRecordingAsync(overlayRecording)
+			this.overlayRecording = overlayRecording
 		},
 		onResetDiv() {
 			this.updateCurrentSettings({
@@ -88,26 +93,19 @@ export default {
 		onRefreshSettings() {
 			this.loadCurrentSettings()
 		},
-		async toggleInjection() {
-			console.log("new inject:", !this.currentSettings.inject)
-			this.currentSettings.inject = !this.currentSettings.inject
-
-			await settingsProvider.setSettings(this.currentScopeCode, {
-				inject: this.currentSettings.inject
-			})
-
-			sendSettingsChanged()
-		},
 		changeScope(scope) {
 			this.currentScopeCode = scope.code
 			this.loadCurrentSettings()
 		},
 		async deleteCurrentSettings() {
-			return await settingsProvider.deleteSettings(this.currentScopeCode)
+			return await SettingsManager.deleteSettings(this.currentScopeCode)
+		},
+		async loadOverlayRecording() {
+			this.overlayRecording = await SettingsManager.getOverlayRecordingAsync()
 		},
 		async loadSettings() {
 			const {settings: currentSettings, level: currentScopeCode} =
-				await settingsProvider.getMostSpecificSettings()
+				await SettingsManager.getMostSpecificSettings()
 
 			this.currentSettings = currentSettings
 			this.currentScopeCode = currentScopeCode
@@ -119,7 +117,7 @@ export default {
 		},
 		async loadCurrentSettings() {
 			console.log("Loading current settings", this.currentScopeCode)
-			const loadedSettings = await settingsProvider.getSettings(this.currentScopeCode)
+			const loadedSettings = await SettingsManager.getSettings(this.currentScopeCode)
 
 			console.log("loaded settings", loadedSettings)
 
@@ -159,9 +157,7 @@ export default {
 					return acc
 				}, {})
 
-			await settingsProvider.setSettings(this.currentScopeCode, settingsToSave)
-
-			await sendSettingsChanged()
+			await SettingsManager.setSettings(this.currentScopeCode, settingsToSave)
 
 			// if (settings.locale) {
 			// 	refreshCurrentPage()

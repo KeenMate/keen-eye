@@ -110,7 +110,7 @@ import {toRaw} from "@vue/reactivity"
 import {container} from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
-import {contentScriptMessages as messages} from "@/messaging/messages"
+import {ContentScriptMessages as messages} from "@/messaging/messages"
 import {containerName} from "@/overlay/overlayConstants"
 import {
 	changeInject,

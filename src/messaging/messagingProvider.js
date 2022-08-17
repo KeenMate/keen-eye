@@ -1,6 +1,6 @@
 import {
-	backgroudScriptMessages as BgMessages,
-	contentScriptMessages as CsMessages
+	BackgroundScriptMessages as BgMessages,
+	ContentScriptMessages as CsMessages
 } from "@/messaging/messages"
 import {
 	sendMessageToBg,

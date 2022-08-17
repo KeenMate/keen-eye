@@ -1,13 +1,14 @@
-export const backgroudScriptMessages = {
+export const BackgroundScriptMessages = {
 	getRequestInfo: "get-response",
 	getSettings: "get-settings",
 	getLocales: "get-locales",
-	setSettings: "set-settings"
+	setSettings: "set-settings",
+	overlayRecordingUpdated: "update-overlay-recording"
 }
 
-export const contentScriptMessages = {
+export const ContentScriptMessages = {
 	settingsChanged: "settings-changed",
 	newRequests: "new-requests"
 }
-export const settingsChanged = "settings-changed"
-export const newRequests = "new-requests"
+export const SettingsChanged = "settings-changed"
+export const NewRequests = "new-requests"
