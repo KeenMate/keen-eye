@@ -251,7 +251,7 @@ export default {
 			this.locales = locales
 		},
 		onRemoveLocale() {
-			saveLocale(null)
+			this.saveLocale(null)
 		}
 	}
 }

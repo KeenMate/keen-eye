@@ -4,11 +4,9 @@
 		style="z-index: 999999"
 	>
 		<div class="card-body">
-			<div class="row">
-				<div class="col-10">
-					<h5>{{request.statusLine}}</h5>
-				</div>
-				<div class="col-2">
+			<div class="d-flex">
+				<h5>{{ request.statusLine }}</h5>
+				<div class="ms-auto">
 					<button
 						type="button"
 						class="btn-close"
@@ -17,30 +15,37 @@
 					/>
 				</div>
 			</div>
-			<span class="overflox-auto">{{request.url}} <br /></span>
-			Took: {{request.took.toFixed(2)}}ms <br />
-			Ttfb: {{request.ttfb.toFixed(2)}}ms <br />
+			<div
+				class="limited-width"
+				style="max-width: 500px"
+			>
+				<Popper :content="request.url">
+					{{ request.url }}
+				</Popper>
+			</div>
+			Took: {{ request.took.toFixed(2) }}ms <br />
+			Ttfb: {{ request.ttfb.toFixed(2) }}ms <br />
 			<header-renderer :headers="request.responseHeaders" />
 		</div>
 	</div>
 </template>
 <script>
-import HeaderRenderer from "./HeaderRenderer.vue";
-import {closeModal} from "jenesius-vue-modal";
+import HeaderRenderer from "./HeaderRenderer.vue"
+import {closeModal} from "jenesius-vue-modal"
 export default {
 	components: {HeaderRenderer},
 	props: {
-		request: Object,
+		request: Object
 	},
 	computed: {
 		title() {
-			return new URL(this.request.url).host;
-		},
+			return new URL(this.request.url).host
+		}
 	},
 	methods: {
 		close() {
-			closeModal();
-		},
-	},
-};
+			closeModal()
+		}
+	}
+}
 </script>
