@@ -13,7 +13,10 @@ import {getSettings} from "@/messaging/messagingProvider"
 import {getResourceUrl} from "@/providers/chromeApiProvider"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 
-onMessageReceived(ContentScriptMessages.settingsChanged, () => loadAndRender())
+onMessageReceived(ContentScriptMessages.settingsChanged, () => {
+	console.log("settings changed message received");
+	loadAndRender()
+})
 
 function loadAndRender() {
 	getSettings().then(response => {

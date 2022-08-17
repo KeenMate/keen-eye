@@ -21,7 +21,7 @@ export class RequestInfo {
 	}
 
 	async sendMessage() {
-		this.tabsToMessage.forEach((tabId) => {
+		this.tabsToMessage.forEach(tabId => {
 			sendNewRequests(this.requestInfo[tabId].requests, tabId)
 		})
 
@@ -108,5 +108,11 @@ export class RequestInfo {
 
 	removeForTab(tabId) {
 		delete this.requestInfo[tabId]
+	}
+
+	removeStorage() {
+		console.log("removing storage")
+
+		this.requestInfo = {}
 	}
 }

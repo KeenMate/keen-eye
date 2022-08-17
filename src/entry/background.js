@@ -1,15 +1,12 @@
 import {BackgroundScriptMessages as Messages} from "@/messaging/messages"
 import {LanguageChanger} from "@/languages/languageChanger"
 import SettingsManager from "@/settings/settings-manager"
-import {sendSettingsChanged} from "@/messaging/messagingProvider"
 import {sendReply} from "@/messaging/scriptsComunicationHelper"
 import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
 import languages from "@/languages/languages"
 import {RequestsHandler} from "@/requestInfo/requestsHandler"
-
-
-("use strict")
+;("use strict")
 //setup providers
 const requestInfoStore = new RequestInfo()
 
@@ -21,26 +18,27 @@ onMessage(function (request, sender, sendResponse) {
 	console.debug("bg got message", request, sender)
 	// Handle message based on type
 	switch (request?.type) {
-		case Messages.overlayRecordingUpdated: {
-			if (request.data)
-				requestHandler.addListeners()
-			else
-				requestHandler.removeListeners()
-		}
+		case Messages.overlayRecordingUpdated:
+			{
+				console.log("setting capturing to", !!request.data)
+
+				requestHandler.setCapturing(!!request.data)
+			}
 			break
 
-		case Messages.getRequestInfo: {
-			const {tabId} = request.data
+		case Messages.getRequestInfo:
+			{
+				const {tabId} = request.data
 
-			let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
+				let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
 
-			console.log("sending request info ", {requestInfo, sender})
+				console.log("sending request info ", {requestInfo, sender})
 
-			sendReply(true, requestInfo, sendResponse)
-		}
+				sendReply(true, requestInfo, sendResponse)
+			}
 			break
 
-		case Messages.getSettings:
+		case Messages.getSettings: {
 			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
 				console.log("sending settings", {settings, sender})
 				if (settings) {
@@ -49,22 +47,17 @@ onMessage(function (request, sender, sendResponse) {
 					sendReply(false, {}, sendResponse)
 				}
 			})
-			break
+
+			return true
+		}
 		case Messages.setSettings: {
-			const {settings, level} = request.data
+			const {settings, level, reloadOverlay} = request.data
 
-			console.log("saving settings: ", {settings, level})
+			console.log("saving settings: ", {settings, level}, {reloadOverlay})
 
-			SettingsManager.setSettings(level, settings)
+			SettingsManager.setSettings(level, settings, reloadOverlay)
 				.then(() => {
-					if (
-						settings.headerRules !== undefined ||
-						settings.requestsRules !== undefined ||
-						settings.inject !== undefined
-					) {
-						sendSettingsChanged()
-					}
-					sendReply(true, undefined, sendResponse)
+					sendReply(true, {}, sendResponse)
 				})
 				.catch(e =>
 					sendReply(
@@ -76,7 +69,7 @@ onMessage(function (request, sender, sendResponse) {
 			return true
 		}
 
-		case Messages.getLocales:
+		case Messages.getLocales: {
 			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
 				console.log("sending most specific settings", {
 					url: sender.url,
@@ -90,13 +83,12 @@ onMessage(function (request, sender, sendResponse) {
 					sendReply(false, {}, sendResponse)
 				}
 			})
-			break
-
+			return true
+		}
 		default:
 			sendReply(false, {}, sendResponse)
 			break
 	}
-	return true
 })
 
 onCommand(command => {

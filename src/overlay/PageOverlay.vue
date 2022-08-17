@@ -7,10 +7,10 @@
 					class="title user-select-none"
 					style="cursor: grab"
 				>
-					{{pageName ?? "refresh page"}}
+					{{ pageName ?? "refresh page" }}
 					<template v-if="requestInfo?.response?.statusCode && time">
-						(<b>{{requestInfo?.response?.statusCode}}</b> in
-						{{time ? time + "ms" : "refresh"}})
+						(<b>{{ requestInfo?.response?.statusCode }}</b> in
+						{{ time ? time + "ms" : "refresh" }})
 					</template>
 				</h5>
 			</div>
@@ -37,25 +37,6 @@
 					style="font-size: 20px"
 				/>
 			</SwitchInput>
-
-			<!--<div class="form-check form-switch">-->
-			<!--	<label-->
-			<!--		class="form-check-label"-->
-			<!--		for="useFilters"-->
-			<!--	>-->
-			<!--		<i-->
-			<!--			class="las la-filter"-->
-			<!--			style="font-size: 20px"-->
-			<!--		/>-->
-			<!--	</label>-->
-			<!--	<input-->
-			<!--		id="useFilters"-->
-			<!--		v-model="useFilters"-->
-			<!--		class="form-check-input"-->
-			<!--		type="checkbox"-->
-			<!--		role="switch"-->
-			<!--	/>-->
-			<!--</div>-->
 
 			<button
 				class="btn btn-sm"
@@ -208,10 +189,12 @@ export default {
 		this.createFilterObjects(this.settings)
 
 		AddDrag(this.$refs.dragg, containerName, this.settings.position, pos =>
-			saveDivPosition(this.level, pos)
+			saveDivPosition(this.level, pos, false)
 		)
 
 		onMessageReceived(messages.newRequests, message => {
+			this.requestInfo = this.requestInfo ?? {}
+
 			this.requestInfo.requests = message.data
 		})
 
@@ -232,15 +215,25 @@ export default {
 			}
 		},
 		saveSettings() {
-			setSettings(this.level, {
-				headerRules: toRaw(this.headersFilterRules.rules)
-			})
+			setSettings(
+				this.level,
+				{
+					headerRules: toRaw(this.headersFilterRules.rules)
+				},
+				false
+			)
+
+			this.changesToSave = false
 		},
 		saveLocale(locale) {
 			console.log(locale)
-			setSettings(this.level, {
-				locale: toRaw(locale)
-			}).then(() => {
+			setSettings(
+				this.level,
+				{
+					locale: toRaw(locale)
+				},
+				true
+			).then(() => {
 				if (locale) location.reload()
 			})
 		},

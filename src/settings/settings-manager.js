@@ -5,7 +5,7 @@ import {
 	getUrlParts
 } from "@/helpers/urlHelper"
 import {parseTransformations} from "@/transformations/transformationHelper"
-import {sendSettingsChanged} from "@/messaging/messagingProvider"
+import {sendSettingsChanged, setCapturing} from "@/messaging/messagingProvider"
 import {StorageProvider} from "./storageProvider"
 import {CacheStorageProvider} from "./cacheStorageProvider"
 import {OverlayRecordingKey} from "@/constants/storage-keys"
@@ -22,6 +22,7 @@ export class SettingsManager {
 	async setOverlayRecordingAsync(overlayRecording) {
 		await this.asyncSource.setItem(OverlayRecordingKey, overlayRecording)
 
+		await setCapturing(overlayRecording)
 		// THE settings are not changed in reality
 		// await sendSettingsChanged()
 	}
@@ -55,16 +56,20 @@ export class SettingsManager {
 		return settings
 	}
 
-	async deleteSettings(level) {
+	async deleteSettings(level, reloadOverlay) {
 		const storageKey = await this.getStorageKey(level)
 		console.log("removing from " + storageKey)
 		await this.asyncSource.setItem(storageKey, null)
+
+		if (reloadOverlay) {
+			sendSettingsChanged()
+		}
 	}
 
 	/**
 	 * if some of them is undefined, it doesnt change it
 	 */
-	async setSettings(level, settings) {
+	async setSettings(level, settings, reloadOverlay = false) {
 		const storageKey = await this.getStorageKey(level)
 
 		let oldOriginInfo = (await this.getSettings(level)) ?? getEmptySettings()
@@ -97,7 +102,11 @@ export class SettingsManager {
 		console.log("saving to storage ", storageKey, oldOriginInfo)
 
 		await this.asyncSource.setItem(storageKey, oldOriginInfo)
-		await sendSettingsChanged()
+
+		if (reloadOverlay) {
+			console.log("SETTINGS CHANGED")
+			sendSettingsChanged()
+		}
 	}
 
 	async getMostSpecificSettings(url) {
@@ -159,15 +168,13 @@ export class SettingsManager {
 		return {settings: {inject: false}, level: "global"}
 	}
 
-	async toggleVisibility() {
+	async toggleVisibility(reloadOverlay) {
 		let {
 			level,
 			settings: {inject}
 		} = await this.getMostSpecificSettings()
 
-		await this.setSettings(level, {inject: !inject})
-
-		sendSettingsChanged()
+		await this.setSettings(level, {inject: !inject}, reloadOverlay)
 	}
 
 	async getStorageKey(level) {

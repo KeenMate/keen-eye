@@ -9,16 +9,40 @@ import {
 } from "@/providers/chromeApiProvider"
 import {fetchFilters, mainFrameFilters, extra} from "./requestInfoConstants"
 
+import settingsManager from "@/settings/settings-manager"
+
 export class RequestsHandler {
 	constructor(requestInfoStore) {
 		this.requestInfoStore = requestInfoStore
 
-		this.addListeners()
+		this.listeners = this.createListeners()
+
+		//this is added separatly so even if you have capturing disabled,
+		//it will clean its memory
+		onTabRemoved(this.tabForTabListener)
+
+		settingsManager.getOverlayRecordingAsync().then(capturing => {
+			console.log(capturing)
+			this.setCapturing(capturing ?? true)
+		})
+	}
+
+	setCapturing(capturing) {
+		if (this.capturing == capturing) return
+
+		this.capturing = capturing
+
+		console.log("set captuing to ", capturing)
+
+		if (this.capturing) {
+			this.addListeners()
+		} else {
+			this.removeListeners()
+			this.requestInfoStore.removeStorage()
+		}
 	}
 
 	addListeners() {
-		onTabRemoved(this.tabForTabListener)
-
 		this.addMainframeListeners()
 
 		this.addRequestListeners()
@@ -26,46 +50,52 @@ export class RequestsHandler {
 
 	removeListeners() {
 		this.removeRequestListeners()
+		this.removeMainframeListeners()
 	}
 
 	addMainframeListeners() {
 		onSendHeaders(
-			this.mainframeSendListener,
+			this.listeners.mainframeSendListener,
 			mainFrameFilters,
 			extra.requestHeaders
 		)
 
 		onHeadersReceived(
-			this.mainFrameReceivedListener,
+			this.listeners.mainFrameReceivedListener,
 			mainFrameFilters,
 			extra.responseHeaders
 		)
 	}
 
+	removeMainframeListeners() {
+		RemoveOnSendHeaders(this.listeners.mainframeSendListener)
+		RemoveOnHeadersReceived(this.listeners.mainFrameReceivedListener)
+	}
+
 	addRequestListeners() {
 		onSendHeaders(
-			this.requestSendListener,
+			this.listeners.requestSendListener,
 			fetchFilters,
 			extra.requestHeaders
 		)
 
 		onHeadersReceived(
-			this.requestReceivedListener,
+			this.listeners.requestReceivedListener,
 			fetchFilters,
 			extra.responseHeaders
 		)
 
 		onCompleted(
-			this.requestCompleteListener,
+			this.listeners.requestCompleteListener,
 			fetchFilters,
 			extra.responseHeaders
 		)
 	}
 
 	removeRequestListeners() {
-		RemoveOnSendHeaders(this.requestSendListener)
-		RemoveOnHeadersReceived(this.requestReceivedListener)
-		RemoveOnCompleted(this.requestCompleteListener)
+		RemoveOnSendHeaders(this.listeners.requestSendListener)
+		RemoveOnHeadersReceived(this.listeners.requestReceivedListener)
+		RemoveOnCompleted(this.listeners.requestCompleteListener)
 	}
 
 	mainframeSendListener(details) {
@@ -90,5 +120,16 @@ export class RequestsHandler {
 
 	tabForTabListener(details) {
 		this.requestInfoStore.removeForTab(details)
+	}
+
+	createListeners() {
+		return {
+			mainframeSendListener: this.mainframeSendListener.bind(this),
+			mainFrameReceivedListener: this.mainFrameReceivedListener.bind(this),
+			requestSendListener: this.requestSendListener.bind(this),
+			requestReceivedListener: this.requestReceivedListener.bind(this),
+			requestCompleteListener: this.requestCompleteListener.bind(this),
+			tabForTabListener: this.tabForTabListener.bind(this)
+		}
 	}
 }

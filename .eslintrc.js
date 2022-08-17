@@ -13,8 +13,7 @@ module.exports = {
 		"computed-property-spacing": ["error", "never"],
 		"vue/multi-word-component-names": "off",
 		indent: ["error", "tab", {SwitchCase: 1}],
-		"vue/html-indent": ["error", "tab"],
-		"vue/mustache-interpolation-spacing": ["error", "never"],
+		"vue/html-indent": "off",
 		"vue/require-default-prop": "off",
 		"vue/html-self-closing": [
 			"error",

@@ -42,15 +42,16 @@
 
 <script>
 import {toRaw, isProxy} from "vue"
+import SwitchInput from "@/components/form/SwitchInput"
+import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
+import Settings from "@/popup/components/settings/Settings"
+
 import {getEmptySettings} from "@/settings/settingConstants"
 import SettingsManager from "@/settings/settings-manager"
 import {getRequestInfo} from "@/messaging/messagingProvider"
 import {getCurrentTab} from "@/providers/chromeApiProvider"
-import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
-import Settings from "@/popup/components/settings/Settings"
 import {downloadJSON} from "@/helpers/file-helpers"
 import {parseTransformations} from "@/transformations/transformationHelper"
-import SwitchInput from "@/components/form/SwitchInput"
 
 export default {
 	name: "PopupApp",
@@ -76,7 +77,9 @@ export default {
 	},
 	methods: {
 		async onUpdateOverlayRecording(overlayRecording) {
+			console.log("updating capturing")
 			await SettingsManager.setOverlayRecordingAsync(overlayRecording)
+
 			this.overlayRecording = overlayRecording
 		},
 		onResetDiv() {
@@ -95,10 +98,11 @@ export default {
 		},
 		changeScope(scope) {
 			this.currentScopeCode = scope.code
+
 			this.loadCurrentSettings()
 		},
 		async deleteCurrentSettings() {
-			return await SettingsManager.deleteSettings(this.currentScopeCode)
+			await SettingsManager.deleteSettings(this.currentScopeCode, true)
 		},
 		async loadOverlayRecording() {
 			this.overlayRecording = await SettingsManager.getOverlayRecordingAsync()
@@ -117,7 +121,10 @@ export default {
 		},
 		async loadCurrentSettings() {
 			console.log("Loading current settings", this.currentScopeCode)
-			const loadedSettings = await SettingsManager.getSettings(this.currentScopeCode)
+
+			const loadedSettings = await SettingsManager.getSettings(
+				this.currentScopeCode
+			)
 
 			console.log("loaded settings", loadedSettings)
 
@@ -137,10 +144,7 @@ export default {
 		async updateCurrentSettings(newSettings, notPartial = false) {
 			const settings = notPartial
 				? newSettings
-				: {
-					...this.currentSettings,
-					...newSettings
-				}
+				: {...this.currentSettings, ...newSettings}
 
 			// console.log(newSettings)
 
@@ -149,19 +153,20 @@ export default {
 			await this.saveSettings(settings)
 		},
 		async saveSettings(settings) {
-			const settingsToSave = Object.keys(settings)
-				.reduce((acc, key) => {
-					acc[key] = isProxy(settings[key])
-						? toRaw(settings[key])
-						: settings[key]
-					return acc
-				}, {})
+			const settingsToSave = Object.keys(settings).reduce((acc, key) => {
+				acc[key] = isProxy(settings[key]) ? toRaw(settings[key]) : settings[key]
+				return acc
+			}, {})
 
-			await SettingsManager.setSettings(this.currentScopeCode, settingsToSave)
+			await SettingsManager.setSettings(
+				this.currentScopeCode,
+				settingsToSave,
+				true
+			)
 
-			// if (settings.locale) {
-			// 	refreshCurrentPage()
-			//}
+			if (settings.locale) {
+				refreshCurrentPage()
+			}
 		},
 		// copySettings() {
 		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))

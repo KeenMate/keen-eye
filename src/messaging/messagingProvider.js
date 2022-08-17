@@ -22,20 +22,28 @@ export async function getSettings() {
 	return data
 }
 
-export async function setSettings(level, settings) {
+export async function setSettings(level, settings, reloadOverlay) {
 	console.log("save settings", settings)
-	return await sendMessageToBg(BgMessages.setSettings, {level, settings})
+	return await sendMessageToBg(BgMessages.setSettings, {
+		level,
+		settings,
+		reloadOverlay
+	})
+}
+
+export async function setCapturing(capturing) {
+	return await sendMessageToBg(BgMessages.overlayRecordingUpdated, capturing)
 }
 
 export function getLocales() {
 	return sendMessageToBg(BgMessages.getLocales)
 }
 
-export async function saveDivPosition(level, position) {
-	return setSettings(level, {position})
+export async function saveDivPosition(level, position, reloadOverlay = false) {
+	return setSettings(level, {position}, reloadOverlay)
 }
-export async function changeInject(level, inject) {
-	return setSettings(level, {inject})
+export async function changeInject(level, inject, reloadOverlay = true) {
+	return setSettings(level, {inject}, reloadOverlay)
 }
 
 export function sendSettingsChanged() {
