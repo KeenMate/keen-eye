@@ -13,4 +13,22 @@ body {
 	justify-content: center;
 	align-items: center;
 	padding: .5em;
+
+	.la, .las, .lar {
+		font-size: 16px;
+	}
+}
+
+.badge-list {
+	display: flex;
+	gap: .25rem;
+	flex-wrap: wrap;
+
+	.badge {
+		font-size: 1em;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
 }

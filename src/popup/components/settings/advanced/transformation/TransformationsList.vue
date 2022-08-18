@@ -1,11 +1,11 @@
 <template>
-	<div class="transformations-list">
+	<div class="transformations-list badge-list mb-3">
 		<template v-if="transformations?.length">
 			<Badge
 				v-for="(transformation, idx) of transformations"
 				:key="transformation.transformationId"
-				:color="getBadgeColor(idx)"
-				pill
+				:color="getBadgeColor(transformation, idx)"
+				class="user-select-none"
 				@click="$emit('edit-transformation', transformation)"
 			>
 				{{transformation.headerRule}} |
@@ -15,12 +15,13 @@
 				/>
 			</Badge>
 
-			<Badge
-				color="success"
+			<button
+				class="btn btn-success btn-sm"
+				title="Add new transformation"
 				@click="$emit('new-transformation')"
 			>
-				Add new
-			</Badge>
+				<i class="las la-plus" />
+			</button>
 		</template>
 		<p v-else>
 			<Badge pill>
@@ -31,18 +32,8 @@
 </template>
 
 <script>
-import Badge from "@/components/ui/Badge"
-
-const BadgeColors = [
-	"primary",
-	"secondary",
-	"success",
-	"danger",
-	"warning",
-	"info",
-	"light",
-	"dark"
-]
+import Badge from "@/components/ui/badge/Badge"
+import {getBadgeColor} from "@/helpers/bootstrap-helpers"
 
 export default {
 	name: "TransformationsList",
@@ -54,30 +45,11 @@ export default {
 	},
 	emits: ["edit-transformation", "new-transformation", "delete-transformation"],
 	methods: {
-		getBadgeColor(idx) {
-			const color = BadgeColors[idx % BadgeColors.length]
-
-			return this.currentTransformationId
-				&& this.transformations[idx].transformationId === this.currentTransformationId
-				&& `outline-${color}`
-				|| color
+		getBadgeColor(transformation, idx) {
+			return transformation.transformationId === this.currentTransformationId
+				&& getBadgeColor(idx)
+				|| "secondary"
 		}
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-	.transformations-list {
-		display: flex;
-		gap: .25rem;
-		flex-wrap: wrap;
-
-		.badge {
-			font-size: 1em;
-
-			&:hover {
-				cursor: pointer;
-			}
-		}
-	}
-</style>

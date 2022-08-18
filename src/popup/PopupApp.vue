@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="popup-app card"
+		class="popup-app"
 		@keydown.esc.stop.prevent
 	>
 		<div class="top-nav d-flex justify-content-between pt-3">
@@ -27,7 +27,7 @@
 			<Settings
 				:current-settings="currentSettings"
 				:request-info="requestInfo"
-				class="expand-height"
+				class="flex-grow-1 flex-shrink-1"
 				@update-settings="updateCurrentSettings($event, true)"
 				@delete="onDeleteSettings"
 				@refresh-settings="onRefreshSettings"
@@ -77,7 +77,7 @@ export default {
 	},
 	methods: {
 		async onUpdateOverlayRecording(overlayRecording) {
-			console.log("updating capturing")
+			console.log("Updating capturing")
 			await SettingsManager.setOverlayRecordingAsync(overlayRecording)
 
 			this.overlayRecording = overlayRecording
@@ -201,10 +201,6 @@ export default {
 
 		margin-top: 1em;
 		//overflow: auto;
-
-		.expand-height {
-			flex: 1;
-		}
 	}
 }
 </style>

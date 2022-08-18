@@ -1,36 +1,11 @@
 <template>
-	<div class="m-1 position-relative">
-		<div class="d-flex align-items-center">
-			<div>
-				<h5
-					ref="dragg"
-					class="title user-select-none"
-					style="cursor: grab"
-				>
-					{{ pageName ?? "refresh page" }}
-					<template v-if="requestInfo?.response?.statusCode && time">
-						(<b>{{ requestInfo?.response?.statusCode }}</b> in
-						{{ time ? time + "ms" : "refresh" }})
-					</template>
-				</h5>
-			</div>
+	<div class="position-relative">
+		<OverlayTopHeader
+			ref="overlayTopHeader"
+			@close-overlay="onCloseOverlay"
+		/>
 
-			<div
-				style="margin-left: auto"
-				class="align-self-start"
-			>
-				<button
-					type="button"
-					class="btn-close"
-					aria-label="Close"
-					@click="closeOverlay"
-				/>
-			</div>
-		</div>
-		<div
-			class="d-flex"
-			style="gap: 3px"
-		>
+		<div class="container d-flex" style="gap: 3px">
 			<SwitchInput v-model="useFilters">
 				<i
 					class="las la-filter"
@@ -87,12 +62,11 @@
 
 <script>
 import {toRaw} from "@vue/reactivity"
-// import {logEverything} from "@/helpers/urlHelper";
 import {container} from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
-import {ContentScriptMessages as messages} from "@/messaging/messages"
-import {containerName} from "@/overlay/overlayConstants"
+import {ContentScriptMessages} from "@/messaging/messages"
+import {ContainerName} from "@/constants/overlay"
 import {
 	changeInject,
 	getRequestInfo,
@@ -107,9 +81,11 @@ import LocaleSelector from "./components/LocaleSelector.vue"
 import "../assets/css/vue-multiselect-overrides.scss"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 import SwitchInput from "@/components/form/SwitchInput"
+import OverlayTopHeader from "@/overlay/components/structure/OverlayTopHeader"
 
 export default {
 	components: {
+		OverlayTopHeader,
 		SwitchInput,
 		HeaderRendererVue,
 		RequestsRendererVue,
@@ -120,14 +96,9 @@ export default {
 		settings: Object,
 		level: String
 	},
-	data() {
-		return {
-			requestInfo: null,
-			useFilters: true,
-			headersFilterRules: null,
-			requestsFilterRules: null,
-			changesToSave: false,
-			locales: []
+	watch: {
+		settings(newVal) {
+			this.createFilterObjects(newVal)
 		}
 	},
 	computed: {
@@ -177,37 +148,43 @@ export default {
 			return new URL(this.requestInfo?.response?.url).host
 		}
 	},
-	watch: {
-		settings(newVal) {
-			this.createFilterObjects(newVal)
+	data() {
+		return {
+			requestInfo: null,
+			useFilters: true,
+			headersFilterRules: null,
+			requestsFilterRules: null,
+			changesToSave: false,
+			locales: []
 		}
 	},
-
 	async mounted() {
+		this.loadLocales()
 		await this.loadRequestInfo()
 
 		this.createFilterObjects(this.settings)
 
-		AddDrag(this.$refs.dragg, containerName, this.settings.position, pos =>
+		this.addNewRequestsListener()
+
+		AddDrag(this.$refs.overlayTopHeader.$refs.drag.$refs.drag, ContainerName, this.settings.position, pos =>
 			saveDivPosition(this.level, pos, false)
 		)
-
-		onMessageReceived(messages.newRequests, message => {
-			this.requestInfo = this.requestInfo ?? {}
-
-			this.requestInfo.requests = message.data
-		})
-
-		await this.loadLocales()
 	},
 	methods: {
+		addNewRequestsListener() {
+			onMessageReceived(ContentScriptMessages.newRequests, message => {
+				this.requestInfo = this.requestInfo ?? {}
+
+				this.requestInfo.requests = message.data
+			})
+		},
 		async loadRequestInfo() {
 			let requestInfo = await getRequestInfo()
 
 			this.requestInfo = requestInfo
 			console.log("requestInfo", requestInfo)
 		},
-		async closeOverlay() {
+		async onCloseOverlay() {
 			let response = await changeInject(this.level, false)
 			if (response && !response.ok) {
 				console.error(response)

@@ -14,11 +14,13 @@
 				group-values="locales"
 				group-label="category"
 				class="form-control form-control-sm"
+				:max-height="500"
+				open-direction="bottom"
 				:multiple="false"
 				@update:model-value="$emit('input', $event)"
 			/>
 			<button
-				class="btn btn-danger"
+				class="btn btn-danger btn-icon"
 				@click="$emit('remove-locale')"
 			>
 				<i class="las la-trash" />
@@ -56,6 +58,7 @@
 import Multiselect from "vue-multiselect"
 import {readTextFile} from "@/helpers/file-helpers"
 import FileInput from "@/components/form/FileInput"
+import {sortLocaleCategories} from "@/helpers/locale-helpers"
 
 export default {
 	name: "LocaleInput",
@@ -74,6 +77,11 @@ export default {
 	data() {
 		return {
 			error: null
+		}
+	},
+	watch: {
+		locales(val) {
+			console.log("Current locales from LocalesInput", val)
 		}
 	},
 	computed: {
@@ -103,7 +111,7 @@ export default {
 					}
 				]
 
-				this.$emit("set-custom-locales", locales)
+				this.$emit("set-custom-locales", sortLocaleCategories(locales))
 			} catch (error) {
 				console.error(
 					"Could not read text file for locales import",

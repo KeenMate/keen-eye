@@ -27,6 +27,8 @@
 import TransformationForm from "@/popup/components/settings/advanced/transformation/TransformationForm"
 import TransformationsList from "@/popup/components/settings/advanced/transformation/TransformationsList"
 import {UrlTransformation} from "@/transformations/urlTransformation"
+import {sortBy} from "lodash"
+import {distinctAndSortArray} from "@/helpers/array-helpers"
 
 export default {
 	name: "Transformations",
@@ -34,7 +36,7 @@ export default {
 	props: {
 		transformations: Array
 	},
-	emits: ["change"],
+	emits: ["update"],
 	data() {
 		return {
 			transformationDetail: new UrlTransformation()
@@ -47,7 +49,7 @@ export default {
 	},
 	methods: {
 		onDeleteTransformation(transformation) {
-			this.$emit("change", this.transformations.filter(x => x.transformationId !== transformation.transformationId))
+			this.$emit("update", this.transformations.filter(x => x.transformationId !== transformation.transformationId))
 		},
 		onNewTransformation() {
 			this.transformationDetail = new UrlTransformation()
@@ -60,11 +62,14 @@ export default {
 					&& transformation
 					|| x)
 
-			this.$emit("change", newTransformations)
+			this.$emit("update", this.sanitizeTransformations(newTransformations))
 
 			this.transformationDetail = transformation
+		},
+		sanitizeTransformations(transformations) {
+			return distinctAndSortArray(transformations, ["headerRule"])
 		}
-	}
+	},
 }
 </script>
 

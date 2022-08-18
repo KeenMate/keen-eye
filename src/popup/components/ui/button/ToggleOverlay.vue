@@ -1,17 +1,17 @@
 <template>
 	<ToggleButton
 		:state="overlayVisible"
-		on-color="btn-success"
-		off-color="btn-danger"
+		on-color="btn-danger"
+		off-color="btn-success"
 		class="btn-icon"
 		:title="tooltip"
 		@click="$emit('toggle')"
 	>
 		<template #on>
-			<i class="las la-eye" />
+			<i class="las la-eye-slash" />
 		</template>
 		<template #off>
-			<i class="las la-eye-slash" />
+			<i class="las la-eye" />
 		</template>
 	</ToggleButton>
 </template>

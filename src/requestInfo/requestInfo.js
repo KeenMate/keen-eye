@@ -2,7 +2,7 @@ import {throttle} from "lodash"
 
 import {sendNewRequests} from "@/messaging/messagingProvider"
 import {sortHeaders} from "./requestInfoHelpers"
-import {sendNewRequestsMaxWait} from "@/overlay/overlayConstants"
+import {sendNewRequestsMaxWait} from "@/constants/overlay"
 
 export class RequestInfo {
 	constructor() {

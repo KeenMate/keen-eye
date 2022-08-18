@@ -4,11 +4,11 @@ import {ContentScriptMessages} from "@/messaging/messages"
 import Popper from "vue3-popper"
 import {
 	bootstrapBody,
-	containerName,
+	ContainerName,
 	containerStyle,
 	removeName,
 	resetCss
-} from "@/overlay/overlayConstants"
+} from "@/constants/overlay"
 import {getSettings} from "@/messaging/messagingProvider"
 import {getResourceUrl} from "@/providers/chromeApiProvider"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
@@ -34,7 +34,7 @@ function loadAndRender() {
 }
 
 function remove() {
-	let mainContainer = document.getElementById(containerName)
+	let mainContainer = document.getElementById(ContainerName)
 
 	if (mainContainer) {
 		mainContainer.remove()
@@ -53,7 +53,7 @@ function render(settings, level) {
 	//create container
 	const div = document.createElement("div")
 	div.setAttribute("style", containerStyle)
-	div.setAttribute("id", containerName)
+	div.setAttribute("id", ContainerName)
 	div.setAttribute("class", "complete-reset")
 
 	div.style.visibility = "hiddne"

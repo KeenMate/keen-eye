@@ -22,28 +22,30 @@
 			/>
 		</div>
 
-		<div class="d-flex justify-content-end">
-			<button
-				type="submit"
-				class="btn btn-success btn-sm"
-			>
-				<i
-					v-if="isNew"
-					class="las la-plus-square"
-				/>
-				<i
-					v-else
-					class="las la-save"
-				/>
-			</button>
-		</div>
-
 		<p
 			v-show="!formValid"
 			class="help-text"
 		>
 			Both header and url need to be filled
 		</p>
+
+		<div class="d-flex justify-content-end">
+			<button
+				type="submit"
+				class="btn btn-success btn-sm"
+			>
+				<template
+					v-if="isNew"
+				>
+					Create
+				</template>
+				<template
+					v-else
+				>
+					Save
+				</template>
+			</button>
+		</div>
 	</form>
 </template>
 

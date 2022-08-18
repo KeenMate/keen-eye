@@ -6,7 +6,7 @@
 			:is-current="currentScopeCode === scope.code"
 			@click="$emit('change-tab', scope)"
 		>
-			{{scope.title}}
+			{{ scope.title }}
 		</ScopeItem>
 	</Tabs>
 </template>

@@ -28,7 +28,8 @@ export class RequestsHandler {
 	}
 
 	setCapturing(capturing) {
-		if (this.capturing == capturing) return
+		if (this.capturing === capturing)
+			return
 
 		this.capturing = capturing
 
@@ -44,13 +45,12 @@ export class RequestsHandler {
 
 	addListeners() {
 		this.addMainframeListeners()
-
 		this.addRequestListeners()
 	}
 
 	removeListeners() {
-		this.removeRequestListeners()
 		this.removeMainframeListeners()
+		this.removeRequestListeners()
 	}
 
 	addMainframeListeners() {

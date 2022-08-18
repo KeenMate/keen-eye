@@ -3,7 +3,7 @@
 		<Transformations
 			:transformations="settings.transformations"
 			class="mb-4"
-			@change="updateTrans"
+			@update="updateTrans"
 		/>
 
 		<hr />

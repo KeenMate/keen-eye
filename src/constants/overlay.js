@@ -2,7 +2,7 @@ export const sendNewRequestsMaxWait = 1000
 
 export const removeName = "keen-eye-outside-div"
 
-export const containerName = "keen-eye-page-overlay-div"
+export const ContainerName = "keen-eye-page-overlay-div"
 export const containerStyle =
 	"position:fixed; z-index:99999; display:block; top: 0;left: 0;box-shadow: rgb(128 128 128 / 69%) 3px 3px 5px; min-width:550px;background: white;resize: both;overflow: vissible;"
 

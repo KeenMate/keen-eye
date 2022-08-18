@@ -1,46 +1,16 @@
 <template>
 	<div class="basic-settings">
-		<div
-			class="mb-3"
-			@keyup.esc.stop
-		>
-			<label>Headers</label>
-			<multiselect
-				:model-value="settings.headerRules"
-				:options="pageHeaders"
-				tag-placeholder="Add"
-				class="form-control form-control-sm"
-				placeholder="Search or add a header rule"
-				taggable
-				:clear-on-select="false"
-				:show-labels="false"
-				:multiple="true"
-				:close-on-select="false"
-				@tag="addHeaderRule"
-				@update:model-value="updateSettings({headerRules: $event})"
-			/>
-		</div>
+		<HeaderRules
+			:header-rules="settings.headerRules"
+			:headers="pageHeaders"
+			@update="updateSettings({headerRules: $event})"
+		/>
 
-		<div
-			class="mb-3"
-			@keyup.esc.stop
-		>
-			<label>Requests</label>
-			<multiselect
-				:model-value="settings.requestsRules"
-				:options="requests"
-				tag-placeholder="Add"
-				class="form-control form-control-sm"
-				placeholder="Search or add a request rule"
-				taggable
-				:multiple="true"
-				:clear-on-select="false"
-				:show-labels="false"
-				:close-on-select="false"
-				@tag="addRequestRule"
-				@update:model-value="updateSettings({requestsRules: $event})"
-			/>
-		</div>
+		<RequestsRules
+			:requests-rules="settings.requestsRules"
+			:requests="requests"
+			@update="updateSettings({requestsRules: $event})"
+		/>
 
 		<LocaleInput
 			:locale="settings?.locale"
@@ -55,13 +25,14 @@
 </template>
 
 <script>
-import Multiselect from "vue-multiselect"
 import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
 import languages from "@/languages/languages"
+import HeaderRules from "@/popup/components/settings/basic/header-rules/HeaderRules"
+import RequestsRules from "@/popup/components/settings/basic/requests-rules/RequestsRules"
 
 export default {
 	name: "BasicSettings",
-	components: {LocaleInput, Multiselect},
+	components: {RequestsRules, HeaderRules, LocaleInput},
 	props: {
 		settings: {
 			type: Object,
@@ -80,6 +51,8 @@ export default {
 	},
 	computed: {
 		pageHeaders() {
+			console.log("Locales to use" , this.settings?.customLocales || languages)
+
 			return (
 				this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
 			)
@@ -128,3 +101,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.basic-settings {
+	margin-bottom: 500px;
+}
+</style>
