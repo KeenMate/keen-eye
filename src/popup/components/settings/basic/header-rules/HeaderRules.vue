@@ -7,7 +7,10 @@
 			@update="setHeaderRules"
 		/>
 
-		<div class="mb-3" @keyup.esc.stop>
+		<div
+class="mb-3"
+@keyup.esc.stop
+>
 			<label>New headers</label>
 			<multiselect
 				v-model="multiselectValue"
@@ -34,19 +37,19 @@ import {distinctAndSortArray} from "@/helpers/array-helpers"
 export default {
 	name: "HeaderRules",
 	components: {HeaderRulesList, Multiselect},
-	emits: ["update"],
 	props: {
 		headerRules: Array,
 		headers: Array
 	},
-	computed: {
-		availableHeaders() {
-			return this.headers.filter(x => !this.headerRules.includes(x))
-		}
-	},
+	emits: ["update"],
 	data() {
 		return {
 			multiselectValue: []
+		}
+	},
+	computed: {
+		availableHeaders() {
+			return this.headers.filter(x => !this.headerRules.includes(x))
 		}
 	},
 	methods: {

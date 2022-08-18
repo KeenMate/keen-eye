@@ -7,7 +7,10 @@
 			@update="setRequestsRules"
 		/>
 
-		<div class="mb-3" @keyup.esc.stop>
+		<div
+class="mb-3"
+@keyup.esc.stop
+>
 			<label>New requests</label>
 			<multiselect
 				v-model="multiselectValue"
@@ -34,10 +37,15 @@ import {distinctAndSortArray} from "@/helpers/array-helpers"
 export default {
 	name: "RequestsRules",
 	components: {RequestsRulesList, Multiselect},
-	emits: ["update"],
 	props: {
 		requestsRules: Array,
 		requests: Array
+	},
+	emits: ["update"],
+	data() {
+		return {
+			multiselectValue: []
+		}
 	},
 	computed: {
 		availableRequests() {
@@ -46,11 +54,6 @@ export default {
 			const result = this.requests.filter(x => !this.requestsRules.includes(x))
 			console.log("Available requests", result)
 			return result
-		}
-	},
-	data() {
-		return {
-			multiselectValue: []
 		}
 	},
 	methods: {

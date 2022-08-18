@@ -7,14 +7,17 @@
 				color="secondary"
 				class="user-select-none"
 			>
-				{{header}} |
+				{{ header }} |
 				<i
 					class="las la-trash"
 					@click.stop="deleteHeader(header)"
 				/>
 			</Badge>
 		</template>
-		<Badge v-else pill>
+		<Badge
+v-else
+pill
+>
 			No header rules
 		</Badge>
 	</div>
@@ -26,10 +29,10 @@ import Badge from "@/components/ui/badge/Badge"
 export default {
 	name: "HeaderRulesList",
 	components: {Badge},
-	emits: ["update"],
 	props: {
 		headerRules: Array
 	},
+	emits: ["update"],
 	methods: {
 		deleteHeader(header) {
 			this.$emit("update", this.headerRules.filter(x => x !== header))

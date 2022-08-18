@@ -6,7 +6,9 @@ import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
 import languages from "@/languages/languages"
 import {RequestsHandler} from "@/requestInfo/requestsHandler"
-;("use strict")
+
+
+("use strict")
 //setup providers
 const requestInfoStore = new RequestInfo()
 
@@ -18,24 +20,22 @@ onMessage(function (request, sender, sendResponse) {
 	console.debug("bg got message", request, sender)
 	// Handle message based on type
 	switch (request?.type) {
-		case Messages.overlayRecordingUpdated:
-			{
-				console.log("setting capturing to", !!request.data)
+		case Messages.overlayRecordingUpdated: {
+			console.log("setting capturing to", !!request.data)
 
-				requestHandler.setCapturing(!!request.data)
-			}
+			requestHandler.setCapturing(!!request.data)
+		}
 			break
 
-		case Messages.getRequestInfo:
-			{
-				const {tabId} = request.data
+		case Messages.getRequestInfo: {
+			const {tabId} = request.data
 
-				let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
+			let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
 
-				console.log("sending request info ", {requestInfo, sender})
+			console.log("sending request info ", {requestInfo, sender})
 
-				sendReply(true, requestInfo, sendResponse)
-			}
+			sendReply(true, requestInfo, sendResponse)
+		}
 			break
 
 		case Messages.getSettings: {

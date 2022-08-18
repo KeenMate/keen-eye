@@ -7,14 +7,17 @@
 				color="secondary"
 				class="user-select-none"
 			>
-				{{request}} |
+				{{ request }} |
 				<i
 					class="las la-trash"
 					@click.stop="deleteRequest(request)"
 				/>
 			</Badge>
 		</template>
-		<Badge v-else pill>
+		<Badge
+v-else
+pill
+>
 			No request rules
 		</Badge>
 	</div>
@@ -26,10 +29,10 @@ import Badge from "@/components/ui/badge/Badge"
 export default {
 	name: "RequestsRulesList",
 	components: {Badge},
-	emits: ["update"],
 	props: {
 		requestsRules: Array
 	},
+	emits: ["update"],
 	methods: {
 		deleteRequest(request) {
 			this.$emit("update", this.requestsRules.filter(x => x !== request))

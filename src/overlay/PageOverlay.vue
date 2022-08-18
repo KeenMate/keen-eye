@@ -5,7 +5,10 @@
 			@close-overlay="onCloseOverlay"
 		/>
 
-		<div class="container d-flex" style="gap: 3px">
+		<div
+class="container d-flex"
+style="gap: 3px"
+>
 			<SwitchInput v-model="useFilters">
 				<i
 					class="las la-filter"
@@ -96,9 +99,14 @@ export default {
 		settings: Object,
 		level: String
 	},
-	watch: {
-		settings(newVal) {
-			this.createFilterObjects(newVal)
+	data() {
+		return {
+			requestInfo: null,
+			useFilters: true,
+			headersFilterRules: null,
+			requestsFilterRules: null,
+			changesToSave: false,
+			locales: []
 		}
 	},
 	computed: {
@@ -148,14 +156,9 @@ export default {
 			return new URL(this.requestInfo?.response?.url).host
 		}
 	},
-	data() {
-		return {
-			requestInfo: null,
-			useFilters: true,
-			headersFilterRules: null,
-			requestsFilterRules: null,
-			changesToSave: false,
-			locales: []
+	watch: {
+		settings(newVal) {
+			this.createFilterObjects(newVal)
 		}
 	},
 	async mounted() {

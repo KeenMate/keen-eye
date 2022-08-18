@@ -32,7 +32,7 @@
 		<label for="custom-locales-file">
 			Custom locales
 			<template v-if="isCustom">
-				(Uploaded {{localesCount}})
+				(Uploaded {{ localesCount }})
 			</template>
 		</label>
 		<div class="d-flex justify-content-between small-gaps">
@@ -79,11 +79,6 @@ export default {
 			error: null
 		}
 	},
-	watch: {
-		locales(val) {
-			console.log("Current locales from LocalesInput", val)
-		}
-	},
 	computed: {
 		localesCount() {
 			if (!this.locales)
@@ -95,6 +90,11 @@ export default {
 				}, 0)
 			else
 				return this.locales.length
+		}
+	},
+	watch: {
+		locales(val) {
+			console.log("Current locales from LocalesInput", val)
 		}
 	},
 	methods: {

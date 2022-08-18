@@ -8,7 +8,7 @@
 				class="user-select-none"
 				@click="$emit('edit-transformation', transformation)"
 			>
-				{{transformation.headerRule}} |
+				{{ transformation.headerRule }} |
 				<i
 					class="las la-trash"
 					@click.stop="$emit('delete-transformation', transformation)"
