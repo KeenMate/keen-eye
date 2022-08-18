@@ -1,7 +1,6 @@
-import {throttle} from "lodash"
+import {orderBy, throttle} from "lodash"
 
 import {sendNewRequests} from "@/messaging/messagingProvider"
-import {sortHeaders} from "./requestInfoHelpers"
 import {sendNewRequestsMaxWait} from "@/constants/overlay"
 
 export class RequestInfo {
@@ -62,9 +61,7 @@ export class RequestInfo {
 
 		this.requestInfo[details.tabId].response = details
 
-		this.requestInfo[details.tabId].responseHeaders = sortHeaders(
-			details.responseHeaders
-		)
+		this.requestInfo[details.tabId].responseHeaders = orderBy(details.responseHeaders, [], "desc")
 	}
 
 	//xhtml requests

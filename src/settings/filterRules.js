@@ -14,7 +14,7 @@ export default class FilterRules {
 
 	toggleAll() {
 		//"*" is only rule remove it else set it to be only rules
-		if (this.exists("*")) {
+		if (this.includes("*")) {
 			this.rules = []
 		} else {
 			this.rules = ["*"]
@@ -23,7 +23,7 @@ export default class FilterRules {
 	}
 
 	all() {
-		return this.exists("*")
+		return this.includes("*")
 	}
 
 	removeWildCard() {
@@ -33,8 +33,8 @@ export default class FilterRules {
 		this.save()
 	}
 
-	exists(rule) {
-		return this.rules.find((r) => r == rule)
+	includes(rule) {
+		return this.rules.includes(rule)
 	}
 
 	//add rule if not already there
@@ -43,21 +43,19 @@ export default class FilterRules {
 		if (this.all()) {
 			this.toggleAll()
 		}
-		if (!this.exists(rule)) {
+		if (!this.includes(rule)) {
 			this.rules.push(rule)
 		}
 		this.save()
 	}
 
 	remove(rule) {
-		this.rules = this.rules.filter((r) => {
-			return r != rule
-		})
+		this.rules = this.rules.filter((r) => r !== rule)
 		this.save()
 	}
 
 	toggle(rule) {
-		if (this.exists(rule)) {
+		if (this.includes(rule)) {
 			this.remove(rule)
 		} else {
 			this.add(rule)

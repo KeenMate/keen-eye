@@ -1,64 +1,30 @@
 <template>
 	<div class="position-relative">
-		<OverlayTopHeader
+		<OverlayTopNav
 			ref="overlayTopHeader"
 			@close-overlay="onCloseOverlay"
 		/>
 
-		<div
-class="container d-flex"
-style="gap: 3px"
->
-			<SwitchInput v-model="useFilters">
-				<i
-					class="las la-filter"
-					style="font-size: 20px"
-				/>
-			</SwitchInput>
+		<OverlayActions
+			:use-filters="useFilters"
+			:unsaved-changes="unsavedChanges"
+			:current-locale="settings?.locale"
+			:locales="locales"
+			@save-settings="saveSettings"
+			@save-locale="saveLocale"
+			@remove-locale="onRemoveLocale"
+		/>
 
-			<button
-				class="btn btn-sm"
-				style="margin-left: auto"
-				:class="{
-					'btn-secondary': !changesToSave,
-					'btn-success': changesToSave
-				}"
-				@click="saveSettings"
-			>
-				<i class="las la-save" />
-			</button>
-			<LocaleSelector
-				:locale="settings?.locale"
-				:locales="locales"
-				@input="saveLocale"
-				@remove-locale="onRemoveLocale"
-			/>
-		</div>
-		<div class="mt-1">
-			<div style="max-height: 35vh; overflow-y: auto; overflow-x: hidden">
-				<HeaderRendererVue
-					v-if="headersFilterRules"
-					:filtering="true"
-					:headers="filteredHeaders"
-					:all-headers="requestInfo?.response?.responseHeaders"
-					:headers-filter-rules="headersFilterRules"
-					:transformations="settings.transformations"
-				/>
-			</div>
-			<template v-if="requestsRulesSet || !useFilters">
-				<div class="row">
-					<div class="col-6">
-						<h6>Requests</h6>
-					</div>
-				</div>
-				<div style="max-height: 35vh; overflow-y: auto">
-					<RequestsRendererVue
-						v-if="filteredRequests"
-						:requests="filteredRequests"
-					/>
-				</div>
-			</template>
-		</div>
+		<PageHeaders
+			:headersFilterRules="headersFilterRules"
+			:requestInfo="requestInfo"
+			:transformations="settings.transformations"
+		/>
+
+		<PageRequests
+			v-if="requestsRulesSet || !useFilters"
+			:requests="filteredRequests"
+		/>
 	</div>
 	<WidgetContainerModal />
 </template>
@@ -69,7 +35,7 @@ import {container} from "jenesius-vue-modal"
 import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
 import {ContentScriptMessages} from "@/messaging/messages"
-import {ContainerName} from "@/constants/overlay"
+import {ContainerWrapperId} from "@/constants/overlay"
 import {
 	changeInject,
 	getRequestInfo,
@@ -77,23 +43,21 @@ import {
 	setSettings,
 	getLocales
 } from "@/messaging/messagingProvider"
-import HeaderRendererVue from "@/overlay/components/HeaderRenderer.vue"
-import RequestsRendererVue from "@/overlay/components/RequestsRenderer.vue"
-import LocaleSelector from "./components/LocaleSelector.vue"
-
 import "../assets/css/vue-multiselect-overrides.scss"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
-import SwitchInput from "@/components/form/SwitchInput"
-import OverlayTopHeader from "@/overlay/components/structure/OverlayTopHeader"
+import OverlayTopNav from "@/overlay/components/structure/OverlayTopNav"
+import OverlayActions from "@/overlay/components/structure/OverlayActions"
+import PageHeaders from "@/overlay/components/headers/PageHeaders"
+import PageRequests from "@/overlay/components/requests/PageRequests"
 
 export default {
+	name: "PageOverlay",
 	components: {
-		OverlayTopHeader,
-		SwitchInput,
-		HeaderRendererVue,
-		RequestsRendererVue,
-		WidgetContainerModal: container,
-		LocaleSelector
+		PageRequests,
+		PageHeaders,
+		OverlayActions,
+		OverlayTopNav,
+		WidgetContainerModal: container
 	},
 	props: {
 		settings: Object,
@@ -105,29 +69,13 @@ export default {
 			useFilters: true,
 			headersFilterRules: null,
 			requestsFilterRules: null,
-			changesToSave: false,
+			unsavedChanges: false,
 			locales: []
 		}
 	},
 	computed: {
 		requestsRulesSet() {
-			if (!this.settings || !this.settings?.requestsRules) {
-				return false
-			}
-			if (this.settings.requestsRules.length == 0) {
-				return false
-			}
-			return true
-		},
-		filteredHeaders() {
-			if (this.headersFilterRules === null) return []
-
-			if (!this.useFilters) return this.requestInfo?.response?.responseHeaders
-
-			return this.headersFilterRules.filter(
-				this.requestInfo?.response?.responseHeaders,
-				"name"
-			)
+			return this.settings?.requestsRules?.length ?? false
 		},
 		filteredRequests() {
 			if (this.requestsFilterRules === null || !this.requestInfo?.requests)
@@ -169,7 +117,7 @@ export default {
 
 		this.addNewRequestsListener()
 
-		AddDrag(this.$refs.overlayTopHeader.$refs.drag.$refs.drag, ContainerName, this.settings.position, pos =>
+		AddDrag(this.$refs.overlayTopHeader.$refs.drag.$refs.drag, ContainerWrapperId, this.settings.position, pos =>
 			saveDivPosition(this.level, pos, false)
 		)
 	},
@@ -190,7 +138,7 @@ export default {
 		async onCloseOverlay() {
 			let response = await changeInject(this.level, false)
 			if (response && !response.ok) {
-				console.error(response)
+				console.error("Error occurred while closing overlay", response)
 				//TODO maybe add real error handling
 			}
 		},
@@ -203,7 +151,7 @@ export default {
 				false
 			)
 
-			this.changesToSave = false
+			this.unsavedChanges = false
 		},
 		saveLocale(locale) {
 			console.log(locale)
@@ -218,10 +166,10 @@ export default {
 			})
 		},
 		createFilterObjects(settings) {
-			this.changesToSave = false
+			this.unsavedChanges = false
 			this.headersFilterRules = new FilterRules(
 				settings.headerRules,
-				() => (this.changesToSave = true)
+				() => (this.unsavedChanges = true)
 			)
 			this.requestsFilterRules = new FilterRules(settings.requestsRules)
 		},

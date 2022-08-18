@@ -1,0 +1,31 @@
+.modal-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #3e3e3e21;
+	cursor: pointer;
+}
+.modal-item {
+	cursor: default;
+}
+.modal-list-enter-active,
+.modal-list-leave-active{
+	transition: all 0.2s ease;
+	
+	.modal-item {
+		transition: all 0.2s ease;
+	}
+}
+
+.modal-list-enter-from,
+.modal-list-leave-to {
+	opacity: 0 !important;
+	.modal-item {
+		transform: translateY(-60px);
+	}
+}

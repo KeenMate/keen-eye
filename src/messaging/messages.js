@@ -10,5 +10,3 @@ export const ContentScriptMessages = {
 	settingsChanged: "settings-changed",
 	newRequests: "new-requests"
 }
-export const SettingsChanged = "settings-changed"
-export const NewRequests = "new-requests"

@@ -1,0 +1,11 @@
+.table {
+	.auto-width {
+		width: 1px;
+	}
+}
+
+.text-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

@@ -14,7 +14,7 @@ import PageOverlayHeader from "@/overlay/components/ui/PageOverlayHeader"
 import CloseButton from "@/components/ui/button/CloseButton"
 
 export default {
-	name: "OverlayTopHeader",
+	name: "OverlayTopNav",
 	components: {CloseButton, PageOverlayHeader},
 	methods: {
 

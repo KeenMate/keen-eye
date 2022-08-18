@@ -1,5 +1,5 @@
 import {
-	BackgroundScriptMessages as BgMessages,
+	BackgroundScriptMessages as BackgroundMessages,
 	ContentScriptMessages as CsMessages
 } from "@/messaging/messages"
 import {
@@ -10,11 +10,11 @@ import {
 import {parseTransformations} from "@/transformations/transformationHelper"
 
 export async function getRequestInfo(tabId = null) {
-	return await sendMessageToBg(BgMessages.getRequestInfo, {tabId: tabId})
+	return await sendMessageToBg(BackgroundMessages.getRequestInfo, {tabId: tabId})
 }
 
 export async function getSettings() {
-	const data = await sendMessageToBg(BgMessages.getSettings)
+	const data = await sendMessageToBg(BackgroundMessages.getSettings)
 	// eslint-disable-next-line no-debugger
 	if (data && data.settings) {
 		parseTransformations(data.settings)
@@ -24,7 +24,7 @@ export async function getSettings() {
 
 export async function setSettings(level, settings, reloadOverlay) {
 	console.log("save settings", settings)
-	return await sendMessageToBg(BgMessages.setSettings, {
+	return await sendMessageToBg(BackgroundMessages.setSettings, {
 		level,
 		settings,
 		reloadOverlay
@@ -32,11 +32,11 @@ export async function setSettings(level, settings, reloadOverlay) {
 }
 
 export async function setCapturing(capturing) {
-	return await sendMessageToBg(BgMessages.overlayRecordingUpdated, capturing)
+	return await sendMessageToBg(BackgroundMessages.overlayRecordingUpdated, capturing)
 }
 
 export function getLocales() {
-	return sendMessageToBg(BgMessages.getLocales)
+	return sendMessageToBg(BackgroundMessages.getLocales)
 }
 
 export async function saveDivPosition(level, position, reloadOverlay = false) {
