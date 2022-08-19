@@ -18,7 +18,7 @@ new LanguageChanger(SettingsManager)
 
 onMessage(function (request, sender, sendResponse) {
 	console.debug("bg got message", request, sender)
-	// Handle message based on type
+	// handle message based on type
 	switch (request?.type) {
 		case Messages.overlayRecordingUpdated: {
 			console.log("setting capturing to", !!request.data)

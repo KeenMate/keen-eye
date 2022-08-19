@@ -1,14 +1,21 @@
 <template>
-	<SmartTable striped condensed small>
+	<SmartTable
+		striped
+		condensed
+		small
+	>
 		<template #head>
 			<tr>
-				<th v-if="filtering" class="auto-width">
-						<span
-							:class="{'text-warning': everythingSelected}"
-							@click="toggleAll"
-						>
-							<i class="lar la-eye" />
-						</span>
+				<th
+					v-if="filtering"
+					class="auto-width text-center"
+				>
+					<span
+						:class="{'text-warning': everythingSelected}"
+						@click="toggleAll"
+					>
+						<i class="lar la-eye" />
+					</span>
 				</th>
 				<th>Actions</th>
 				<th>Name</th>
@@ -27,20 +34,28 @@
 				<SmartButton
 					:class="{'text-warning': headersFilterRules.includes(header.name)}"
 					icon
+					xsmall
 					@click="toggleRule(header.name)"
 				>
 					<i class="lar la-eye" />
 				</SmartButton>
 			</td>
 			<td class="auto-width">
-				<SmartButton icon @click="copy(header.name, header.value)">
+				<SmartButton
+					icon
+					xsmall
+					@click="copy(header.name, header.value)"
+				>
 					<i class="las la-copy" />
 				</SmartButton>
 			</td>
 			<td class="auto-width">
-				<b>{{header.name}}</b>
+				<b>{{ header.name }}</b>
 			</td>
-			<td class="text-ellipsis" style="max-width: 200px">
+			<td
+				class="text-ellipsis"
+				style="max-width: 200px"
+			>
 				<TransformationRenderer
 					v-if="getTransformation(header.name) !== undefined"
 					:header-value="header.value"
@@ -49,7 +64,7 @@
 				/>
 				<template v-else>
 					<Popper :content="header.value">
-						{{header.value}}
+						{{ header.value }}
 					</Popper>
 				</template>
 			</td>

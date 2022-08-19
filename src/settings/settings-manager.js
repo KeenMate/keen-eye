@@ -85,6 +85,9 @@ export class SettingsManager {
 		if (settings.position !== undefined) {
 			oldOriginInfo.position = settings.position
 		}
+		if (settings.size !== undefined) {
+			oldOriginInfo.size = settings.size
+		}
 		if (settings.requestsRules !== undefined) {
 			oldOriginInfo.requestsRules = settings.requestsRules
 		}

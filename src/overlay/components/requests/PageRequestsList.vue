@@ -1,5 +1,9 @@
 <template>
-	<SmartTable class="page-requests-list" striped small>
+	<SmartTable
+class="page-requests-list"
+striped
+small
+>
 		<template #head>
 			<tr>
 				<th>More</th>
@@ -23,24 +27,24 @@
 				more
 			</td>
 			<td :class="`text-${getColor(request.statusCode)}`">
-				{{request.statusCode ?? "Unknown"}}
+				{{ request.statusCode ?? "Unknown" }}
 			</td>
 			<td>
-				{{request.method}}
+				{{ request.method }}
 			</td>
 			<td class="limited-width">
 				<Popper :content="request.url">
-					<b>{{getPath(request.url)}}</b>
+					<b>{{ getPath(request.url) }}</b>
 				</Popper>
 			</td>
 			<td>
-				{{request.ttfb ? request.ttfb.toFixed(2) + "ms" : "Unknown"}}
+				{{ request.ttfb ? request.ttfb.toFixed(2) + "ms" : "Unknown" }}
 			</td>
 			<td>
-				{{request.took ? request.took.toFixed(2) + "ms" : "Unknown"}}
+				{{ request.took ? request.took.toFixed(2) + "ms" : "Unknown" }}
 			</td>
 			<td>
-				{{getOrigin(request.url)}}
+				{{ getOrigin(request.url) }}
 			</td>
 		</tr>
 	</SmartTable>

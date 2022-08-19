@@ -1,15 +1,19 @@
 <template>
-	<div class="d-flex align-items-center justify-content-between mb-3">
-		<h6>Headers</h6>
-		
-		<div class="actions">
+	<div class="d-flex align-items-center justify-content-between px-2">
+		<h6 class="mb-0">
+Headers
+</h6>
+
+		<div class="actions btn-group">
 			<SmartButton
+				color="info"
 				small
 				@click="copyHeadersToClipboard(headers)"
 			>
 				Copy selected
 			</SmartButton>
 			<SmartButton
+				color="primary"
 				small
 				@click="copyHeadersToClipboard(allHeaders)"
 			>

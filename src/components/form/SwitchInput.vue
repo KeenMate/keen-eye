@@ -1,12 +1,5 @@
 <template>
-	<div class="form-check form-switch">
-		<label
-			v-if="$slots.default"
-			class="form-check-label"
-			:for="id"
-		>
-			<slot />
-		</label>
+	<div class="form-check form-switch d-flex align-items-center justify-content-between gap-2 mb-0">
 		<input
 			:id="id"
 			:checked="modelValue"
@@ -16,6 +9,13 @@
 			@input.stop.prevent
 			@change.stop.prevent="onChange"
 		/>
+		<label
+			v-if="$slots.default"
+			class="form-check-label"
+			:for="id"
+		>
+			<slot />
+		</label>
 	</div>
 </template>
 

@@ -1,7 +1,10 @@
 <template>
-	<div class="position-relative">
+	<div class="page-overlay position-relative d-flex flex-column gap-2">
 		<OverlayTopNav
 			ref="overlayTopHeader"
+			:page-name="pageName"
+			:status-code="requestInfo?.response?.statusCode"
+			:taken="taken"
 			@close-overlay="onCloseOverlay"
 		/>
 
@@ -15,16 +18,19 @@
 			@remove-locale="onRemoveLocale"
 		/>
 
-		<PageHeaders
-			:headersFilterRules="headersFilterRules"
-			:requestInfo="requestInfo"
-			:transformations="settings.transformations"
-		/>
+		<div class="flex-take-remaining overflow-auto d-flex flex-column gap-2">
+			<PageHeaders
+				:headers-filter-rules="headersFilterRules"
+				:request-info="requestInfo"
+				:transformations="settings.transformations"
+				:use-filters="useFilters"
+			/>
 
-		<PageRequests
-			v-if="requestsRulesSet || !useFilters"
-			:requests="filteredRequests"
-		/>
+			<PageRequests
+				v-if="requestsRulesSet || !useFilters"
+				:requests="filteredRequests"
+			/>
+		</div>
 	</div>
 	<WidgetContainerModal />
 </template>
@@ -84,7 +90,7 @@ export default {
 			if (!this.useFilters) return requestsArray
 			return this.requestsFilterRules.filter(requestsArray, "url")
 		},
-		time() {
+		taken() {
 			if (
 				!this.requestInfo ||
 				!this.requestInfo?.response?.timeStamp ||

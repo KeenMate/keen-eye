@@ -4,7 +4,7 @@
 		style="z-index: 999999"
 	>
 		<h5 class="card-header d-flex align-items-center justify-content-between">
-			{{request.statusLine}}
+			{{ request.statusLine }}
 
 			<button
 				type="button"
@@ -20,11 +20,11 @@
 				style="max-width: 500px"
 			>
 				<Popper :content="request.url">
-					{{request.url}}
+					{{ request.url }}
 				</Popper>
 			</div>
-			Took: {{request.took.toFixed(2)}}ms <br />
-			TTFB: {{request.ttfb.toFixed(2)}}ms <br />
+			Took: {{ request.took.toFixed(2) }}ms <br />
+			TTFB: {{ request.ttfb.toFixed(2) }}ms <br />
 
 			<PageHeadersList :headers="request.responseHeaders" />
 		</div>

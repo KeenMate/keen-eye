@@ -28,6 +28,7 @@ export function getEmptySettings() {
 		requestsRules: [],
 		locale: null,
 		position: {x: 0, y: 0},
+		size: {width: null, height: null},
 		transformations: [],
 		localeReplace: {
 			cookieKey: null

@@ -1,0 +1,15 @@
+#keen-eye-wrapper {
+	position: fixed;
+	z-index: 99999;
+	display: block;
+	top: 0;
+	left: 0;
+	box-shadow: rgb(128 128 128 / 69%) 3px 3px 5px;
+	min-width: 550px;
+	background: white;
+	resize: both;
+	/*overflow: visible;*/
+
+	overflow-x: hidden;
+	overflow-y: auto;
+}

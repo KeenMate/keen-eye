@@ -3,12 +3,14 @@ import PageOverlay from "@/overlay/PageOverlay.vue"
 import {ContentScriptMessages} from "@/messaging/messages"
 import {
 	ContainerClass,
-	ContainerWrapperId,
+	ContainerWrapperId
 } from "@/constants/overlay"
-import {getSettings} from "@/messaging/messagingProvider"
+import {getSettings, updateOverlaySize} from "@/messaging/messagingProvider"
 import {getResourceUrl} from "@/providers/chromeApiProvider"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 import "@/assets/css/overlay.scss"
+import {debounce} from "lodash"
+import {ResizeDebounceDelay} from "@/constants/ui"
 
 onMessageReceived(ContentScriptMessages.settingsChanged, () => {
 	console.log("settings changed message received")
@@ -19,7 +21,7 @@ function loadAndRender() {
 	getSettings().then(response => {
 		removeOverlay()
 
-		if (response?.settings?.inject) {
+		if (!response?.settings?.inject) {
 			console.log("Not rendering overlay because of settings")
 			return
 		}
@@ -44,27 +46,68 @@ function removeOverlay() {
 function renderOverlay(settings, level) {
 	console.log("START RENDER")
 
-	// Create container
-	const div = document.createElement("div")
-	div.setAttribute("id", ContainerWrapperId)
-	div.setAttribute("class", ContainerClass)
-	// div.style.visibility = "hidden"
+	addExternalScriptsAndStyles(document.body)
 
-	// Create shadow root
-	div.attachShadow({mode: "open"})
+	// create container
+	const {container, callback} = createOverlayContainer(settings, level)
+
+	// create shadow root
+	container.attachShadow({mode: "open"})
+	const shadowRootElement = document.createElement("div")
+	shadowRootElement.classList.add("bootstrap-body")
+
+	addInternalScriptsAndStyles(shadowRootElement)
+
 	const appRoot = document.createElement("div")
-	appRoot.classList.add("bootstrap-body")
-	addScriptsAndStyles(appRoot)
-
 	createVueApp(appRoot, {
 		settings: settings,
 		level: level
 	})
+	shadowRootElement.appendChild(appRoot)
 
-	div.shadowRoot.appendChild(appRoot)
-	document.body.appendChild(div)
+	container.shadowRoot.appendChild(shadowRootElement)
+	document.body.appendChild(container)
 
-	// setTimeout(() => (div.style.visibility = "visible"), 30)
+	setTimeout(callback, 30)
+}
+
+function createOverlayContainer(settings, level) {
+	const container = document.createElement("div")
+
+	container.setAttribute("id", ContainerWrapperId)
+	container.setAttribute("class", ContainerClass)
+	container.style.visibility = "hidden"
+
+	// sets size of container if previously stored in settings
+	if (settings.size) {
+		if (settings.size.height)
+			container.style.height = settings.size.height + "px"
+		if (settings.size.width)
+			container.style.width = settings.size.width + "px"
+	}
+
+	// watches if keen eye wrapper gets resized and after debounce, saves current size of wrapper to settings
+	const debouncedResize = debounce(size => {
+		updateOverlaySize(size, level)
+	}, ResizeDebounceDelay)
+	const resizeObserver = new ResizeObserver(mutations => {
+		debouncedResize({
+			width: mutations[0].contentRect.width,
+			height: mutations[0].contentRect.height
+		})
+	})
+	resizeObserver.observe(container, {attributes: true})
+
+	return {
+		container,
+		callback() {
+			// not needed when size is set initially
+			if (!settings.resize)
+				container.dispatchEvent(new Event("resize"))
+
+			container.style.visibility = "visible"
+		}
+	}
 }
 
 function createVueApp(appRoot, props) {
@@ -75,20 +118,20 @@ function createVueApp(appRoot, props) {
 	return app
 }
 
-function addScriptsAndStyles(appRoot) {
-	addScript(appRoot, getResourceUrl("/external/bootstrap.bundle.min.js"))
+function addExternalScriptsAndStyles(parentElement) {
+	addStyle(parentElement, getResourceUrl("external/overlay.css"))
+}
 
-	// addStyleContent(document.body, resetCss)
-	// addStyleContent(appRoot.shadowRoot, resetCss)
-	// addStyleContent(appRoot.shadowRoot, BootstrapBody)
+function addInternalScriptsAndStyles(parentElement) {
+	addScript(parentElement, getResourceUrl("external/bootstrap.bundle.min.js"))
 
-	addStyle(appRoot, getResourceUrl("css/content.css"))
-
-	addStyle(appRoot, getResourceUrl("external/popper.css"))
-	addStyle(appRoot, getResourceUrl("external/line-awesome.min.css"))
+	addStyle(parentElement, getResourceUrl("external/popper.css"))
+	addStyle(parentElement, getResourceUrl("external/line-awesome.min.css"))
 	addStyle(document.body, getResourceUrl("external/line-awesome.min.css"))
-	addStyle(appRoot, getResourceUrl("external/bootstrap.min.css"))
-	addStyle(appRoot, getResourceUrl("external/vue-multiselect.min.css"))
+	addStyle(parentElement, getResourceUrl("external/bootstrap.min.css"))
+	addStyle(parentElement, getResourceUrl("external/vue-multiselect.min.css"))
+
+	addStyle(parentElement, getResourceUrl("css/content.css"))
 }
 
 function addStyle(el, href) {

@@ -1,14 +1,19 @@
 <template>
 	<button
 		type="button"
-		class="btn-close"
 		aria-label="Close"
-	/>
+		class="btn btn-link p-0"
+	>
+		<CloseIcon />
+	</button>
 </template>
 
 <script>
+import CloseIcon from "@/components/ui/icon/CloseIcon"
+
 export default {
-	name: "CloseButton"
+	name: "CloseButton",
+	components: {CloseIcon}
 }
 </script>
 

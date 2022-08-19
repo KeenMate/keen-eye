@@ -1,43 +1,38 @@
 <template>
 	<div
-		class="form-group flex-nowrap"
-		style="min-width: 55%"
+		class="input-group"
+		@keyup.esc.stop
 	>
-		<div
-			class="input-group"
-			@keyup.esc.stop
-		>
-			<div class="form-control form-control-sm p-0">
-				<multiselect
-					class="multiselect-sm"
-					:model-value="locale"
-					:options="locales"
-					track-by="code"
-					label="name"
-					:custom-label="customLabel"
-					group-values="locales"
-					group-label="category"
-					:multiple="false"
-					@update:model-value="$emit('input', $event)"
-				/>
-			</div>
+		<multiselect
+			:model-value="locale"
+			:options="locales"
+			track-by="code"
+			label="name"
+			:custom-label="customLabel"
+			group-values="locales"
+			group-label="category"
+			class="form-control form-control-sm"
+			@update:model-value="$emit('input', $event)"
+		/>
 
-			<button
-				class="btn btn-danger"
-				@click="$emit('remove-locale')"
-			>
-				<i class="las la-trash" />
-			</button>
-		</div>
+		<SmartButton
+			color="danger"
+			small
+			icon
+			@click="$emit('remove-locale')"
+		>
+			<i class="las la-trash" />
+		</SmartButton>
 	</div>
 </template>
 
 <script>
 import Multiselect from "vue-multiselect"
+import SmartButton from "@/components/ui/button/SmartButton"
 
 export default {
 	name: "LocaleInput",
-	components: {Multiselect},
+	components: {SmartButton, Multiselect},
 	props: {
 		locale: Object,
 		locales: {type: Array, default: () => []}

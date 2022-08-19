@@ -1,5 +1,5 @@
 <template>
-	<div class="page-headers mb-3">
+	<div class="page-headers d-flex flex-column gap-2">
 		<PageHeadersNav
 			:headers="filteredHeaders"
 			:all-headers="allHeaders"
@@ -28,7 +28,8 @@ export default {
 		headers: Array,
 		headersFilterRules: FilterRules,
 		requestInfo: Object,
-		transformations: Array
+		transformations: Array,
+		useFilters: Boolean
 	},
 	computed: {
 		allHeaders() {
