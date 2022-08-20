@@ -29,6 +29,7 @@
 			<PageRequests
 				v-if="requestsRulesSet || !useFilters"
 				:requests="filteredRequests"
+				:max-width="settings.size?.width"
 			/>
 		</div>
 	</div>

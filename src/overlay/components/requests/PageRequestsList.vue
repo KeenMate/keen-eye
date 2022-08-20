@@ -1,6 +1,6 @@
 <template>
 	<SmartTable
-		class="page-requests-list"
+		class="page-requests-list mb-0"
 		striped
 		small
 	>
@@ -21,23 +21,25 @@
 			:key="request.requestId"
 		>
 			<td class="auto-width">
-				<SmartButton
-					color="primary"
-					icon
-					xsmall
-					@click="openRequestModal(request)"
-				>
-					<i class="las la-lightbulb" />
-				</SmartButton>
-				<SmartButton
-					color="info"
-					title="Copy request path"
-					icon
-					xsmall
-					@click="copyValue(getPath(request.url))"
-				>
-					<i class="las la-copy" />
-				</SmartButton>
+				<div class="d-inline-flex gap-1">
+					<SmartButton
+						color="primary"
+						icon
+						xsmall
+						@click="openRequestModal(request)"
+					>
+						<i class="las la-lightbulb" />
+					</SmartButton>
+					<SmartButton
+						color="info"
+						title="Copy request path"
+						icon
+						xsmall
+						@click="copyValue(getPath(request.url))"
+					>
+						<i class="las la-copy" />
+					</SmartButton>
+				</div>
 			</td>
 			<td class="auto-width">
 				<StatusCodeBadge :status-code="request.statusCode" />
@@ -48,11 +50,11 @@
 			<td class="text-ellipsis" style="max-width: 300px">
 				<b>{{getPath(request.url)}}</b>
 			</td>
-			<td>
-				{{request.took ? request.took.toFixed(2) + "ms" : "Unknown"}}
+			<td class="text-center">
+				{{request.took ? request.took.toFixed(2) + "ms" : "-"}}
 			</td>
-			<td>
-				{{request.ttfb ? request.ttfb.toFixed(2) + "ms" : "Unknown"}}
+			<td class="text-center">
+				{{request.ttfb ? request.ttfb.toFixed(2) + "ms" : "-"}}
 			</td>
 			<td>
 				{{getOrigin(request.url)}}

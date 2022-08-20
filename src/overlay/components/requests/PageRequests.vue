@@ -2,7 +2,9 @@
 	<div class="page-requests mb-3">
 		<h6>Requests</h6>
 
-		<PageRequestsList :requests="requests" />
+		<div class="horizontal-scroll" :style="scrollableStyles">
+			<PageRequestsList :requests="requests" />
+		</div>
 	</div>
 </template>
 
@@ -13,7 +15,23 @@ export default {
 	name: "PageRequests",
 	components: {PageRequestsList},
 	props: {
-		requests: Array
+		requests: Array,
+		maxWidth: Number
+	},
+	computed: {
+		scrollableStyles() {
+			return {
+				maxWidth: this.maxWidth
+					? this.maxWidth + "px"
+					: "100%"
+			}
+		}
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.horizontal-scroll {
+	overflow: auto;
+}
+</style>

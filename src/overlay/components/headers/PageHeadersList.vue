@@ -18,6 +18,7 @@
 					</span>
 				</th>
 				<th>Name</th>
+				<th></th>
 				<th>Value</th>
 			</tr>
 		</template>
@@ -42,32 +43,32 @@
 			<td class="auto-width text-nowrap">
 				<b>{{header.name}}</b>
 			</td>
+			<td class="auto-width">
+				<SmartButton
+					color="info"
+					title="Copy header value"
+					icon
+					xsmall
+					@click="copyValue(header.value)"
+				>
+					<i class="las la-copy" />
+				</SmartButton>
+			</td>
 			<td>
-				<div class="d-flex gap-1 align-items-center">
-					<SmartButton
-						color="info"
-						title="Copy header value"
-						icon
-						xsmall
-						@click="copyValue(header.value)"
-					>
-						<i class="las la-copy" />
-					</SmartButton>
-					<div
-						class="text-ellipsis"
-						:title="header.value"
-						style="max-width: 300px"
-					>
-						<TransformValue
-							v-if="getTransformation(header.name)"
-							:header-value="header.value"
-							:transformation="getTransformation(header.name)"
-							:headers="headers"
-						/>
-						<template v-else>
-							{{header.value}}
-						</template>
-					</div>
+				<div
+					class="text-ellipsis"
+					:title="header.value"
+					style="max-width: 300px"
+				>
+					<TransformValue
+						v-if="getTransformation(header.name)"
+						:header-value="header.value"
+						:transformation="getTransformation(header.name)"
+						:headers="headers"
+					/>
+					<template v-else>
+						{{header.value}}
+					</template>
 				</div>
 			</td>
 		</tr>
