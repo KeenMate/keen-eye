@@ -2,29 +2,29 @@
 	<a
 		:href="link"
 		target="_blank"
-	>{{ headerValue }}</a>
+	>{{headerValue}}</a>
 </template>
 
 <script>
-import {UrlTransformation} from "@/transformations/urlTransformation";
+import {UrlTransformation} from "@/transformations/urlTransformation"
 
 export default {
-	name: "UrlTransformator",
+	name: "UrlTransformation",
 	props: {
 		transformation: {
 			type: UrlTransformation,
-			required: true,
+			required: true
 		},
 		headerValue: String,
-		headers: Array,
+		headers: Array
 	},
 	computed: {
 		link() {
 			return this.transformation.getTransformedUrl(
 				this.headerValue,
 				this.headers
-			);
-		},
-	},
-};
+			)
+		}
+	}
+}
 </script>

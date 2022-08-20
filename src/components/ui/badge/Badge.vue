@@ -1,7 +1,7 @@
 <template>
 	<component
 		:is="htmlElement"
-		:class="badgeClasses"
+		:class="classes"
 		:href="href"
 	>
 		<slot />
@@ -22,11 +22,11 @@ export default {
 				&& "a"
 				|| "span"
 		},
-		badgeClasses() {
+		classes() {
 			return [
 				"badge",
 				this.pill && "rounded-pill",
-				this.color && `text-bg-${this.color}` || "text-bg-light"
+				this.color && `text-bg-${this.color}`
 			]
 		}
 	}

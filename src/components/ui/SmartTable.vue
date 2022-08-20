@@ -33,6 +33,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+table {
+	td {
+		vertical-align: middle;
+	}
+}
 </style>

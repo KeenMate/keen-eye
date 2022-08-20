@@ -17,7 +17,6 @@
 						<i class="lar la-eye" />
 					</span>
 				</th>
-				<th>Actions</th>
 				<th>Name</th>
 				<th>Value</th>
 			</tr>
@@ -40,42 +39,44 @@
 					<i class="lar la-eye" />
 				</SmartButton>
 			</td>
-			<td class="auto-width">
-				<SmartButton
-					icon
-					xsmall
-					@click="copy(header.name, header.value)"
-				>
-					<i class="las la-copy" />
-				</SmartButton>
+			<td class="auto-width text-nowrap">
+				<b>{{header.name}}</b>
 			</td>
-			<td class="auto-width">
-				<b>{{ header.name }}</b>
-			</td>
-			<td
-				class="text-ellipsis"
-				style="max-width: 200px"
-			>
-				<TransformationRenderer
-					v-if="getTransformation(header.name) !== undefined"
-					:header-value="header.value"
-					:transformation="getTransformation(header.name)"
-					:headers="headers"
-				/>
-				<template v-else>
-					<Popper :content="header.value">
-						{{ header.value }}
-					</Popper>
-				</template>
+			<td>
+				<div class="d-flex gap-1 align-items-center">
+					<SmartButton
+						color="info"
+						title="Copy header value"
+						icon
+						xsmall
+						@click="copyValue(header.value)"
+					>
+						<i class="las la-copy" />
+					</SmartButton>
+					<div
+						class="text-ellipsis"
+						:title="header.value"
+						style="max-width: 300px"
+					>
+						<TransformValue
+							v-if="getTransformation(header.name)"
+							:header-value="header.value"
+							:transformation="getTransformation(header.name)"
+							:headers="headers"
+						/>
+						<template v-else>
+							{{header.value}}
+						</template>
+					</div>
+				</div>
 			</td>
 		</tr>
 	</SmartTable>
 </template>
 <script>
-import Popper from "vue3-popper"
 import {copyTextToClipboard} from "@/helpers/clipboardHelper"
 import FilterRules from "@/settings/filterRules"
-import TransformationRenderer from "../TransformationRenderer.vue"
+import TransformValue from "../TransformValue.vue"
 import {escapeHtml} from "@/helpers/stringHelpers"
 import SmartTable from "@/components/ui/SmartTable"
 import {orderBy} from "lodash"
@@ -83,7 +84,7 @@ import SmartButton from "@/components/ui/button/SmartButton"
 
 export default {
 	name: "PageHeadersList",
-	components: {SmartButton, SmartTable, TransformationRenderer, Popper},
+	components: {SmartButton, SmartTable, TransformValue},
 	props: {
 		headers: Array,
 		allHeaders: Array,
@@ -100,7 +101,10 @@ export default {
 		}
 	},
 	methods: {
-		copy(name, value) {
+		copyValue(value) {
+			copyTextToClipboard(value)
+		},
+		copyRow(name, value) {
 			copyTextToClipboard(`${name}: ${value}`)
 		},
 		toggleAll() {

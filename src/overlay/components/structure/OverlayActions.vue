@@ -41,7 +41,8 @@ export default {
 	emits: [
 		"save-settings",
 		"save-locale",
-		"remove-locale"
+		"remove-locale",
+		"update:use-filters"
 	],
 	computed: {
 		saveButtonClasses() {

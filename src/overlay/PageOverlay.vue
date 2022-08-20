@@ -9,7 +9,7 @@
 		/>
 
 		<OverlayActions
-			:use-filters="useFilters"
+			v-model:use-filters="useFilters"
 			:unsaved-changes="unsavedChanges"
 			:current-locale="settings?.locale"
 			:locales="locales"
