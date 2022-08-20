@@ -18,7 +18,7 @@
 					</span>
 				</th>
 				<th>Name</th>
-				<th></th>
+				<th />
 				<th>Value</th>
 			</tr>
 		</template>

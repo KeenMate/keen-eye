@@ -1,23 +1,31 @@
 <template>
 	<div class="requests-list badge-list mb-3">
 		<template v-if="requestsRules?.length">
-			<Badge
+			<BadgeWithButtons
 				v-for="request of requestsRules"
 				:key="request"
-				color="secondary"
-				class="user-select-none"
+				badge-color="secondary"
+				badge-class="user-select-none"
 			>
-				{{ request }} |
-				<i
-					class="las la-trash"
-					@click.stop="deleteRequest(request)"
-				/>
-			</Badge>
+				<span
+					class="text-ellipsis"
+					style="max-width: 20em"
+				>
+					{{request}}
+				</span>
+				<template #after>
+					<SmartButton
+						color="danger"
+						small
+						icon
+						@click.stop="deleteRequest(request)"
+					>
+						<i class="las la-trash" />
+					</SmartButton>
+				</template>
+			</BadgeWithButtons>
 		</template>
-		<Badge
-v-else
-pill
->
+		<Badge v-else color="secondary">
 			No request rules
 		</Badge>
 	</div>
@@ -25,10 +33,12 @@ pill
 
 <script>
 import Badge from "@/components/ui/badge/Badge"
+import SmartButton from "@/components/ui/button/SmartButton"
+import BadgeWithButtons from "@/components/ui/badge/BadgeWithButtons"
 
 export default {
 	name: "RequestsRulesList",
-	components: {Badge},
+	components: {BadgeWithButtons, SmartButton, Badge},
 	props: {
 		requestsRules: Array
 	},
@@ -40,3 +50,11 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.requests-list {
+	.input-group {
+		max-width: calc(50% - (.25rem / 2));
+	}
+}
+</style>

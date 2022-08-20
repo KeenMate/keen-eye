@@ -8,9 +8,9 @@
 		/>
 
 		<div
-class="mb-3"
-@keyup.esc.stop
->
+			class="mb-3"
+			@keyup.esc.stop
+		>
 			<label>New requests</label>
 			<multiselect
 				v-model="multiselectValue"

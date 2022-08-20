@@ -3,6 +3,7 @@
 		:is="htmlElement"
 		:class="classes"
 		:href="href"
+		:style="styles"
 	>
 		<slot />
 	</component>
@@ -28,6 +29,11 @@ export default {
 				this.pill && "rounded-pill",
 				this.color && `text-bg-${this.color}`
 			]
+		},
+		styles() {
+			return {
+				borderColor: `var(--bs-${this.color})`
+			}
 		}
 	}
 }

@@ -1,23 +1,27 @@
 <template>
 	<div class="headers-list badge-list mb-3">
 		<template v-if="headerRules?.length">
-			<Badge
+			<BadgeWithButtons
 				v-for="header of headerRules"
 				:key="header"
-				color="secondary"
-				class="user-select-none"
+				badge-color="secondary"
+				badge-class="user-select-none"
 			>
-				{{ header }} |
-				<i
-					class="las la-trash"
-					@click.stop="deleteHeader(header)"
-				/>
-			</Badge>
+				{{header}}
+
+				<template #after>
+					<SmartButton
+						color="danger"
+						small
+						icon
+						@click.stop="deleteHeader(header)"
+					>
+						<i class="las la-trash" />
+					</SmartButton>
+				</template>
+			</BadgeWithButtons>
 		</template>
-		<Badge
-v-else
-pill
->
+		<Badge v-else color="secondary">
 			No header rules
 		</Badge>
 	</div>
@@ -25,10 +29,12 @@ pill
 
 <script>
 import Badge from "@/components/ui/badge/Badge"
+import SmartButton from "@/components/ui/button/SmartButton"
+import BadgeWithButtons from "@/components/ui/badge/BadgeWithButtons"
 
 export default {
 	name: "HeaderRulesList",
-	components: {Badge},
+	components: {BadgeWithButtons, SmartButton, Badge},
 	props: {
 		headerRules: Array
 	},
@@ -40,3 +46,11 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.header-rules {
+	.input-group {
+		width: auto !important;
+	}
+}
+</style>
