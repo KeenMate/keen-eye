@@ -4,6 +4,7 @@
 			<BadgeWithButtons
 				v-for="request of requestsRules"
 				:key="request"
+				:title="request"
 				badge-color="secondary"
 				badge-class="user-select-none"
 			>
@@ -15,10 +16,18 @@
 				</span>
 				<template #after>
 					<SmartButton
+						color="info"
+						small
+						icon
+						@click="copyValue(request)"
+					>
+						<i class="las la-copy" />
+					</SmartButton>
+					<SmartButton
 						color="danger"
 						small
 						icon
-						@click.stop="deleteRequest(request)"
+						@click="deleteRequest(request)"
 					>
 						<i class="las la-trash" />
 					</SmartButton>
@@ -35,6 +44,7 @@
 import Badge from "@/components/ui/badge/Badge"
 import SmartButton from "@/components/ui/button/SmartButton"
 import BadgeWithButtons from "@/components/ui/badge/BadgeWithButtons"
+import {copyTextToClipboard} from "@/helpers/clipboardHelper"
 
 export default {
 	name: "RequestsRulesList",
@@ -44,6 +54,9 @@ export default {
 	},
 	emits: ["update"],
 	methods: {
+		copyValue(value) {
+			copyTextToClipboard(value)
+		},
 		deleteRequest(request) {
 			this.$emit("update", this.requestsRules.filter(x => x !== request))
 		}
