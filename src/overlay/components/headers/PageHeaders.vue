@@ -42,7 +42,7 @@ export default {
 			if (!this.useFilters)
 				return this.allHeaders
 
-			return this.headersFilterRules.filter(this.allHeaders, "name")
+			return this.headersFilterRules.filterHeaders(this.allHeaders, "name")
 		}
 	}
 }

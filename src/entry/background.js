@@ -10,9 +10,9 @@ import {RequestsHandler} from "@/requestInfo/requestsHandler"
 
 ("use strict")
 //setup providers
-const requestInfoStore = new RequestInfo()
+const requestInfo = new RequestInfo()
 
-const requestHandler = new RequestsHandler(requestInfoStore)
+const requestHandler = new RequestsHandler(requestInfo)
 
 new LanguageChanger(SettingsManager)
 
@@ -30,11 +30,11 @@ onMessage(function (request, sender, sendResponse) {
 		case Messages.getRequestInfo: {
 			const {tabId} = request.data
 
-			let requestInfo = requestInfoStore.getInfoForTab(tabId ?? sender.tab.id)
+			let tabRequestInfo = requestInfo.getInfoForTab(tabId ?? sender.tab.id)
 
-			console.log("sending request info ", {requestInfo, sender})
+			console.log("sending request info ", tabRequestInfo, sender)
 
-			sendReply(true, requestInfo, sendResponse)
+			sendReply(true, tabRequestInfo, sendResponse)
 		}
 			break
 

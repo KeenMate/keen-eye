@@ -92,11 +92,7 @@ export default {
 			})
 		},
 		updateSettings(partialSettings) {
-			// console.log("update settings", partialSettings)
-			this.$emit("update-settings", {
-				...(this.settings || {}),
-				...partialSettings
-			})
+			this.$emit("update-settings", partialSettings)
 		}
 	}
 }

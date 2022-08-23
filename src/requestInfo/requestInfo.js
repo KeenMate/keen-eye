@@ -1,14 +1,14 @@
 import {orderBy, throttle} from "lodash"
 
 import {sendNewRequests} from "@/messaging/messagingProvider"
-import {sendNewRequestsMaxWait} from "@/constants/overlay"
+import {SendNewRequestsMaxWait} from "@/constants/overlay"
 
 export class RequestInfo {
 	constructor() {
 		this.requestInfo = {}
 
 		// only send request max 1 per second to prevent performance issues
-		this.throttle = throttle(this.sendMessage, sendNewRequestsMaxWait)
+		this.throttle = throttle(this.sendMessage, SendNewRequestsMaxWait)
 
 		this.tabsToMessage = new Set()
 	}

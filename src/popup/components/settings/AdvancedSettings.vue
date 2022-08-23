@@ -20,9 +20,7 @@
 				type="text"
 				name="headerName"
 				class="form-control"
-				@change="
-					updateLocaleReplaceSettings({cookieKey: $event.target.value})
-				"
+				@change="updateLocaleReplaceSettings({cookieKey: $event.target.value})"
 			/>
 		</div>
 		<div class="mb-3">
@@ -80,17 +78,14 @@ export default {
 		}
 	},
 	mounted() {
-		this.parse(this.settings)
+		this.parseSettings(this.settings)
 	},
 	methods: {
 		updateTrans(transformations) {
-			this.$emit("update-settings", {
-				...this.settings,
-				transformations
-			})
+			this.updateSettings({transformations})
 		},
-		parse(newVal) {
-			let transformation = newVal?.transformations?.[0]
+		parseSettings(settings) {
+			let transformation = settings?.transformations?.[0]
 
 			if (transformation) {
 				this.headerRule = transformation.headerRule
@@ -100,16 +95,13 @@ export default {
 				this.url = ""
 			}
 		},
-		updateLocaleReplaceSettings(partial) {
+		updateLocaleReplaceSettings(partialLocaleSettings) {
 			this.updateSettings({
-				localeReplace: {
-					...((this.settings || {}).localeReplace || {}),
-					...partial
-				}
+				localeReplace: partialLocaleSettings
 			})
 		},
-		updateSettings(partial) {
-			this.$emit("update-settings", {...this.settings, ...partial})
+		updateSettings(partialSettings) {
+			this.$emit("update-settings", partialSettings)
 		}
 	}
 }

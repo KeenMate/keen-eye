@@ -28,7 +28,7 @@
 				:current-settings="currentSettings"
 				:request-info="requestInfo"
 				class="flex-grow-1 flex-shrink-1"
-				@update-settings="updateCurrentSettings($event, true)"
+				@update-settings="updateCurrentSettings($event)"
 				@toggle-overlay="updateCurrentSettings({inject: $event})"
 				@delete="onDeleteSettings"
 				@refresh-settings="onRefreshSettings"
@@ -79,7 +79,6 @@ export default {
 	},
 	methods: {
 		async onUpdateOverlayRecording(overlayRecording) {
-			console.log("Updating capturing")
 			await SettingsManager.setOverlayRecordingAsync(overlayRecording)
 
 			this.overlayRecording = overlayRecording
@@ -128,9 +127,7 @@ export default {
 				this.currentScopeCode
 			)
 
-			console.log("loaded settings", loadedSettings)
-
-			//if settings arent set, use empty settings and allow saving it
+			// if settings arent set, use empty settings and allow saving it
 			this.currentSettings = loadedSettings || getEmptySettings()
 
 			console.debug("Current settings", toRaw(this.currentSettings))
@@ -143,20 +140,21 @@ export default {
 		//
 		// 	await this.loadSettings()
 		//},
-		async updateCurrentSettings(newSettings, notPartial = false) {
+		async updateCurrentSettings(newPartialSettings, notPartial = false) {
 			const settings = notPartial
-				? newSettings
-				: {...this.currentSettings, ...newSettings}
-
-			this.currentSettings = settings
+				? newPartialSettings
+				: {...this.currentSettings, ...newPartialSettings}
 
 			await this.saveSettings(settings)
 
-			this.refreshPage()
+			if (settings.locale !== undefined && this.currentSettings.locale?.code !== settings.locale?.code)
+				this.refreshPage()
+
+			this.currentSettings = settings
 		},
 		refreshPage() {
 			if (confirm("Confirm page reload")) {
-				refreshCurrentPage();
+				refreshCurrentPage()
 			}
 		},
 		async saveSettings(settings) {

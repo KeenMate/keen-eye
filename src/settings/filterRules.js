@@ -68,7 +68,7 @@ export default class FilterRules {
 		})
 	}
 
-	filter(data, propName) {
+	filterHeaders(data, propName) {
 		if (this.all()) return data
 		if (!data) return []
 
