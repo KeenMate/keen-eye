@@ -82,18 +82,28 @@ export default {
 
 <style lang="scss" scoped>
 $transition-duration: 100ms;
-$total-width: 3em;
+$total-width: 30px;
 $toggle-width: $total-width / 2;
 $toggle-height: $total-width / 2;
+$border-width: 1px;
 
 .checkbox-toggle {
 	display: flex;
 	align-items: center;
 
+	&:focus-visible {
+		outline: none;
+
+		.checkbox-slide {
+			outline: -webkit-focus-ring-color auto 1px;
+		}
+	}
+
 	.checkbox-slide {
 		width: $total-width;
 		padding: 0;
 		margin: 0;
+		border: 1px solid #ccc;
 		border-radius: .25em;
 		cursor: pointer;
 
@@ -101,8 +111,7 @@ $toggle-height: $total-width / 2;
 
 		&.checked {
 			.checkbox-switch {
-				transform: translateX($toggle-width);
-				transition: all $transition-duration;
+				transform: translateX(calc($toggle-width - ($border-width * 2)));
 			}
 		}
 

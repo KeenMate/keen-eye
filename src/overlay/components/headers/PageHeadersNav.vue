@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex align-items-center gap-2 py-1 px-2">
 		<h6 class="mb-0">
-			Reponse headers
+			Response headers
 		</h6>
 
 		<div class="actions btn-group">

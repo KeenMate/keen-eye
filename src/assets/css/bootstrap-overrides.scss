@@ -36,3 +36,17 @@
 tr .btn {
 	--bs-btn-line-height: 1;
 }
+
+.dropdown-menu {
+	--bs-dropdown-padding-y: 0.3em;
+	--bs-dropdown-item-padding-y: .1em;
+	--bs-dropdown-item-padding-x: .25em;
+	
+	.dropdown-item {
+		font-size: 0.9em;
+		
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}

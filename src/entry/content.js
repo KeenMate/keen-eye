@@ -68,7 +68,7 @@ function renderOverlay(settings, level) {
 	container.shadowRoot.appendChild(shadowRootElement)
 	document.body.appendChild(container)
 
-	setTimeout(callback, 30)
+	setTimeout(callback, 1000)
 }
 
 function createOverlayContainer(settings, level) {

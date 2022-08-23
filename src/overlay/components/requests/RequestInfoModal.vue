@@ -10,11 +10,11 @@
 		</h5>
 
 		<div class="card-body">
-			<p>
+			<p class="request-url">
 				{{request.url}}
 			</p>
-			<strong>Took:</strong> {{request.took.toFixed(2)}}ms <br />
 			<strong>TTFB:</strong> {{request.ttfb.toFixed(2)}}ms <br />
+			<strong>Took:</strong> {{request.took.toFixed(2)}}ms <br />
 
 			<PageHeadersList :headers="request.responseHeaders" />
 		</div>
@@ -43,3 +43,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+.request-url {
+	max-width: 50vw;
+}
+</style>

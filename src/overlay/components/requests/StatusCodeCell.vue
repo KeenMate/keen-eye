@@ -1,5 +1,5 @@
 <template>
-	<td :class="cellClasses">
+	<td :class="cellClasses" class="text-">
 		{{statusCode || "-"}}
 	</td>
 </template>
@@ -21,7 +21,7 @@ export default {
 				this.statusCode >= 400 && this.statusCode < 500
 					&& "text-danger",
 				this.statusCode >= 500
-					&& "text-bg-danger",
+					&& "text-bg-danger fw-bold",
 			]
 		}
 	}
