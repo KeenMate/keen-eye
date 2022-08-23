@@ -2,7 +2,7 @@
 	<div class="transformations-list badge-list mb-3">
 		<template v-if="transformations?.length">
 			<BadgeWithButtons
-				v-for="(transformation, idx) of transformations"
+				v-for="(transformation, idx) of sortedTransformations"
 				:key="transformation.transformationId"
 				:badge-color="getBadgeColor(transformation, idx)"
 				badge-class="user-select-none"
@@ -32,9 +32,9 @@
 			</SmartButton>
 		</template>
 		<Badge
-v-else
-color="secondary"
->
+			v-else
+			color="secondary"
+		>
 			No header rules
 		</Badge>
 	</div>
@@ -45,6 +45,7 @@ import Badge from "@/components/ui/badge/Badge"
 import {getBadgeColor} from "@/helpers/bootstrap-helpers"
 import BadgeWithButtons from "@/components/ui/badge/BadgeWithButtons"
 import SmartButton from "@/components/ui/button/SmartButton"
+import {sortBy} from "lodash"
 
 export default {
 	name: "TransformationsList",
@@ -55,6 +56,11 @@ export default {
 		isNew: Boolean
 	},
 	emits: ["edit-transformation", "new-transformation", "delete-transformation"],
+	computed: {
+		sortedTransformations() {
+			return sortBy(this.transformations, ["headerRule"])
+		}
+	},
 	methods: {
 		getBadgeColor(transformation, idx) {
 			return transformation.transformationId === this.currentTransformationId
