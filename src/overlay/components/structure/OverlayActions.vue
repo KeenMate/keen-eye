@@ -1,13 +1,14 @@
 <template>
 	<div class="overlay-actions d-flex align-items-center justify-content-between gap-2 px-2">
-		<div class="d-flex align-items-center gap-2">
-			<SwitchInput
-				:model-value="useFilters"
-				@update:model-value="$emit('update:use-filters', $event)"
-			>
-				<i class="las la-filter" />
-			</SwitchInput>
+		<CheckboxToggle
+			:model-value="useFilters"
+			title="Show only filtered values"
+			@update:model-value="$emit('update:use-filters', $event)"
+		>
+			<i class="las la-filter" />
+		</CheckboxToggle>
 
+		<div class="d-flex align-items-center gap-2">
 			<div class="locale-selector-parent">
 				<LocaleSelector
 					:locale="currentLocale"
@@ -16,26 +17,26 @@
 					@remove-locale="$emit('remove-locale', $event)"
 				/>
 			</div>
+			<SmartButton
+				:class="saveButtonClasses"
+				small
+				icon
+				@click="$emit('save-settings')"
+			>
+				<i class="las la-save" />
+			</SmartButton>
 		</div>
-		<SmartButton
-			:class="saveButtonClasses"
-			small
-			icon
-			@click="$emit('save-settings')"
-		>
-			<i class="las la-save" />
-		</SmartButton>
 	</div>
 </template>
 
 <script>
-import SwitchInput from "@/components/form/SwitchInput"
 import LocaleSelector from "@/overlay/components/LocaleSelector"
 import SmartButton from "@/components/ui/button/SmartButton"
+import CheckboxToggle from "@/components/form/CheckboxToggle"
 
 export default {
 	name: "OverlayActions",
-	components: {SmartButton, SwitchInput, LocaleSelector},
+	components: {CheckboxToggle, SmartButton, LocaleSelector},
 	props: {
 		useFilters: Boolean,
 		unsavedChanges: Boolean,
@@ -52,8 +53,8 @@ export default {
 		saveButtonClasses() {
 			return [
 				this.unsavedChanges
-					&& "btn-primary"
-					|| "btn-info"
+				&& "btn-primary"
+				|| "btn-info"
 			]
 		}
 	}

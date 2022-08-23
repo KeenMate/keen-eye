@@ -12,8 +12,8 @@
 				/>
 			</div>
 
-			<div class="px-3">
-				<SwitchInput
+			<div class="d-flex align-items-center pe-3">
+				<CheckboxToggle
 					:model-value="overlayRecording"
 					title="Toggles recording of requests for KEEN-EYE"
 					on-color="success"
@@ -43,7 +43,7 @@
 
 <script>
 import {toRaw, isProxy} from "vue"
-import SwitchInput from "@/components/form/SwitchInput"
+// import SwitchInput from "@/components/form/SwitchInput"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import Settings from "@/popup/components/settings/Settings"
 
@@ -54,11 +54,13 @@ import {getCurrentTab} from "@/providers/chromeApiProvider"
 import {downloadJSON} from "@/helpers/file-helpers"
 import {parseTransformations} from "@/transformations/transformationHelper"
 import {refreshCurrentPage} from "@/helpers/helpers"
+import CheckboxToggle from "@/components/form/CheckboxToggle"
 
 export default {
 	name: "PopupApp",
 	components: {
-		SwitchInput,
+		CheckboxToggle,
+		// SwitchInput,
 		Settings,
 		PopupScopesTabs
 	},
