@@ -93,6 +93,9 @@ export default {
 		}
 	},
 	watch: {
+		locale(val) {
+			console.log("Current locales from LocalesInput", val)
+		},
 		locales(val) {
 			console.log("Current locales from LocalesInput", val)
 		}

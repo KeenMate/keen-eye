@@ -30,7 +30,10 @@
 				</template>
 			</BadgeWithButtons>
 		</template>
-		<Badge v-else color="secondary">
+		<Badge
+v-else
+color="secondary"
+>
 			No request rules
 		</Badge>
 	</div>

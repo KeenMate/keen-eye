@@ -1,5 +1,8 @@
 <template>
-	<div ref="root" class="dropdown">
+	<div
+ref="root"
+class="dropdown"
+>
 		<SmartButton
 			type="button"
 			class="dropdown-toggle"
@@ -23,18 +26,18 @@ export default {
 	components: {SmartButton},
 	inheritAttrs: false,
 	emits: ["click"],
+	data() {
+		return {
+			dropdownVisible: false,
+			windowClickHandler: null
+		}
+	},
 	computed: {
 		dropdownContentClasses() {
 			return [
 				"dropdown-menu",
 				this.dropdownVisible && "show"
 			]
-		}
-	},
-	data() {
-		return {
-			dropdownVisible: false,
-			windowClickHandler: null
 		}
 	},
 	methods: {

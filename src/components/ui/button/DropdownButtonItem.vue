@@ -1,6 +1,9 @@
 <template>
 	<li>
-		<a v-bind="$attrs" :class="anchorClasses">
+		<a
+v-bind="$attrs"
+:class="anchorClasses"
+>
 			<slot />
 		</a>
 	</li>

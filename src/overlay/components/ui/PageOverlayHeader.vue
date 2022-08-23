@@ -4,10 +4,10 @@
 		class="title user-select-none mb-0"
 		style="cursor: grab"
 	>
-		{{ pageName ?? "Refresh page" }}
+		{{pageName ?? "Refresh page"}}
 		<template v-if="statusCode && taken">
-			(<b>{{ statusCode }}</b> in
-			{{ taken ? taken + "ms" : "refresh" }})
+			(<b>{{statusCode}}</b> in
+			{{taken ? taken + "ms" : "refresh"}})
 		</template>
 	</h5>
 </template>

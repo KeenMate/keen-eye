@@ -43,7 +43,10 @@
 			<td>
 				{{request.method}}
 			</td>
-			<td class="text-ellipsis" style="max-width: 300px">
+			<td
+class="text-ellipsis"
+style="max-width: 300px"
+>
 				<b>{{getPath(request.url)}}</b>
 			</td>
 			<td class="text-right">
