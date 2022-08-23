@@ -14,7 +14,7 @@ module.exports = {
 		"vue/multi-word-component-names": "off",
 		indent: ["error", "tab", {SwitchCase: 1}],
 		"vue/html-indent": "off",
-		"vue/mustache-interpolation-spacing": ["error", 0],
+		"vue/mustache-interpolation-spacing": ["error", "never"],
 		"vue/require-default-prop": "off",
 		"vue/html-self-closing": [
 			"error",
