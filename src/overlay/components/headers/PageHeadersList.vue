@@ -9,14 +9,7 @@
 				<th
 					v-if="filtering"
 					class="auto-width text-center"
-				>
-					<!--<span-->
-					<!--	:class="{'text-warning': everythingSelected}"-->
-					<!--	@click="toggleAll"-->
-					<!--&gt;-->
-					<!--	<i class="lar la-eye" />-->
-					<!--</span>-->
-				</th>
+				/>
 				<th>Name</th>
 				<th />
 				<th>Value</th>

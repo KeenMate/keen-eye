@@ -33,7 +33,7 @@ export default {
 	},
 	computed: {
 		allHeaders() {
-			return this.requestInfo?.response?.responseHeaders || []
+			return this.requestInfo?.responseHeaders || []
 		},
 		filteredHeaders() {
 			if (!this.headersFilterRules)
@@ -43,6 +43,17 @@ export default {
 				return this.allHeaders
 
 			return this.headersFilterRules.filterHeaders(this.allHeaders, "name")
+		}
+	},
+	watch: {
+		headersFilterRules(val) {
+			console.log("Filtered headers rules", val)
+		},
+		filteredHeaders(val) {
+			console.log("Filtered headers", val)
+		},
+		allHeaders(val) {
+			console.log("All headers", val)
 		}
 	}
 }

@@ -42,13 +42,7 @@ import AddDrag from "@/helpers/dragHelper"
 import FilterRules from "@/settings/filterRules"
 import {ContentScriptMessages} from "@/messaging/messages"
 import {ContainerWrapperId} from "@/constants/overlay"
-import {
-	changeInject,
-	getRequestInfo,
-	saveDivPosition,
-	setSettings,
-	getLocales
-} from "@/messaging/messagingProvider"
+import {changeInject, getLocales, getRequestInfo, saveDivPosition, setSettings} from "@/messaging/messagingProvider"
 import "../assets/css/vue-multiselect-overrides.scss"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
 import OverlayTopNav from "@/overlay/components/structure/OverlayTopNav"
@@ -88,7 +82,7 @@ export default {
 				return []
 			let requestsArray = Object.values(toRaw(this.requestInfo?.requests))
 			if (!this.useFilters) return requestsArray
-			return this.requestsFilterRules.filter(requestsArray, "url")
+			return this.requestsFilterRules.filterHeaders(requestsArray, "url")
 		},
 		taken() {
 			if (
@@ -148,8 +142,8 @@ export default {
 				//TODO maybe add real error handling
 			}
 		},
-		saveSettings() {
-			setSettings(
+		async saveSettings() {
+			await setSettings(
 				this.level,
 				{
 					headerRules: toRaw(this.headersFilterRules.rules)
@@ -159,17 +153,18 @@ export default {
 
 			this.unsavedChanges = false
 		},
-		saveLocale(locale) {
-			console.log(locale)
-			setSettings(
+		async saveLocale(locale) {
+			await setSettings(
 				this.level,
 				{
 					locale: toRaw(locale)
 				},
 				true
-			).then(() => {
-				if (locale) location.reload()
-			})
+			)
+
+			if (locale)
+				location.reload()
+
 		},
 		createFilterObjects(settings) {
 			this.unsavedChanges = false
@@ -180,9 +175,7 @@ export default {
 			this.requestsFilterRules = new FilterRules(settings.requestsRules)
 		},
 		async loadLocales() {
-			let locales = await getLocales()
-			console.log(locales)
-			this.locales = locales
+			this.locales = await getLocales()
 		},
 		onRemoveLocale() {
 			this.saveLocale(null)

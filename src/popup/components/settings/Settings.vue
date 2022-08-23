@@ -67,6 +67,7 @@ export default {
 		}
 	},
 	emits: [
+		"delete",
 		"update-settings",
 		"refresh-settings",
 		"reset-div",

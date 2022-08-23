@@ -1,8 +1,8 @@
 <template>
 	<div class="page-requests mb-3">
 		<h6 class="px-2">
-Requests
-</h6>
+			Requests
+		</h6>
 
 		<div class="horizontal-scroll">
 			<PageRequestsList :requests="requests" />

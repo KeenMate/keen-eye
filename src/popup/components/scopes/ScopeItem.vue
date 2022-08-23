@@ -2,7 +2,6 @@
 	<TabItem
 		:is-active="isCurrent"
 		:style="tabStyles"
-		@click="$emit('click', $event)"
 	>
 		<slot />
 	</TabItem>

@@ -37,16 +37,14 @@
 					/>
 				</div>
 			</td>
-			<td class="auto-width text-center">
-				<StatusCodeBadge :status-code="request.statusCode" />
-			</td>
+			<StatusCodeCell :status-code="request.statusCode" />
 			<td>
 				{{request.method}}
 			</td>
 			<td
-class="text-ellipsis"
-style="max-width: 300px"
->
+				class="text-ellipsis"
+				style="max-width: 300px"
+			>
 				<b>{{getPath(request.url)}}</b>
 			</td>
 			<td class="text-right">
@@ -68,12 +66,12 @@ import {openModal} from "jenesius-vue-modal"
 import RequestInfoModal from "./RequestInfoModal.vue"
 import SmartTable from "@/components/ui/SmartTable"
 import SmartButton from "@/components/ui/button/SmartButton"
-import StatusCodeBadge from "@/overlay/components/requests/StatusCodeBadge"
+import StatusCodeCell from "@/overlay/components/requests/StatusCodeCell"
 import CopyButton from "@/components/ui/button/CopyButton"
 
 export default {
 	name: "PageRequestsList",
-	components: {CopyButton, StatusCodeBadge, SmartButton, SmartTable},
+	components: {CopyButton, StatusCodeCell, SmartButton, SmartTable},
 	props: {
 		requests: Object
 	},
