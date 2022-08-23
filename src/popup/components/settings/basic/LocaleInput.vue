@@ -32,7 +32,7 @@
 		<label for="custom-locales-file">
 			Custom locales
 			<template v-if="isCustom">
-				(Uploaded {{ localesCount }})
+				(Uploaded {{localesCount}})
 			</template>
 		</label>
 		<div class="d-flex justify-content-between small-gaps">

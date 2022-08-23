@@ -18,6 +18,9 @@
 				tag-placeholder="Add"
 				class="form-control form-control-sm"
 				placeholder="Add existing or new requests"
+				open-direction="bottom"
+				:max-height="500"
+				:option-height="30"
 				:show-labels="false"
 				:close-on-select="false"
 				multiple
@@ -69,7 +72,7 @@ export default {
 				return
 
 			this.setRequestsRules([...this.requestsRules, ...newRequestsRules])
-			// this.multiselectValue = []
+			this.multiselectValue = []
 		},
 		setRequestsRules(requestsRules) {
 			this.$emit("update", this.sanitizeRequestRules(requestsRules))

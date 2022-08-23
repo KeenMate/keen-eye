@@ -1,3 +1,10 @@
+.card {
+	--bs-card-spacer-y: .5rem !important;
+	--bs-card-spacer-x: .5rem !important;
+	--bs-card-cap-padding-y: .5rem !important;
+	--bs-card-cap-padding-x: .5rem !important;
+}
+
 .nav {
 	.nav-item {
 		user-select: none;
@@ -8,4 +15,20 @@
 .badge {
 	display: inline-flex;
 	align-items: center;
+}
+
+.input-group .btn {
+	z-index: 0 !important;
+}
+
+.btn {
+	--bs-btn-border-width: 1px !important
+}
+
+.btn-group-sm {
+	.dropdown-item {
+		--bs-dropdown-item-padding-y: var(--bs-btn-padding-y);
+		--bs-dropdown-item-padding-x: var(--bs-btn-padding-x);
+		--bs-dropdown-font-size: var(--bs-btn-font-size);
+	}
 }

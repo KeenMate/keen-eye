@@ -7,6 +7,12 @@
 			<i class="las la-filter" />
 		</SwitchInput>
 
+		<LocaleSelector
+			:locale="currentLocale"
+			:locales="locales"
+			@input="$emit('save-locale', $event)"
+			@remove-locale="$emit('remove-locale', $event)"
+		/>
 		<SmartButton
 			:class="saveButtonClasses"
 			small
@@ -15,12 +21,6 @@
 		>
 			<i class="las la-save" />
 		</SmartButton>
-		<LocaleSelector
-			:locale="currentLocale"
-			:locales="locales"
-			@input="$emit('save-locale', $event)"
-			@remove-locale="$emit('remove-locale', $event)"
-		/>
 	</div>
 </template>
 
@@ -48,7 +48,7 @@ export default {
 		saveButtonClasses() {
 			return [
 				this.unsavedChanges
-					&& "btn-warning"
+					&& "btn-primary"
 					|| "btn-info"
 			]
 		}

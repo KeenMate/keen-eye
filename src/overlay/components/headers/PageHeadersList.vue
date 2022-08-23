@@ -10,12 +10,12 @@
 					v-if="filtering"
 					class="auto-width text-center"
 				>
-					<span
-						:class="{'text-warning': everythingSelected}"
-						@click="toggleAll"
-					>
-						<i class="lar la-eye" />
-					</span>
+					<!--<span-->
+					<!--	:class="{'text-warning': everythingSelected}"-->
+					<!--	@click="toggleAll"-->
+					<!--&gt;-->
+					<!--	<i class="lar la-eye" />-->
+					<!--</span>-->
 				</th>
 				<th>Name</th>
 				<th />
@@ -24,7 +24,7 @@
 		</template>
 
 		<tr
-			v-for="(header, index) in orderedHeaders"
+			v-for="(header, index) in headers"
 			:key="index"
 		>
 			<td
@@ -33,7 +33,6 @@
 			>
 				<SmartButton
 					:class="{'text-warning': headersFilterRules.includes(header.name)}"
-					icon
 					xsmall
 					@click="toggleRule(header.name)"
 				>
@@ -44,15 +43,12 @@
 				<b>{{header.name}}</b>
 			</td>
 			<td class="auto-width">
-				<SmartButton
-					color="info"
+				<CopyButton
 					title="Copy header value"
-					icon
+					:icon="false"
 					xsmall
 					@click="copyValue(header.value)"
-				>
-					<i class="las la-copy" />
-				</SmartButton>
+				/>
 			</td>
 			<td>
 				<div
@@ -82,10 +78,11 @@ import {escapeHtml} from "@/helpers/stringHelpers"
 import SmartTable from "@/components/ui/SmartTable"
 import {orderBy} from "lodash"
 import SmartButton from "@/components/ui/button/SmartButton"
+import CopyButton from "@/components/ui/button/CopyButton"
 
 export default {
 	name: "PageHeadersList",
-	components: {SmartButton, SmartTable, TransformValue},
+	components: {CopyButton, SmartButton, SmartTable, TransformValue},
 	props: {
 		headers: Array,
 		allHeaders: Array,
@@ -93,14 +90,11 @@ export default {
 		headersFilterRules: FilterRules,
 		transformations: Array
 	},
-	computed: {
-		orderedHeaders() {
-			return orderBy(this.headers || [], [], "desc")
-		},
-		everythingSelected() {
-			return this.headersFilterRules?.includes("*") ?? false
-		}
-	},
+	// computed: {
+	// 	everythingSelected() {
+	// 		return this.headersFilterRules?.includes("*") ?? false
+	// 	}
+	// },
 	methods: {
 		copyValue(value) {
 			copyTextToClipboard(value)

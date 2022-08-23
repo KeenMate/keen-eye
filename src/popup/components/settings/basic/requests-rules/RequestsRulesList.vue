@@ -15,14 +15,10 @@
 					{{request}}
 				</span>
 				<template #after>
-					<SmartButton
-						color="info"
+					<CopyButton
 						small
-						icon
 						@click="copyValue(request)"
-					>
-						<i class="las la-copy" />
-					</SmartButton>
+					/>
 					<SmartButton
 						color="danger"
 						small
@@ -45,10 +41,11 @@ import Badge from "@/components/ui/badge/Badge"
 import SmartButton from "@/components/ui/button/SmartButton"
 import BadgeWithButtons from "@/components/ui/badge/BadgeWithButtons"
 import {copyTextToClipboard} from "@/helpers/clipboardHelper"
+import CopyButton from "@/components/ui/button/CopyButton"
 
 export default {
 	name: "RequestsRulesList",
-	components: {BadgeWithButtons, SmartButton, Badge},
+	components: {CopyButton, BadgeWithButtons, SmartButton, Badge},
 	props: {
 		requestsRules: Array
 	},

@@ -31,7 +31,7 @@
 				<i class="las la-plus" />
 			</SmartButton>
 		</template>
-		<Badge v-else>
+		<Badge v-else color="secondary">
 			No header rules
 		</Badge>
 	</div>

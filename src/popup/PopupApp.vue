@@ -29,6 +29,7 @@
 				:request-info="requestInfo"
 				class="flex-grow-1 flex-shrink-1"
 				@update-settings="updateCurrentSettings($event, true)"
+				@toggle-overlay="updateCurrentSettings({inject: $event})"
 				@delete="onDeleteSettings"
 				@refresh-settings="onRefreshSettings"
 				@reset-div="onResetDiv"
@@ -52,6 +53,7 @@ import {getRequestInfo} from "@/messaging/messagingProvider"
 import {getCurrentTab} from "@/providers/chromeApiProvider"
 import {downloadJSON} from "@/helpers/file-helpers"
 import {parseTransformations} from "@/transformations/transformationHelper"
+import {refreshCurrentPage} from "@/helpers/helpers"
 
 export default {
 	name: "PopupApp",
@@ -146,11 +148,16 @@ export default {
 				? newSettings
 				: {...this.currentSettings, ...newSettings}
 
-			// console.log(newSettings)
-
 			this.currentSettings = settings
 
 			await this.saveSettings(settings)
+
+			this.refreshPage()
+		},
+		refreshPage() {
+			if (confirm("Confirm page reload")) {
+				refreshCurrentPage();
+			}
 		},
 		async saveSettings(settings) {
 			const settingsToSave = Object.keys(settings).reduce((acc, key) => {
@@ -164,9 +171,9 @@ export default {
 				true
 			)
 
-			if (settings.locale) {
-				refreshCurrentPage()
-			}
+			// if (settings.locale) {
+			// 	refreshCurrentPage()
+			// }
 		},
 		// copySettings() {
 		// 	copyTextToClipboard(JSON.stringify(toRaw(this.currentSettings)))
@@ -180,6 +187,9 @@ export default {
 			console.log("parsed imported transformations", settings)
 
 			await this.saveSettings(settings)
+
+			if (settings.locale)
+				this.refreshPage()
 
 			this.currentSettings = settings
 		}

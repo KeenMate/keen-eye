@@ -8,7 +8,7 @@
 			<SettingsActions
 				:current-settings="currentSettings"
 				@delete="$emit('delete', $event)"
-				@toggle-overlay="$emit('update-settings', {...currentSettings, inject: !currentSettings?.inject})"
+				@toggle-overlay="$emit('toggle-overlay', !currentSettings?.inject)"
 				@refresh-settings="$emit('refresh-settings', $event)"
 				@reset-div="$emit('reset-div', $event)"
 				@start-download="$emit('start-download', $event)"
@@ -71,6 +71,7 @@ export default {
 		"refresh-settings",
 		"reset-div",
 		"start-download",
+		"toggle-overlay",
 		"import-settings"
 	],
 	data() {

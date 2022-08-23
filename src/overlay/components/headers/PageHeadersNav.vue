@@ -1,35 +1,36 @@
 <template>
-	<div class="d-flex align-items-center justify-content-between px-2">
+	<div class="d-flex align-items-center gap-2 py-1 px-2">
 		<h6 class="mb-0">
-Headers
-</h6>
+			Reponse headers
+		</h6>
 
 		<div class="actions btn-group">
-			<SmartButton
+			<DropdownButtons
 				color="info"
 				small
+				icon
 				@click="copyHeadersToClipboard(headers)"
 			>
-				Copy selected
-			</SmartButton>
-			<SmartButton
-				color="primary"
-				small
-				@click="copyHeadersToClipboard(allHeaders)"
-			>
-				Copy all
-			</SmartButton>
+				<i class="las la-copy" />
+
+				<template #dropdown>
+					<DropdownButtonItem @click="copyHeadersToClipboard(allHeaders)">
+						Copy All
+					</DropdownButtonItem>
+				</template>
+			</DropdownButtons>
 		</div>
 	</div>
 </template>
 
 <script>
 import {copyTextToClipboard} from "@/helpers/clipboardHelper"
-import SmartButton from "@/components/ui/button/SmartButton"
+import DropdownButtons from "@/components/ui/button/DropdownButtons"
+import DropdownButtonItem from "@/components/ui/button/DropdownButtonItem"
 
 export default {
 	name: "PageHeadersNav",
-	components: {SmartButton},
+	components: {DropdownButtonItem, DropdownButtons},
 	props: {
 		headers: Array,
 		allHeaders: Array

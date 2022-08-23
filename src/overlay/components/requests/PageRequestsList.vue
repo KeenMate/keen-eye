@@ -10,8 +10,8 @@
 				<th>Code</th>
 				<th>Method</th>
 				<th>Path</th>
-				<th>Time</th>
 				<th>Ttfb</th>
+				<th>Time</th>
 				<th>Origin</th>
 			</tr>
 		</template>
@@ -24,24 +24,20 @@
 				<div class="d-inline-flex gap-1">
 					<SmartButton
 						color="primary"
-						icon
 						xsmall
 						@click="openRequestModal(request)"
 					>
 						<i class="las la-lightbulb" />
 					</SmartButton>
-					<SmartButton
-						color="info"
+					<CopyButton
 						title="Copy request path"
-						icon
+						:icon="false"
 						xsmall
 						@click="copyValue(getPath(request.url))"
-					>
-						<i class="las la-copy" />
-					</SmartButton>
+					/>
 				</div>
 			</td>
-			<td class="auto-width">
+			<td class="auto-width text-center">
 				<StatusCodeBadge :status-code="request.statusCode" />
 			</td>
 			<td>
@@ -50,11 +46,11 @@
 			<td class="text-ellipsis" style="max-width: 300px">
 				<b>{{getPath(request.url)}}</b>
 			</td>
-			<td class="text-center">
-				{{request.took ? request.took.toFixed(2) + "ms" : "-"}}
-			</td>
-			<td class="text-center">
+			<td class="text-right">
 				{{request.ttfb ? request.ttfb.toFixed(2) + "ms" : "-"}}
+			</td>
+			<td class="text-right">
+				{{request.took ? request.took.toFixed(2) + "ms" : "-"}}
 			</td>
 			<td>
 				{{getOrigin(request.url)}}
@@ -66,14 +62,15 @@
 import {copyTextToClipboard} from "@/helpers/clipboardHelper"
 import {getStatusCodeColor} from "@/helpers/helpers"
 import {openModal} from "jenesius-vue-modal"
-import RequestInfoModalVue from "./RequestInfoModal.vue"
+import RequestInfoModal from "./RequestInfoModal.vue"
 import SmartTable from "@/components/ui/SmartTable"
 import SmartButton from "@/components/ui/button/SmartButton"
 import StatusCodeBadge from "@/overlay/components/requests/StatusCodeBadge"
+import CopyButton from "@/components/ui/button/CopyButton"
 
 export default {
 	name: "PageRequestsList",
-	components: {StatusCodeBadge, SmartButton, SmartTable},
+	components: {CopyButton, StatusCodeBadge, SmartButton, SmartTable},
 	props: {
 		requests: Object
 	},
@@ -102,7 +99,7 @@ export default {
 		},
 		openRequestModal(request) {
 			if (request.took) {
-				openModal(RequestInfoModalVue, {request})
+				openModal(RequestInfoModal, {request})
 			}
 		}
 	}

@@ -61,7 +61,7 @@ export class RequestInfo {
 
 		this.requestInfo[details.tabId].response = details
 
-		this.requestInfo[details.tabId].responseHeaders = orderBy(details.responseHeaders, [], "desc")
+		this.requestInfo[details.tabId].responseHeaders = orderBy(details.responseHeaders, ["name"])
 	}
 
 	//xhtml requests

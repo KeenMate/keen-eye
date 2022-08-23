@@ -37,7 +37,7 @@
 		border: none;
 		min-height: 2em;
 		overflow-x: hidden;
-		padding: .2em;
+		padding: .2em .4em;
 		font-size: inherit !important;
 
 		.multiselect__input {
@@ -85,6 +85,12 @@
 					margin-left: 0;
 				}
 			}
+		}
+		
+		.multiselect__single {
+			margin-bottom: 0;
+			padding-left: 0;
+			font-size: inherit !important;
 		}
 	}
 

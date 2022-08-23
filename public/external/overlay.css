@@ -8,6 +8,8 @@
 	min-width: 550px;
 	background: white;
 	resize: both;
+	border: rgb(54 91 169 / 50%) 3px solid;
+	border-radius: 3px;
 	/*overflow: visible;*/
 
 	overflow-x: hidden;

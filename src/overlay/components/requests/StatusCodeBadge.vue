@@ -1,15 +1,18 @@
 <template>
-	<Badge :class="badgeClasses">
+	<span :class="badgeClasses">
 		{{statusCode}}
-	</Badge>
+	</span>
+	<!--<Badge :class="badgeClasses">-->
+	<!--	{{statusCode}}-->
+	<!--</Badge>-->
 </template>
 
 <script>
-import Badge from "@/components/ui/badge/Badge"
+// import Badge from "@/components/ui/badge/Badge"
 
 export default {
 	name: "StatusCodeBadge",
-	components: {Badge},
+	// components: {Badge},
 	props: {
 		statusCode: Number
 	},
