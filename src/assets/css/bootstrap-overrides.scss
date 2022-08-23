@@ -32,3 +32,7 @@
 		--bs-dropdown-font-size: var(--bs-btn-font-size);
 	}
 }
+
+tr .btn {
+	--bs-btn-line-height: 1;
+}
