@@ -158,13 +158,10 @@ export default {
 				this.level,
 				{
 					locale: toRaw(locale)
-				},
-				true
+				}
 			)
 
-			if (locale)
-				location.reload()
-
+			location.reload()
 		},
 		createFilterObjects(settings) {
 			this.unsavedChanges = false
