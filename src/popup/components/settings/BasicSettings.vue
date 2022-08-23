@@ -29,6 +29,7 @@ import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
 import languages from "@/languages/languages"
 import HeaderRules from "@/popup/components/settings/basic/header-rules/HeaderRules"
 import RequestsRules from "@/popup/components/settings/basic/requests-rules/RequestsRules"
+import {sortBy, uniq} from "lodash"
 
 export default {
 	name: "BasicSettings",
@@ -51,16 +52,21 @@ export default {
 	},
 	computed: {
 		pageHeaders() {
-			console.log("Locales to use" , this.settings?.customLocales || languages)
-
-			return (
-				this.requestInfo?.response?.responseHeaders?.map((o) => o.name) ?? []
-			)
+			return this.requestInfo
+				?.responseHeaders
+				?.map(x => x.name)
+				?? []
 		},
 		requests() {
 			if (!this.requestInfo?.requests) return []
 
-			return Object.values(this.requestInfo.requests).map((req) => req.url)
+			let requestsUrls = Object
+				.values(this.requestInfo.requests)
+				.map(req => req.url)
+			requestsUrls = uniq(requestsUrls)
+			requestsUrls = sortBy(requestsUrls)
+
+			return requestsUrls
 		}
 	},
 	methods: {

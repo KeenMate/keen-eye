@@ -80,16 +80,13 @@ export class RequestInfo {
 				this.requestInfo[details.tabId].requests[details.requestId]
 
 			let startTimestamp = oldRequestInfo?.startTimestamp ?? 0
-			let ttfb = details.timeStamp - startTimestamp
 
-			let newInfo = {
+			this.requestInfo[details.tabId].requests[details.requestId] = {
 				...oldRequestInfo,
 				...details,
 				endTimestamp: details.timeStamp,
-				ttfb: ttfb
+				ttfb: details.timeStamp - startTimestamp
 			}
-
-			this.requestInfo[details.tabId].requests[details.requestId] = newInfo
 		})
 	}
 	requestComplete(details) {
