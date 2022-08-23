@@ -39,7 +39,7 @@ export class RequestInfo {
 	requestEnsureAndSend(details, func) {
 		this.ensureNotUndef(details)
 
-		//ensure obejct for this specific request
+		// ensure object for this specific request
 		this.requestInfo[details.tabId].requests[details.requestId] =
 			this.requestInfo[details.tabId].requests[details.requestId] ?? {}
 

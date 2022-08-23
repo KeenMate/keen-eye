@@ -9,10 +9,10 @@
 				<th>Actions</th>
 				<th>Code</th>
 				<th>Method</th>
+				<th>Origin</th>
 				<th>Path</th>
 				<th>Ttfb</th>
 				<th>Time</th>
-				<th>Origin</th>
 			</tr>
 		</template>
 
@@ -41,6 +41,9 @@
 			<td>
 				{{request.method}}
 			</td>
+			<td>
+				{{getOrigin(request.url)}}
+			</td>
 			<td
 				class="text-ellipsis"
 				style="max-width: 300px"
@@ -52,9 +55,6 @@
 			</td>
 			<td class="text-right">
 				{{request.took ? request.took.toFixed(2) + "ms" : "-"}}
-			</td>
-			<td>
-				{{getOrigin(request.url)}}
 			</td>
 		</tr>
 	</SmartTable>

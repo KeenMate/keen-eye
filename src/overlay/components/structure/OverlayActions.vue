@@ -1,18 +1,22 @@
 <template>
-	<div class="overlay-actions d-flex align-items-center gap-2 px-2">
-		<SwitchInput
-			:model-value="useFilters"
-			@update:model-value="$emit('update:use-filters', $event)"
-		>
-			<i class="las la-filter" />
-		</SwitchInput>
+	<div class="overlay-actions d-flex align-items-center justify-content-between gap-2 px-2">
+		<div class="d-flex align-items-center gap-2">
+			<SwitchInput
+				:model-value="useFilters"
+				@update:model-value="$emit('update:use-filters', $event)"
+			>
+				<i class="las la-filter" />
+			</SwitchInput>
 
-		<LocaleSelector
-			:locale="currentLocale"
-			:locales="locales"
-			@input="$emit('save-locale', $event)"
-			@remove-locale="$emit('remove-locale', $event)"
-		/>
+			<div class="locale-selector-parent">
+				<LocaleSelector
+					:locale="currentLocale"
+					:locales="locales"
+					@input="$emit('save-locale', $event)"
+					@remove-locale="$emit('remove-locale', $event)"
+				/>
+			</div>
+		</div>
 		<SmartButton
 			:class="saveButtonClasses"
 			small
@@ -55,3 +59,23 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+@import "@/assets/css/common.scss";
+
+.overlay-actions {
+	.locale-selector-parent {
+		$selector-min-width: 20em;
+		$selector-max-width: 40em;
+
+		min-width: $selector-min-width;
+		max-width: $selector-max-width;
+
+		.multiselect__single {
+			@extend .text-ellipsis;
+
+			max-width: $selector-max-width;
+		}
+	}
+}
+</style>
