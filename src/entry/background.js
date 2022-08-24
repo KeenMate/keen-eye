@@ -4,7 +4,7 @@ import SettingsManager from "@/settings/settings-manager"
 import {sendReply} from "@/messaging/scriptsComunicationHelper"
 import {onCommand, onMessage} from "@/providers/chromeApiProvider"
 import {RequestInfo} from "@/requestInfo/requestInfo"
-import languages from "@/languages/languages"
+import {DefaultLanguages} from "@/constants/languages"
 import {RequestsHandler} from "@/requestInfo/requestsHandler"
 
 
@@ -40,7 +40,7 @@ onMessage(function (request, sender, sendResponse) {
 
 		case Messages.getSettings: {
 			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
-				console.log("sending settings", {settings, sender})
+				console.log("Getting settings for command", {settings, sender})
 				if (settings) {
 					sendReply(true, settings, sendResponse)
 				} else {
@@ -55,7 +55,7 @@ onMessage(function (request, sender, sendResponse) {
 
 			console.log("saving settings: ", {settings, level}, {reloadOverlay})
 
-			SettingsManager.setSettings(level, settings, reloadOverlay)
+			SettingsManager.setSettings(settings, null, level, reloadOverlay)
 				.then(() => {
 					sendReply(true, {}, sendResponse)
 				})
@@ -70,23 +70,15 @@ onMessage(function (request, sender, sendResponse) {
 		}
 
 		case Messages.getLocales: {
-			SettingsManager.getMostSpecificSettings(sender.url).then(settings => {
-				console.log("sending most specific settings", {
-					url: sender.url,
-					settings,
-					sender
-				})
-
-				if (settings) {
-					sendReply(true, settings.customLocales || languages, sendResponse)
-				} else {
-					sendReply(false, {}, sendResponse)
-				}
+			SettingsManager.getMostSpecificSettings(sender.url).then(({settings}) => {
+				console.log("Most specific settings for custom locales", settings, settings?.customLocales || DefaultLanguages)
+				sendReply(true, settings?.customLocales || DefaultLanguages, sendResponse)
 			})
 			return true
 		}
+
 		default:
-			sendReply(false, {}, sendResponse)
+			sendReply(false, {message: "Unknown message type", detail: request?.type}, sendResponse)
 			break
 	}
 })

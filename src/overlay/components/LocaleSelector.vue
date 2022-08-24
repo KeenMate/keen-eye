@@ -18,7 +18,6 @@
 		<SmartButton
 			color="danger"
 			small
-			icon
 			@click="$emit('remove-locale')"
 		>
 			<i class="las la-trash" />

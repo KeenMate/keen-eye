@@ -6,21 +6,23 @@
 				(Uploaded {{localesCount}})
 			</template>
 		</label>
-		<div class="d-flex justify-content-between small-gaps">
+		<div class="input-group">
 			<FileInput
 				id="custom-locales-file"
 				ref="fileInput"
-				accept="application/json, text/plain"
+				accept="application/json"
+				small
 				@change="onLocaleFileSelected"
 			/>
-			<button
+			<SmartButton
 				v-if="isCustom"
-				class="btn btn-danger"
-				title="Removes custom locales to see default ones"
+				color="danger"
+				title="Removes custom locales"
+				small
 				@click="$emit('remove-custom-locales')"
 			>
 				<i class="las la-trash" />
-			</button>
+			</SmartButton>
 		</div>
 	</div>
 </template>
@@ -29,24 +31,40 @@
 import {readTextFile} from "@/helpers/file-helpers"
 import {sortLocaleCategories} from "@/helpers/locale-helpers"
 import FileInput from "@/components/form/FileInput"
+import SmartButton from "@/components/ui/button/SmartButton"
 
 export default {
 	name: "CustomLocalesUpload",
-	components: {FileInput},
+	components: {SmartButton, FileInput},
+	emits: [
+		"set-custom-locales",
+		"remove-custom-locales"
+	],
 	props: {
-		isCustom: Boolean
+		customLocales: Array
+	},
+	watch: {
+		customLocales: {
+			immediate: true,
+			handler(val) {
+				console.log("Custom locales changed in customlocalesupload", val)
+			}
+		}
 	},
 	computed: {
+		isCustom() {
+			return !!this.customLocales?.length
+		},
 		localesCount() {
-			if (!this.locales)
+			if (!this.customLocales)
 				return 0
 
-			if (this.locales[0]?.category)
-				return this.locales.reduce((acc, locale) => {
+			if (this.customLocales[0]?.category)
+				return this.customLocales.reduce((acc, locale) => {
 					return acc + locale.locales.length
 				}, 0)
 			else
-				return this.locales.length
+				return this.customLocales.length
 		}
 	},
 	methods: {

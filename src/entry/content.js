@@ -8,7 +8,7 @@ import {
 import {getSettings, updateOverlaySize} from "@/messaging/messagingProvider"
 import {getResourceUrl} from "@/providers/chromeApiProvider"
 import {onMessageReceived} from "@/messaging/scriptsComunicationHelper"
-import "@/assets/css/overlay.scss"
+import "@/assets/css/apps/overlay.scss"
 import {debounce} from "lodash"
 import {ResizeDebounceDelay} from "@/constants/ui"
 

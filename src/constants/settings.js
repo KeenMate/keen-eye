@@ -1,4 +1,4 @@
-export const PopupScopes = [
+export const SettingsScopes = [
 	{
 		code: "page",
 		title: "Page",
@@ -38,7 +38,7 @@ export function getEmptySettings() {
 }
 
 export function getPopupScope(code) {
-	return PopupScopes.find((x) => x.code === code)
+	return SettingsScopes.find((x) => x.code === code)
 }
 
 // export const Levels2 = {

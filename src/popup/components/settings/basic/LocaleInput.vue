@@ -60,9 +60,7 @@ export default {
 	},
 	emits: [
 		"input",
-		"remove-locale",
-		"set-custom-locales",
-		"remove-custom-locales"
+		"remove-locale"
 	],
 	data() {
 		return {
@@ -100,9 +98,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-.small-gaps {
-	gap: 0.5rem;
-}
-</style>

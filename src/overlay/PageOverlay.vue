@@ -173,6 +173,7 @@ export default {
 		},
 		async loadLocales() {
 			this.locales = await getLocales()
+			console.log("Loaded locales in overlay", this.locales)
 		},
 		onRemoveLocale() {
 			this.saveLocale(null)

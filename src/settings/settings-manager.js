@@ -1,4 +1,4 @@
-import {getEmptySettings} from "@/settings/settingConstants"
+import {getEmptySettings} from "@/constants/settings"
 import {
 	getCurrentTabUrl,
 	getCurrentUrlParts,
@@ -8,7 +8,8 @@ import {parseTransformations} from "@/transformations/transformationHelper"
 import {sendSettingsChanged, setCapturing} from "@/messaging/messagingProvider"
 import {StorageProvider} from "./storageProvider"
 import {CacheStorageProvider} from "./cacheStorageProvider"
-import {OverlayRecordingKey} from "@/constants/storage-keys"
+import {CustomLocalesKey, OverlayRecordingKey} from "@/constants/storage-keys"
+import {DefaultLanguages} from "@/constants/languages"
 
 export class SettingsManager {
 	constructor(asyncSource, syncSource) {
@@ -17,6 +18,10 @@ export class SettingsManager {
 
 		this.asyncSource = asyncSource
 		this.syncSource = syncSource
+	}
+
+	async getAllSettings() {
+		return this.asyncSource.getAll()
 	}
 
 	async setOverlayRecordingAsync(overlayRecording) {
@@ -30,8 +35,12 @@ export class SettingsManager {
 	}
 
 	async getSettings(level, url) {
+		url = typeof url === "string"
+			&& new URL(url)
+			|| url
+
 		const storageKey =
-			(url && this.getStorageKeyForUrl(getUrlParts(url), level)) ||
+			(url && this.getStorageKeyForUrlParts(getUrlParts(url), level)) ||
 			(await this.getStorageKey(level))
 
 		// console.log(url, urlParts, storageKey);
@@ -47,7 +56,7 @@ export class SettingsManager {
 			return
 
 		//if url is not specified use current url
-		const storageKey = this.getStorageKeyForUrl(getUrlParts(url), level)
+		const storageKey = this.getStorageKeyForUrlParts(getUrlParts(url), level)
 
 		const settings = this.syncSource.getItem(storageKey)
 		parseTransformations(settings)
@@ -67,18 +76,22 @@ export class SettingsManager {
 	/**
 	 * Saves only those settings that have non-undefined value
 	 */
-	async setSettings(level, settings, reloadOverlay = false) {
-		const storageKey = await this.getStorageKey(level)
+	async setSettings(settings, url, level, reloadOverlay = false) {
+		url = typeof url === "string"
+			&& new URL(url)
+			|| url
+		
+		const storageKey = await (url && this.getStorageKeyForUrl(url, level) || this.getStorageKey(level))
 
-		let oldOriginInfo = (await this.getSettings(level)) ?? getEmptySettings()
+		let currentLevelSettings = (await this.getSettings(level, url)) ?? getEmptySettings()
 
 		Object.keys(settings)
 			.filter(x => settings[x] !== undefined)
 			.forEach(x => {
-				oldOriginInfo[x] = settings[x]
+				currentLevelSettings[x] = settings[x]
 			})
 
-		await this.asyncSource.setItem(storageKey, oldOriginInfo)
+		await this.asyncSource.setItem(storageKey, currentLevelSettings)
 
 		if (reloadOverlay)
 			await sendSettingsChanged()
@@ -92,7 +105,14 @@ export class SettingsManager {
 		} else {
 			url = await getCurrentTabUrl()
 		}
-		console.log("Getting most specific settings for url", url)
+
+		const allSettings = {
+			page: await this.getSettings("page", url),
+			origin: await this.getSettings("origin", url),
+			domain: await this.getSettings("domain", url),
+			global: await this.getSettings("global", url)
+		}
+		console.log("All settings for URL", allSettings)
 
 		if ((settings = await this.getSettings("page", url))) {
 			return {settings, level: "page"}
@@ -149,27 +169,34 @@ export class SettingsManager {
 			settings: {inject}
 		} = await this.getMostSpecificSettings()
 
-		await this.setSettings(level, {inject: !inject}, reloadOverlay)
+		await this.setSettings({inject: !inject}, null, level, reloadOverlay)
 	}
 
 	async getStorageKey(level) {
 		const urlParts = await getCurrentUrlParts()
 
-		return this.getStorageKeyForUrl(urlParts, level)
+		return this.getStorageKeyForUrlParts(urlParts, level)
 	}
 
-	getStorageKeyForUrl(urlParts, level) {
+	async getStorageKeyForUrl(url, level) {
+		const urlParts = getUrlParts(url)
+		console.log("URL parts for storage key", url, urlParts)
+		return this.getStorageKeyForUrlParts(urlParts, level)
+	}
+
+	getStorageKeyForUrlParts(urlParts, level) {
 		if (urlParts.page.startsWith("chrome")) {
-			throw new Error(`not allowed url: ${JSON.stringify(urlParts)}`)
+			console.error("Chrome extension page is not allowed for storage", urlParts)
+			throw new Error(`Chrome extension page not allowed for storage`)
 		}
 
 		const storageKey = urlParts[level]
 
 		if (!storageKey) {
-			console.warn("incorect url part", level, urlParts)
+			console.warn("Incorrect url part", level, urlParts)
 
 			throw new Error(
-				`Url part: ${level} is not in url: ${JSON.stringify(urlParts)}`
+				`Url part: ${level} is not in url parts: ${JSON.stringify(urlParts)}`
 			)
 		}
 		return storageKey

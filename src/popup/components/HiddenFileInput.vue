@@ -16,7 +16,7 @@
 
 <script>
 import {readTextFile} from "@/helpers/file-helpers"
-import {getEmptySettings} from "@/settings/settingConstants"
+import {getEmptySettings} from "@/constants/settings"
 
 export default {
 	emits: ["import"],

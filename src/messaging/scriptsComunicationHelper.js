@@ -5,25 +5,12 @@ import {
 	onMessage
 } from "@/providers/chromeApiProvider"
 
-export async function sendMessagePromise(message) {
-	let response = await sendMessage(message)
-	console.debug(response)
-	if (response === undefined) {
-		return Promise.resolve(null)
-	}
-	if (response?.ok) {
-		return Promise.resolve(response.data)
-	} else {
-		return Promise.reject(response)
-	}
-}
-
 export function sendMessageToBg(type, data) {
 	return sendMessagePromise({type, data})
 }
 
-export function sendReply(succeded, data, sendResponse) {
-	sendResponse({ok: succeded, data: data})
+export function sendReply(succeeded, data, sendResponse) {
+	sendResponse({ok: succeeded, data: data})
 }
 
 export function sendToSpecificCS(tabId, type, data) {
@@ -37,8 +24,24 @@ export async function sendToCS(type, data) {
 
 export function onMessageReceived(type, handler) {
 	onMessage((message) => {
-		if (message && message.type == type) {
+		if (message && message.type === type) {
 			handler(message)
 		}
 	})
+}
+
+export async function sendMessagePromise(message) {
+	const response = await sendMessage(message)
+
+	if (response === undefined) {
+		return Promise.resolve(null)
+	}
+
+	console.log("Sent message response", response)
+
+	if (response?.ok) {
+		return Promise.resolve(response.data)
+	} else {
+		return Promise.reject(response)
+	}
 }

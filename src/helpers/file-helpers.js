@@ -3,8 +3,6 @@
  * @returns {Promise<string>}
  */
 export function readTextFile(file) {
-	console.log(file)
-
 	if (!isTextFile(file))
 		return Promise.reject(
 			new Error("Cannot read given file because it is not in text format")
@@ -22,8 +20,6 @@ export function readTextFile(file) {
 }
 
 function isTextFile(file) {
-	console.log(file.type)
-
 	return (
 		file.type.startsWith("text/") ||
 		["application/json"].find((x) => x === file.type)

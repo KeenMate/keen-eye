@@ -1,4 +1,4 @@
-export default [
+export const DefaultLanguages = [
 	{
 		category: "Most used",
 		locales: [

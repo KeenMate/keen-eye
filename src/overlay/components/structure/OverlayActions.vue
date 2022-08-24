@@ -20,7 +20,6 @@
 			<SmartButton
 				:class="saveButtonClasses"
 				small
-				icon
 				@click="$emit('save-settings')"
 			>
 				<i class="las la-save" />

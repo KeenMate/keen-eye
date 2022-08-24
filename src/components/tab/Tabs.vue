@@ -1,6 +1,6 @@
 <template>
 	<ul
-		class="nav nav-tabs"
+		:class="classes"
 		role="tablist"
 	>
 		<slot />
@@ -9,7 +9,20 @@
 
 <script>
 export default {
-	name: "Tabs"
+	name: "Tabs",
+	props: {
+		pills: Boolean
+	},
+	computed: {
+		classes() {
+			return [
+				"nav",
+				this.pills
+					&& "nav-pills"
+					|| "nav-tabs"
+			]
+		}
+	}
 }
 </script>
 

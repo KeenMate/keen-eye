@@ -4,7 +4,7 @@ import {
 	onBeforeSendHeaders,
 	onBeforeRequest,
 	onTabRemoved
-} from "../providers/chromeApiProvider"
+} from "@/providers/chromeApiProvider"
 import {
 	headerName,
 	beforeHeadersOptions,

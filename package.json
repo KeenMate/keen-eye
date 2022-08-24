@@ -9,7 +9,6 @@
     "build-watch": "vue-cli-service  --env.NODE_ENV=development build-watch --mode development"
   },
   "dependencies": {
-    "bootstrap-vue": "^2.22.0",
     "core-js": "^3.8.3",
     "jenesius-vue-modal": "^1.5.5",
     "lodash": "^4.17.21",

@@ -47,7 +47,7 @@ import {toRaw, isProxy} from "vue"
 import PopupScopesTabs from "@/popup/components/scopes/PopupScopesTabs"
 import Settings from "@/popup/components/settings/Settings"
 
-import {getEmptySettings} from "@/settings/settingConstants"
+import {getEmptySettings} from "@/constants/settings"
 import SettingsManager from "@/settings/settings-manager"
 import {getRequestInfo} from "@/messaging/messagingProvider"
 import {getCurrentTab} from "@/providers/chromeApiProvider"
@@ -55,6 +55,7 @@ import {downloadJSON} from "@/helpers/file-helpers"
 import {parseTransformations} from "@/transformations/transformationHelper"
 import {refreshCurrentPage} from "@/helpers/helpers"
 import CheckboxToggle from "@/components/form/CheckboxToggle"
+import {cleanseObjectOfProxies} from "@/helpers/vue-helpers"
 
 export default {
 	name: "PopupApp",
@@ -160,14 +161,12 @@ export default {
 			}
 		},
 		async saveSettings(settings) {
-			const settingsToSave = Object.keys(settings).reduce((acc, key) => {
-				acc[key] = isProxy(settings[key]) ? toRaw(settings[key]) : settings[key]
-				return acc
-			}, {})
+			const settingsToSave = cleanseObjectOfProxies(settings)
 
 			await SettingsManager.setSettings(
-				this.currentScopeCode,
 				settingsToSave,
+				null,
+				this.currentScopeCode,
 				true
 			)
 

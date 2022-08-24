@@ -23,7 +23,6 @@ export async function getSettings() {
 }
 
 export async function setSettings(level, settings, reloadOverlay) {
-	console.log("save settings", settings)
 	return await sendMessageToBg(BackgroundMessages.setSettings, {
 		level,
 		settings,
@@ -38,8 +37,8 @@ export async function updateOverlaySize(size, level, reloadOverlay = false) {
 	return setSettings(level, settings, reloadOverlay)
 }
 
-export async function setCapturing(capturing) {
-	return await sendMessageToBg(BackgroundMessages.overlayRecordingUpdated, capturing)
+export async function setCapturing(value) {
+	return await sendMessageToBg(BackgroundMessages.overlayRecordingUpdated, value)
 }
 
 export function getLocales() {

@@ -3,7 +3,8 @@ export const BackgroundScriptMessages = {
 	getSettings: "get-settings",
 	getLocales: "get-locales",
 	setSettings: "set-settings",
-	overlayRecordingUpdated: "update-overlay-recording"
+	overlayRecordingUpdated: "update-overlay-recording",
+	localesUpdated: "locales-updated"
 }
 
 export const ContentScriptMessages = {

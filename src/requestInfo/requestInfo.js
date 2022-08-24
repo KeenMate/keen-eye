@@ -69,7 +69,6 @@ export class RequestInfo {
 
 	//xhtml requests
 	requestSend(details) {
-		console.log("XMLHttp request", details)
 		this.requestEnsureAndSend(details, () => {
 			this.requestInfo[details.tabId].requests[details.requestId] = {
 				...details,
@@ -98,13 +97,11 @@ export class RequestInfo {
 	}
 	requestComplete(details) {
 		this.requestEnsureAndSend(details, () => {
-			let startTimestamp =
+			const startTimestamp =
 				this.requestInfo[details.tabId].requests[details.requestId]
 					.startTimestamp
 
-			let took = details.timeStamp - startTimestamp
-
-			this.requestInfo[details.tabId].requests[details.requestId].took = took
+			this.requestInfo[details.tabId].requests[details.requestId].took = details.timeStamp - startTimestamp
 		})
 	}
 
@@ -119,10 +116,9 @@ export class RequestInfo {
 	}
 
 	sortRequestHeaders(headers) {
-		const sorted = sortBy(headers, ["name"])
+		if (!headers)
+			return headers
 
-		console.log("Sorted request headers", sorted, headers)
-
-		return sorted
+		return sortBy(headers.map(x => ({...x, name: x.name.toLocaleLowerCase()})), ["name"])
 	}
 }

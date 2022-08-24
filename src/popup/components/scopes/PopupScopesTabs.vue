@@ -1,7 +1,7 @@
 <template>
-	<Tabs>
+	<Tabs :pills="pills">
 		<ScopeItem
-			v-for="scope in PopupScopes"
+			v-for="scope in SettingsScopes"
 			:key="scope.code"
 			:is-current="currentScopeCode === scope.code"
 			@click="$emit('change-tab', scope)"
@@ -13,7 +13,7 @@
 
 <script>
 import Tabs from "@/components/tab/Tabs.vue"
-import {PopupScopes} from "@/settings/settingConstants"
+import {SettingsScopes} from "@/constants/settings"
 import ScopeItem from "@/popup/components/scopes/ScopeItem"
 
 export default {
@@ -22,13 +22,14 @@ export default {
 		ScopeItem,
 		Tabs
 	},
-	props: {
-		currentScopeCode: String
-	},
 	emits: ["change-tab"],
+	props: {
+		currentScopeCode: String,
+		pills: Boolean
+	},
 	data() {
 		return {
-			PopupScopes
+			SettingsScopes
 		}
 	}
 }

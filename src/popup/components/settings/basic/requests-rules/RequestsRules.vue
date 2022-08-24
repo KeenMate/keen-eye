@@ -52,11 +52,7 @@ export default {
 	},
 	computed: {
 		availableRequests() {
-			// console.log("All requests: ", this.requests, this.requestsRules)
-
-			const result = this.requests.filter(x => !this.requestsRules.includes(x))
-			console.log("Available requests", result)
-			return result
+			return this.requests.filter(x => !this.requestsRules?.includes(x))
 		}
 	},
 	methods: {

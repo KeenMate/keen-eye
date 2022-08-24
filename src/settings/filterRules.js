@@ -27,14 +27,14 @@ export default class FilterRules {
 	}
 
 	removeWildCard() {
-		this.rules = this.rules.filter(
+		this.rules = this.rules?.filter(
 			(rule) => !rule.includes("*") || rule === "*"
 		)
 		this.save()
 	}
 
 	includes(rule) {
-		return this.rules.includes(rule)
+		return this.rules?.includes(rule)
 	}
 
 	//add rule if not already there
@@ -44,13 +44,13 @@ export default class FilterRules {
 			this.toggleAll()
 		}
 		if (!this.includes(rule)) {
-			this.rules.push(rule)
+			this.rules?.push(rule)
 		}
 		this.save()
 	}
 
 	remove(rule) {
-		this.rules = this.rules.filter((r) => r !== rule)
+		this.rules = this.rules?.filter((r) => r !== rule)
 		this.save()
 	}
 
@@ -63,7 +63,7 @@ export default class FilterRules {
 	}
 
 	filterOne(key) {
-		return this.rules.some((allowed) => {
+		return this.rules?.some((allowed) => {
 			return matchWithStairs(key, allowed)
 		})
 	}

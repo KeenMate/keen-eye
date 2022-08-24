@@ -14,19 +14,17 @@
 
 		<LocaleInput
 			:locale="settings?.locale"
-			:locales="settings?.customLocales || languages"
+			:locales="settings?.customLocales || defaultLanguages"
 			:is-custom="!!settings?.customLocales"
 			@input="updateSettings({locale: $event})"
 			@remove-locale="onRemoveLocale"
-			@set-custom-locales="onSetCustomLocales"
-			@remove-custom-locales="onRemoveCustomLocales"
 		/>
 	</div>
 </template>
 
 <script>
 import LocaleInput from "@/popup/components/settings/basic/LocaleInput"
-import languages from "@/languages/languages"
+import {DefaultLanguages} from "@/constants/languages"
 import HeaderRules from "@/popup/components/settings/basic/header-rules/HeaderRules"
 import RequestsRules from "@/popup/components/settings/basic/requests-rules/RequestsRules"
 import {sortBy, uniq} from "lodash"
@@ -47,12 +45,7 @@ export default {
 	emits: ["update-settings"],
 	data() {
 		return {
-			languages
-		}
-	},
-	watch: {
-		settings(val) {
-			console.log("Basic settings: ", val)
+			defaultLanguages: DefaultLanguages
 		}
 	},
 	computed: {
@@ -75,12 +68,6 @@ export default {
 		}
 	},
 	methods: {
-		async onRemoveCustomLocales() {
-			this.updateSettings({customLocales: null})
-		},
-		async onSetCustomLocales(customLocales) {
-			this.updateSettings({customLocales: customLocales})
-		},
 		onRemoveLocale() {
 			if (!this.settings) return
 
