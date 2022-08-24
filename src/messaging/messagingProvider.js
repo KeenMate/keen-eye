@@ -31,7 +31,7 @@ export async function setSettings(level, settings, reloadOverlay) {
 }
 
 export async function updateOverlaySize(size, level, reloadOverlay = false) {
-	const settings = await getSettings()
+	const {settings} = await getSettings()
 	settings.size = size
 
 	return setSettings(level, settings, reloadOverlay)

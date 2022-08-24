@@ -80,11 +80,13 @@ export class SettingsManager {
 		url = typeof url === "string"
 			&& new URL(url)
 			|| url
-		
+
 		const storageKey = await (url && this.getStorageKeyForUrl(url, level) || this.getStorageKey(level))
 
 		let currentLevelSettings = (await this.getSettings(level, url)) ?? getEmptySettings()
 
+		console.log("Settings settings from manager", JSON.stringify(currentLevelSettings))
+		console.log("Settings settings from manager 2", JSON.stringify(settings))
 		Object.keys(settings)
 			.filter(x => settings[x] !== undefined)
 			.forEach(x => {

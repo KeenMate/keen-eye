@@ -87,10 +87,13 @@ function createOverlayContainer(settings, level) {
 		updateOverlaySize(size, level)
 	}, ResizeDebounceDelay)
 	const resizeObserver = new ResizeObserver(mutations => {
-		debouncedResize({
-			width: mutations[0].contentRect.width,
-			height: mutations[0].contentRect.height
-		})
+		const width = mutations[0].contentRect.width
+		const height = mutations[0].contentRect.height
+
+		if (!width && !height)
+			return
+
+		debouncedResize({width, height})
 	})
 	resizeObserver.observe(container, {attributes: true})
 
