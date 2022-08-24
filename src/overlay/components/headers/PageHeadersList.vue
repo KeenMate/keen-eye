@@ -92,12 +92,12 @@ export default {
 		copyValue(value) {
 			copyTextToClipboard(value)
 		},
-		copyRow(name, value) {
-			copyTextToClipboard(`${name}: ${value}`)
-		},
-		toggleAll() {
-			this.headersFilterRules.toggleAll()
-		},
+		// copyRow(name, value) {
+		// 	copyTextToClipboard(`${name}: ${value}`)
+		// },
+		// toggleAll() {
+		// 	this.headersFilterRules.toggleAll()
+		// },
 		toggleRule(rule) {
 			this.headersFilterRules.removeWildCard()
 			this.headersFilterRules.toggle(rule)

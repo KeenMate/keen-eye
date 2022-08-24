@@ -1,4 +1,4 @@
-import {orderBy, throttle} from "lodash"
+import {sortBy, throttle} from "lodash"
 
 import {sendNewRequests} from "@/messaging/messagingProvider"
 import {SendNewRequestsMaxWait} from "@/constants/overlay"
@@ -56,20 +56,25 @@ export class RequestInfo {
 	mainFrameSend(details) {
 		this.requestInfo[details.tabId] = {request: details, requests: {}}
 	}
+
 	mainFrameReceived(details) {
 		this.ensureNotUndef(details)
 
 		this.requestInfo[details.tabId].response = details
 
-		this.requestInfo[details.tabId].responseHeaders = orderBy(details.responseHeaders, ["name"])
+		this.requestInfo[details.tabId].responseHeaders = this.sortRequestHeaders(details.responseHeaders)
+		this.requestInfo[details.tabId].responseHeaders = this.sortRequestHeaders(details.responseHeaders)
 		console.log("Sorted request info headers", this.requestInfo[details.tabId].responseHeaders)
 	}
 
 	//xhtml requests
 	requestSend(details) {
+		console.log("XMLHttp request", details)
 		this.requestEnsureAndSend(details, () => {
 			this.requestInfo[details.tabId].requests[details.requestId] = {
 				...details,
+				requestHeaders: this.sortRequestHeaders(details.requestHeaders),
+				responseHeaders: this.sortRequestHeaders(details.responseHeaders),
 				startTimestamp: details.timeStamp
 			}
 		})
@@ -84,6 +89,8 @@ export class RequestInfo {
 			this.requestInfo[details.tabId].requests[details.requestId] = {
 				...oldRequestInfo,
 				...details,
+				requestHeaders: this.sortRequestHeaders(details.requestHeaders || oldRequestInfo.requestHeaders),
+				responseHeaders: this.sortRequestHeaders(details.responseHeaders || oldRequestInfo.responseHeaders),
 				endTimestamp: details.timeStamp,
 				ttfb: details.timeStamp - startTimestamp
 			}
@@ -109,5 +116,13 @@ export class RequestInfo {
 		console.log("removing storage")
 
 		this.requestInfo = {}
+	}
+
+	sortRequestHeaders(headers) {
+		const sorted = sortBy(headers, ["name"])
+
+		console.log("Sorted request headers", sorted, headers)
+
+		return sorted
 	}
 }

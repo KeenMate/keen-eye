@@ -30,6 +30,7 @@ export function getEmptySettings() {
 		position: {x: 0, y: 0},
 		size: {width: null, height: null},
 		transformations: [],
+		customLocales: null,
 		localeReplace: {
 			cookieKey: null
 		}

@@ -50,6 +50,11 @@ export default {
 			languages
 		}
 	},
+	watch: {
+		settings(val) {
+			console.log("Basic settings: ", val)
+		}
+	},
 	computed: {
 		pageHeaders() {
 			return this.requestInfo

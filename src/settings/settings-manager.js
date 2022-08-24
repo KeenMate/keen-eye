@@ -23,8 +23,6 @@ export class SettingsManager {
 		await this.asyncSource.setItem(OverlayRecordingKey, overlayRecording)
 
 		await setCapturing(overlayRecording)
-		// THE settings are not changed in reality
-		// await sendSettingsChanged()
 	}
 
 	async getOverlayRecordingAsync() {
@@ -45,7 +43,8 @@ export class SettingsManager {
 	}
 
 	getSettingsSync(level, url) {
-		if (!this.syncSource) return
+		if (!this.syncSource)
+			return
 
 		//if url is not specified use current url
 		const storageKey = this.getStorageKeyForUrl(getUrlParts(url), level)
@@ -58,58 +57,31 @@ export class SettingsManager {
 
 	async deleteSettings(level, reloadOverlay) {
 		const storageKey = await this.getStorageKey(level)
-		console.log("removing from " + storageKey)
+
 		await this.asyncSource.setItem(storageKey, null)
 
-		if (reloadOverlay) {
-			sendSettingsChanged()
-		}
+		if (reloadOverlay)
+			await sendSettingsChanged()
 	}
 
 	/**
-	 * if some of them is undefined, it doesnt change it
+	 * Saves only those settings that have non-undefined value
 	 */
 	async setSettings(level, settings, reloadOverlay = false) {
 		const storageKey = await this.getStorageKey(level)
 
 		let oldOriginInfo = (await this.getSettings(level)) ?? getEmptySettings()
 
-		//TODO use for
-		//#region replce if undef
-		if (settings.inject !== undefined) {
-			oldOriginInfo.inject = settings.inject
-		}
-		if (settings.headerRules !== undefined) {
-			oldOriginInfo.headerRules = settings.headerRules
-		}
-		if (settings.position !== undefined) {
-			oldOriginInfo.position = settings.position
-		}
-		if (settings.size !== undefined) {
-			oldOriginInfo.size = settings.size
-		}
-		if (settings.requestsRules !== undefined) {
-			oldOriginInfo.requestsRules = settings.requestsRules
-		}
-		if (settings.locale !== undefined) {
-			oldOriginInfo.locale = settings.locale
-		}
-		if (settings.transformations !== undefined) {
-			oldOriginInfo.transformations = settings.transformations
-		}
-		if (settings.localeReplace !== undefined) {
-			oldOriginInfo.localeReplace = settings.localeReplace
-		}
-		//#endregion
-
-		console.log("saving to storage ", storageKey, oldOriginInfo)
+		Object.keys(settings)
+			.filter(x => settings[x] !== undefined)
+			.forEach(x => {
+				oldOriginInfo[x] = settings[x]
+			})
 
 		await this.asyncSource.setItem(storageKey, oldOriginInfo)
 
-		if (reloadOverlay) {
-			console.log("SETTINGS CHANGED")
-			sendSettingsChanged()
-		}
+		if (reloadOverlay)
+			await sendSettingsChanged()
 	}
 
 	async getMostSpecificSettings(url) {

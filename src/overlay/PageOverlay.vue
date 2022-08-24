@@ -130,10 +130,8 @@ export default {
 			})
 		},
 		async loadRequestInfo() {
-			let requestInfo = await getRequestInfo()
-
-			this.requestInfo = requestInfo
-			console.log("requestInfo", requestInfo)
+			this.requestInfo = await getRequestInfo()
+			console.log("requestInfo", this.requestInfo)
 		},
 		async onCloseOverlay() {
 			let response = await changeInject(this.level, false)

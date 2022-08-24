@@ -11,11 +11,17 @@
 
 		<div class="card-body">
 			<p class="request-url">
-				{{request.url}}
+				{{request.url}} <br />
 			</p>
-			<strong>TTFB:</strong> {{request.ttfb.toFixed(2)}}ms <br />
-			<strong>Took:</strong> {{request.took.toFixed(2)}}ms <br />
 
+			<p class="request-stats">
+				<strong>TTFB:</strong> {{request.ttfb.toFixed(2)}}ms <br />
+				<strong>Took:</strong> {{request.took.toFixed(2)}}ms <br />
+			</p>
+
+			<h6>
+				Response headers
+			</h6>
 			<PageHeadersList :headers="request.responseHeaders" />
 		</div>
 	</div>
@@ -30,6 +36,14 @@ export default {
 	components: {CloseButton, PageHeadersList},
 	props: {
 		request: Object
+	},
+	watch: {
+		request: {
+			immediate: true,
+			handler(val) {
+				console.log("Request info modal request prop", val)
+			}
+		}
 	},
 	computed: {
 		title() {
