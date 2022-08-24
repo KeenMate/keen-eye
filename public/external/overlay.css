@@ -14,5 +14,6 @@
 
 	overflow-x: hidden;
 	overflow-y: auto;
+	min-height: 5rem;
 	max-height: 90vh;
 }

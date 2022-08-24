@@ -22,7 +22,6 @@ export class RequestsHandler {
 		onTabRemoved(this.tabForTabListener)
 
 		settingsManager.getOverlayRecordingAsync().then(capturing => {
-			console.log(capturing)
 			this.setCapturing(capturing ?? true)
 		})
 	}
@@ -33,7 +32,7 @@ export class RequestsHandler {
 
 		this.capturing = capturing
 
-		console.log("set captuing to ", capturing)
+		console.log("Set capturing to ", capturing)
 
 		if (this.capturing) {
 			this.addListeners()

@@ -1,11 +1,9 @@
 export function parseRegex(regexString) {
-	let lastIndex = regexString.lastIndexOf("/")
+	const lastIndex = regexString.lastIndexOf("/")
 
-	let flags = regexString.substring(lastIndex + 1, regexString.length)
+	const flags = regexString.substring(lastIndex + 1, regexString.length)
 
-	let stringPart = regexString.substring(1, lastIndex)
+	const stringPart = regexString.substring(1, lastIndex)
 
-	let regex = new RegExp(stringPart, flags)
-	console.log(regex)
-	return regex
+	return new RegExp(stringPart, flags)
 }

@@ -1,15 +1,7 @@
 import {parseRegex} from "@/helpers/regexHelper"
 import {updateQueryStringParameter} from "@/helpers/urlHelper"
-import {
-	onBeforeSendHeaders,
-	onBeforeRequest,
-	onTabRemoved
-} from "@/providers/chromeApiProvider"
-import {
-	headerName,
-	beforeHeadersOptions,
-	beforeRequestOptions
-} from "./languageConstants"
+import {onBeforeRequest, onBeforeSendHeaders, onTabRemoved} from "@/providers/chromeApiProvider"
+import {beforeHeadersOptions, beforeRequestOptions, headerName} from "./languageConstants"
 
 export class LanguageChanger {
 	constructor(settingsProvider, filter) {
@@ -183,16 +175,14 @@ export class LanguageChanger {
 			return url
 		}
 
-		let regex = parseRegex(settings.localeReplace.urlRegex)
+		const regex = parseRegex(settings.localeReplace.urlRegex)
 
-		let replaceStr = `$1${settings.locale.code}$3`
+		const replaceStr = `$1${settings.locale.code}$3`
 
-		let replacedUrl = url.replace(regex, replaceStr)
-		return replacedUrl
+		return url.replace(regex, replaceStr)
 	}
 
 	firstRedirect(details, settings) {
-		console.log(this.redirects)
 		if (this.redirects[details.tabId] === settings.locale.code) {
 			return false
 		}

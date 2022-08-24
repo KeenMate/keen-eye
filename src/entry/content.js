@@ -3,7 +3,7 @@ import PageOverlay from "@/overlay/PageOverlay.vue"
 import {ContentScriptMessages} from "@/messaging/messages"
 import {
 	ContainerClass,
-	ContainerWrapperId
+	ContainerWrapperId, DefaultContainerHeight, DefaultContainerWidth
 } from "@/constants/overlay"
 import {getSettings, updateOverlaySize} from "@/messaging/messagingProvider"
 import {getResourceUrl} from "@/providers/chromeApiProvider"
@@ -78,13 +78,9 @@ function createOverlayContainer(settings, level) {
 	container.setAttribute("class", ContainerClass)
 	container.style.visibility = "hidden"
 
-	// sets size of container if previously stored in settings
-	if (settings.size) {
-		if (settings.size.height)
-			container.style.height = settings.size.height + "px"
-		if (settings.size.width)
-			container.style.width = settings.size.width + "px"
-	}
+	// sets size of container
+	container.style.width = (settings.size?.width || DefaultContainerWidth) + "px"
+	container.style.height = (settings.size?.height || DefaultContainerHeight) + "px"
 
 	// watches if keen eye wrapper gets resized and after debounce, saves current size of wrapper to settings
 	const debouncedResize = debounce(size => {
