@@ -1,6 +1,11 @@
 <template>
-	<div class="mb-3">
-		<label>Locale</label>
+	<div class="locale-input mb-3">
+		<label>
+			Locale
+			<template v-if="isCustom">
+				(Uploaded {{localesCount}})
+			</template>
+		</label>
 		<div
 			class="input-group"
 			@keyup.esc.stop
@@ -19,37 +24,21 @@
 				:multiple="false"
 				@update:model-value="$emit('input', $event)"
 			/>
-			<button
-				class="btn btn-danger btn-icon"
+			<SmartButton
+				color="danger"
+				icon
 				@click="$emit('remove-locale')"
 			>
 				<i class="las la-trash" />
-			</button>
-		</div>
-	</div>
-
-	<div class="mb-3">
-		<label for="custom-locales-file">
-			Custom locales
-			<template v-if="isCustom">
-				(Uploaded {{localesCount}})
-			</template>
-		</label>
-		<div class="d-flex justify-content-between small-gaps">
-			<FileInput
-				id="custom-locales-file"
-				ref="fileInput"
-				accept="application/json, text/plain"
-				@change="onLocaleFileSelected"
-			/>
-			<button
-				v-if="isCustom"
-				class="btn btn-danger"
-				title="Removes custom locales to see default ones"
-				@click="$emit('remove-custom-locales')"
+			</SmartButton>
+			<SmartButton
+				color="primary"
+				title="Opens settings page where you can upload custom set of languages"
+				icon
+				@click="showOptions"
 			>
-				<i class="las la-trash" />
-			</button>
+				<i class="las la-edit" />
+			</SmartButton>
 		</div>
 	</div>
 </template>
@@ -57,12 +46,13 @@
 <script>
 import Multiselect from "vue-multiselect"
 import {readTextFile} from "@/helpers/file-helpers"
-import FileInput from "@/components/form/FileInput"
 import {sortLocaleCategories} from "@/helpers/locale-helpers"
+import SmartButton from "@/components/ui/button/SmartButton"
+import {openOptionsInNewTab} from "@/providers/chromeApiProvider"
 
 export default {
 	name: "LocaleInput",
-	components: {FileInput, Multiselect},
+	components: {SmartButton, Multiselect},
 	props: {
 		locale: Object,
 		locales: {type: Array, default: () => []},
@@ -101,30 +91,8 @@ export default {
 		}
 	},
 	methods: {
-		async onLocaleFileSelected(file) {
-			if (file.size > 102400) return
-
-			try {
-				const content = await readTextFile(file)
-				const parsedContent = JSON.parse(content)
-				const locales = (parsedContent[0]?.category && parsedContent) || [
-					{
-						category: "Custom locales",
-						locales: parsedContent
-					}
-				]
-
-				this.$emit("set-custom-locales", sortLocaleCategories(locales))
-			} catch (error) {
-				console.error(
-					"Could not read text file for locales import",
-					error,
-					file
-				)
-				this.error = error
-			} finally {
-				this.$refs.fileInput.clearInput()
-			}
+		showOptions() {
+			openOptionsInNewTab()
 		},
 		customLabel(object) {
 			return `[${object.code}] ${object.name}`

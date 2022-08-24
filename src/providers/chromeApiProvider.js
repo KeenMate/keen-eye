@@ -4,10 +4,8 @@ export function onMessage(handler) {
 }
 
 export function sendMessage(message) {
-	return new Promise((resolve) => {
-		chrome.runtime.sendMessage(message, (response) => {
-			resolve(response)
-		})
+	return new Promise(resolve => {
+		chrome.runtime.sendMessage(message, resolve)
 	})
 }
 
@@ -27,17 +25,37 @@ export function getResourceUrl(resourcePath) {
 	return chrome.extension.getURL(resourcePath)
 }
 
+export async function openOptionsInNewTab() {
+	const optionsResourceUrl = getResourceUrl("options.html")
+
+	const existingOptionsTabs = await queryTabs({url: optionsResourceUrl})
+	if (existingOptionsTabs.length)
+		return focusTabs(existingOptionsTabs)
+
+	return openInNewTab(optionsResourceUrl)
+}
+
 //* TABS
+export function focusTabs(tabs) {
+	return new Promise(resolve => {
+		chrome.tabs.highlight({tabs}, resolve)
+	})
+}
+
+export function openInNewTab(resourceUrl) {
+	return new Promise(resolve => {
+		chrome.tabs.create({url: resourceUrl}, resolve)
+	})
+}
+
 export async function queryTabs(options) {
-	return new Promise((resolve) => {
-		chrome.tabs.query(options, (tabs) => {
-			resolve(tabs)
-		})
+	return new Promise(resolve => {
+		chrome.tabs.query(options, resolve)
 	})
 }
 
 export async function getCurrentTab() {
-	let tabs = await queryTabs({active: true, currentWindow: true})
+	const tabs = await queryTabs({active: true, currentWindow: true})
 	return tabs[0]
 }
 

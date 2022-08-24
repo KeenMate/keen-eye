@@ -1,37 +1,28 @@
 <template>
-	<div class="main_app">
-		<h1>Settings</h1>
-		<button @click="clearStorage">
-			CLEAR STORAGE
-		</button>
+	<div class="options-app">
+		<div class="row">
+			<div class="col-lg-6">
+				<Settings />
+			</div>
+			<!--<div class="col-lg-6"></div>-->
+		</div>
 	</div>
 </template>
 
 <script>
-import storageProvider from "@/settings/storageProvider";
+import Settings from "@/options/components/Settings"
 
 export default {
-	name: "OptionsView",
-	data() {
-		return {
-			msg: "options",
-		};
-	},
-	methods: {
-		async clearStorage() {
-			await storageProvider.clear();
-			console.log("storage deleted");
-		},
-	},
-};
+	name: "Options",
+	components: {Settings}
+}
 </script>
 
 <style>
-.main_app {
+.options-app {
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
 	color: #2c3e50;
 	margin-top: 60px;
 }

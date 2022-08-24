@@ -25,7 +25,6 @@ export default {
 	name: "PageHeaders",
 	components: {PageHeadersNav, PageHeadersList},
 	props: {
-		headers: Array,
 		headersFilterRules: FilterRules,
 		requestInfo: Object,
 		transformations: Array,
@@ -43,17 +42,6 @@ export default {
 				return this.allHeaders
 
 			return this.headersFilterRules.filterHeaders(this.allHeaders, "name")
-		}
-	},
-	watch: {
-		headersFilterRules(val) {
-			console.log("Filtered headers rules", val)
-		},
-		filteredHeaders(val) {
-			console.log("Filtered headers", val)
-		},
-		allHeaders(val) {
-			console.log("All headers", val)
 		}
 	}
 }

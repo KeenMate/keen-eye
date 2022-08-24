@@ -80,21 +80,23 @@ export default {
 		filteredRequests() {
 			if (this.requestsFilterRules === null || !this.requestInfo?.requests)
 				return []
-			let requestsArray = Object.values(toRaw(this.requestInfo?.requests))
-			if (!this.useFilters) return requestsArray
-			return this.requestsFilterRules.filterHeaders(requestsArray, "url")
+
+			const requests = Object.values(toRaw(this.requestInfo?.requests))
+			return this.useFilters
+				? this.requestsFilterRules.filterHeaders(requests, "url")
+				: requests
 		},
 		taken() {
-			if (
-				!this.requestInfo ||
-				!this.requestInfo?.response?.timeStamp ||
-				!this.requestInfo?.request?.timeStamp
-			)
+			if (!this.requestInfo)
+				return null
+
+			const requestTimeStamp = this.requestInfo.request?.timeStamp
+			const responseTimeStamp = this.requestInfo.response?.timeStamp
+
+			if (!responseTimeStamp || !requestTimeStamp)
 				return undefined
 
-			return (
-				this.requestInfo.response.timeStamp - this.requestInfo.request.timeStamp
-			).toFixed(2)
+			return (responseTimeStamp - requestTimeStamp).toFixed(2)
 		},
 
 		pageName() {
