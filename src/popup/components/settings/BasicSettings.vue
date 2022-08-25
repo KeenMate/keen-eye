@@ -98,6 +98,6 @@ export default {
 
 <style lang="scss" scoped>
 .basic-settings {
-	margin-bottom: 500px;
+	//margin-bottom: 500px;
 }
 </style>
