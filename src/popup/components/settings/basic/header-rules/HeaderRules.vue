@@ -49,20 +49,21 @@ export default {
 	},
 	computed: {
 		availableHeaders() {
+			if (!this.headerRules) {
+				return this.headers
+			}
+
 			return this.headers.filter(x => !this.headerRules.includes(x))
 		}
 	},
 	methods: {
 		addHeaderRule(val) {
-			let oldRules = Array.isArray(this.headerRules)
-				? this.headerRules
-				: []
+			let oldRules = Array.isArray(this.headerRules) ? this.headerRules : []
 
 			this.setHeaderRules([...(oldRules || []), val])
 		},
 		addHeaderRules(newHeaderRules) {
-			if (!newHeaderRules.length)
-				return
+			if (!newHeaderRules.length) return
 
 			this.setHeaderRules([...this.headerRules, ...newHeaderRules])
 			this.multiselectValue = []
@@ -72,12 +73,9 @@ export default {
 		},
 		sanitizeHeaderRules(headerRules) {
 			return distinctAndSortArray(headerRules)
-
 		}
 	}
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

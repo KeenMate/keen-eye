@@ -48,16 +48,19 @@ import {sortBy} from "lodash"
 export default {
 	name: "SettingsScopesAndPageUrl",
 	components: {SmartButton, Multiselect},
-	emits: ["set-scope", "update:model-value"],
 	props: {
 		modelValue: String,
 		currentScopeCode: String
 	},
+	emits: ["set-scope", "update:model-value"],
 	data() {
 		return {
 			SettingsScopes,
 			availablePageUrls: []
 		}
+	},
+	mounted() {
+		this.loadAvailablePageUrls()
 	},
 	methods: {
 		setPage(page) {
@@ -70,9 +73,6 @@ export default {
 
 			this.availablePageUrls = sortBy(Object.keys(allSettings).map(x => x.toLocaleLowerCase()))
 		}
-	},
-	mounted() {
-		this.loadAvailablePageUrls()
 	}
 }
 </script>

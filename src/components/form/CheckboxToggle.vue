@@ -2,10 +2,10 @@
 	<div
 		class="checkbox-toggle"
 		role="checkbox"
-		@keydown="onToggle"
-		@click.stop="onToggle"
 		tabindex="0"
 		:aria-checked="modelValue?.toString()"
+		@keydown="onToggle"
+		@click.stop="onToggle"
 	>
 		<div
 			class="checkbox-slide bg-light"
@@ -21,8 +21,14 @@
 			class="checkbox-label"
 		>
 			<slot v-if="!granulatedLabels" />
-			<slot v-else-if="modelValue" name="checked" />
-			<slot v-else name="unchecked" />
+			<slot
+v-else-if="modelValue"
+name="checked"
+/>
+			<slot
+v-else
+name="unchecked"
+/>
 		</div>
 	</div>
 </template>
@@ -30,7 +36,6 @@
 <script>
 export default {
 	name: "CheckboxToggle",
-	emits: ["update:model-value"],
 	props: {
 		modelValue: Boolean,
 		disabled: Boolean,
@@ -43,6 +48,7 @@ export default {
 			default: "secondary"
 		}
 	},
+	emits: ["update:model-value"],
 	computed: {
 		granulatedLabels() {
 			return this.$slots.checked || this.$slots.unchecked

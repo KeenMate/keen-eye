@@ -35,9 +35,7 @@ export class SettingsManager {
 	}
 
 	async getSettings(level, url) {
-		url = typeof url === "string"
-			&& new URL(url)
-			|| url
+		url = (typeof url === "string" && new URL(url)) || url
 
 		const storageKey =
 			(url && this.getStorageKeyForUrlParts(getUrlParts(url), level)) ||
@@ -52,8 +50,7 @@ export class SettingsManager {
 	}
 
 	getSettingsSync(level, url) {
-		if (!this.syncSource)
-			return
+		if (!this.syncSource) return
 
 		//if url is not specified use current url
 		const storageKey = this.getStorageKeyForUrlParts(getUrlParts(url), level)
@@ -69,23 +66,25 @@ export class SettingsManager {
 
 		await this.asyncSource.setItem(storageKey, null)
 
-		if (reloadOverlay)
-			await sendSettingsChanged()
+		if (reloadOverlay) await sendSettingsChanged()
 	}
 
 	/**
 	 * Saves only those settings that have non-undefined value
 	 */
 	async setSettings(settings, url, level, reloadOverlay = false) {
-		url = typeof url === "string"
-			&& new URL(url)
-			|| url
+		url = (typeof url === "string" && new URL(url)) || url
 
-		const storageKey = await (url && this.getStorageKeyForUrl(url, level) || this.getStorageKey(level))
+		const storageKey = await ((url && this.getStorageKeyForUrl(url, level)) ||
+			this.getStorageKey(level))
 
-		let currentLevelSettings = (await this.getSettings(level, url)) ?? getEmptySettings()
+		let currentLevelSettings =
+			(await this.getSettings(level, url)) ?? getEmptySettings()
 
-		console.log("Settings settings from manager", JSON.stringify(currentLevelSettings))
+		console.log(
+			"Settings settings from manager",
+			JSON.stringify(currentLevelSettings)
+		)
 		console.log("Settings settings from manager 2", JSON.stringify(settings))
 		Object.keys(settings)
 			.filter(x => settings[x] !== undefined)
@@ -95,8 +94,7 @@ export class SettingsManager {
 
 		await this.asyncSource.setItem(storageKey, currentLevelSettings)
 
-		if (reloadOverlay)
-			await sendSettingsChanged()
+		if (reloadOverlay) await sendSettingsChanged()
 	}
 
 	async getMostSpecificSettings(url) {
@@ -188,8 +186,8 @@ export class SettingsManager {
 
 	getStorageKeyForUrlParts(urlParts, level) {
 		if (urlParts.page.startsWith("chrome")) {
-			console.error("Chrome extension page is not allowed for storage", urlParts)
-			throw new Error(`Chrome extension page not allowed for storage`)
+			console.error("Internal chrome pages dont allow extensions", urlParts)
+			throw new Error(`Internal chrome pages dont allow extensions`)
 		}
 
 		const storageKey = urlParts[level]

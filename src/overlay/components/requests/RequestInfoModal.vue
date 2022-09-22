@@ -37,17 +37,17 @@ export default {
 	props: {
 		request: Object
 	},
+	computed: {
+		title() {
+			return new URL(this.request.url).host
+		}
+	},
 	watch: {
 		request: {
 			immediate: true,
 			handler(val) {
 				console.log("Request info modal request prop", val)
 			}
-		}
-	},
-	computed: {
-		title() {
-			return new URL(this.request.url).host
 		}
 	},
 	methods: {

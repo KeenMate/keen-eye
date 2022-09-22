@@ -1,5 +1,8 @@
 <template>
-	<div class="page-overlay position-relative d-flex flex-column gap-2" dir="ltr">
+	<div
+class="page-overlay position-relative d-flex flex-column gap-2"
+dir="ltr"
+>
 		<OverlayTopNav
 			ref="overlayTopHeader"
 			:page-name="pageName"

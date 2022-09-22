@@ -1,11 +1,17 @@
 <template>
 	<Card>
-		<template #header>Settings</template>
+		<template #header>
+Settings
+</template>
 
 		<div class="actions mb-3">
 			<h5>Actions</h5>
 
-			<SmartButton color="danger" small @click="clearStorage">
+			<SmartButton
+color="danger"
+small
+@click="clearStorage"
+>
 				Clear storage
 			</SmartButton>
 		</div>
@@ -57,6 +63,9 @@ export default {
 			this.loadSettings()
 		}
 	},
+	mounted() {
+		this.loadSettings(true)
+	},
 	methods: {
 		async setCustomLocales(customLocales) {
 			if (!this.pageUrl)
@@ -88,9 +97,6 @@ export default {
 
 			console.log("After load settings", this.settings)
 		}
-	},
-	mounted() {
-		this.loadSettings(true)
 	}
 }
 </script>

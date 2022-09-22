@@ -36,21 +36,13 @@ import SmartButton from "@/components/ui/button/SmartButton"
 export default {
 	name: "CustomLocalesUpload",
 	components: {SmartButton, FileInput},
+	props: {
+		customLocales: Array
+	},
 	emits: [
 		"set-custom-locales",
 		"remove-custom-locales"
 	],
-	props: {
-		customLocales: Array
-	},
-	watch: {
-		customLocales: {
-			immediate: true,
-			handler(val) {
-				console.log("Custom locales changed in customlocalesupload", val)
-			}
-		}
-	},
 	computed: {
 		isCustom() {
 			return !!this.customLocales?.length
@@ -65,6 +57,14 @@ export default {
 				}, 0)
 			else
 				return this.customLocales.length
+		}
+	},
+	watch: {
+		customLocales: {
+			immediate: true,
+			handler(val) {
+				console.log("Custom locales changed in customlocalesupload", val)
+			}
 		}
 	},
 	methods: {

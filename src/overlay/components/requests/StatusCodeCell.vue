@@ -1,5 +1,8 @@
 <template>
-	<td :class="cellClasses" class="text-">
+	<td
+:class="cellClasses"
+class="text-"
+>
 		{{statusCode || "-"}}
 	</td>
 </template>

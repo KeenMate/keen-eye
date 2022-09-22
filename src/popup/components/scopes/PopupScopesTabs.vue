@@ -22,11 +22,11 @@ export default {
 		ScopeItem,
 		Tabs
 	},
-	emits: ["change-tab"],
 	props: {
 		currentScopeCode: String,
 		pills: Boolean
 	},
+	emits: ["change-tab"],
 	data() {
 		return {
 			SettingsScopes
